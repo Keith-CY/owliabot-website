@@ -5,6 +5,7 @@ type SigningModelProps = {
     title: string;
     subtitle: string;
     description: string;
+    status?: string;
     tiers: ReadonlyArray<{
       title: string;
       body: string;
@@ -16,10 +17,7 @@ type SigningModelProps = {
 
 export default function SigningModel({ signing }: SigningModelProps) {
   return (
-    <section
-      id="architecture"
-      className="flex flex-col gap-8 border-t border-border pt-12"
-    >
+    <section id="signing" className="flex flex-col gap-8 border-t border-border pt-12">
       <Reveal>
         <div className="flex flex-col gap-3">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/60">
@@ -31,6 +29,11 @@ export default function SigningModel({ signing }: SigningModelProps) {
           <p className="text-pretty text-sm text-foreground/70">
             {signing.description}
           </p>
+          {signing.status ? (
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/50">
+              {signing.status}
+            </p>
+          ) : null}
         </div>
       </Reveal>
       <div className="grid gap-6 lg:grid-cols-3">

@@ -2,6 +2,8 @@ export const content = {
   lang: "zh",
   nav: {
     why: "为什么",
+    architecture: "架构",
+    skills: "技能系统",
     signing: "签名模型",
     execution: "执行流程",
     local: "本地优先",
@@ -10,7 +12,9 @@ export const content = {
   hero: {
     title: "一个永远不会越过签名边界的加密自治代理。",
     subtitle:
-      "OwliaBot 是一个加密原生的自治代理，面向链上操作。\n采用明确权限、分层签名与本地优先的安全设计。",
+      "OwliaBot 是一个自托管的加密原生代理，面向链上操作。\n极简依赖，可扩展 Skills，本地优先安全模型。",
+    badge: "签名模型规划中",
+    status: "已完成设计与文档，正在实现。",
     emphasis: "安全、隐私、可控，皆为设计的一部分。",
     ctaPrimary: "加入候补名单",
     ctaSecondary: "阅读架构说明",
@@ -26,30 +30,69 @@ export const content = {
         mechanism: "不对密钥做抽象，不做链下影子执行。",
       },
       {
-        title: "自治",
+        title: "自托管",
         body:
-          "OwliaBot 在清晰边界内自动执行任务。每一次动作都来自明确意图与受限权限。",
-        mechanism: "自治不等于隐式授权。",
+          "完全运行在你自己的机器或服务器上。无托管代理、无远程密钥、无隐藏依赖。",
+        mechanism: "本地优先，远程可选。",
       },
       {
-        title: "安全",
+        title: "最小攻击面",
         body:
-          "分层签名模型将意图、执行与权限分离。高风险操作需用户确认，低风险自动化仍可审计且受限。",
-        mechanism: "无盲签。无隐藏权限升级。",
+          "更少依赖、更少通道、更少攻击路径。仅支持 Telegram 与 Discord，核心保持极简。",
+        mechanism: "依赖 <30，无原生模块，无浏览器自动化。",
       },
       {
-        title: "隐私",
+        title: "可扩展",
         body:
-          "本地优先。私钥永不离开设备，不存在托管密钥或中心化签名服务。",
-        mechanism: "你拥有密钥，也定义信任。",
+          "能力通过 Skills 扩展：工作区里的 JavaScript 模块，热重载，不改核心。",
+        mechanism: "Skills 定义工具、权限与安全等级。",
       },
     ],
+  },
+  architecture: {
+    title: "架构总览",
+    subtitle: "保持极简",
+    body:
+      "OwliaBot 核心保持极简与本地优先，再通过 Skills 向外扩展。通道可以扩展，但核心保持可审计。",
+    flowLabel: "核心流程",
+    flow: ["Gateway", "Telegram / Discord", "Agent Runtime", "Skills", "Signer"],
+    bullets: [
+      "Telegram 与 Discord 是首要入口。",
+      "运行时构建上下文、调用工具并返回结果。",
+      "签名能力与 Bot 进程隔离。",
+    ],
+    note: "更多通道规划中，但核心表面积保持最小。",
+  },
+  skills: {
+    title: "Skills 系统",
+    subtitle: "组合式扩展",
+    body:
+      "Skills 是工作区中的 JavaScript 模块，定义工具、参数与安全等级，无需修改核心代码。",
+    cards: [
+      {
+        title: "JS 模块格式",
+        body: "每个 Skill 是一个目录，包含 package.json 与 index.js。",
+        meta: "支持热重载",
+      },
+      {
+        title: "安全等级",
+        body: "每个工具声明 read / write / sign 的安全级别。",
+        meta: "权限显式",
+      },
+      {
+        title: "内置 Skills",
+        body: "crypto-price（CoinGecko）与 crypto-balance（Alchemy）。",
+        meta: "查询余额需 ALCHEMY_API_KEY",
+      },
+    ],
+    footer: "无需扩大核心体积即可安装或自建 Skills。",
   },
   signing: {
     title: "三层签名模型",
     subtitle: "自治不等于盲目信任。",
     description:
       "OwliaBot 将用户意图、自动执行与链上权限分为三个独立签名层级。每一层都有明确用途、范围与失败边界。",
+    status: "规划中：已完成设计，正在实现。",
     tiers: [
       {
         title: "第一层：伴侣 App",
@@ -73,6 +116,7 @@ export const content = {
     title: "执行流程",
     steps: ["意图", "授权", "执行", "审计"],
     caption: "每一次动作都有明确的签名路径。",
+    note: "当前版本聚焦不涉及签名的操作。",
   },
   local: {
     title: "本地优先的设计",
@@ -86,7 +130,7 @@ export const content = {
   devices: {
     title: "随时随地",
     body:
-      "无论桌面、移动端还是 Web，都能在不改变信任假设的前提下安全使用。",
+      "无论桌面、移动端还是 Web，都能安全使用——Telegram 与 Discord 先行，更多通道规划中。",
   },
   waitlist: {
     title: "加入候补名单",

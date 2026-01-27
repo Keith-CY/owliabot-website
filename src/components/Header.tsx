@@ -4,6 +4,8 @@ import ThemeSelect from "./ThemeSelect";
 type HeaderProps = {
   nav: {
     why: string;
+    architecture: string;
+    skills: string;
     signing: string;
     execution: string;
     local: string;
@@ -29,6 +31,12 @@ export default function Header({ nav }: HeaderProps) {
             {nav.why}
           </a>
           <a className="hover:text-foreground" href="#architecture">
+            {nav.architecture}
+          </a>
+          <a className="hover:text-foreground" href="#skills">
+            {nav.skills}
+          </a>
+          <a className="hover:text-foreground" href="#signing">
             {nav.signing}
           </a>
           <a className="hover:text-foreground" href="#execution">

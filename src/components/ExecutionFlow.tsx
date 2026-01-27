@@ -5,6 +5,7 @@ type ExecutionFlowProps = {
     title: string;
     steps: ReadonlyArray<string>;
     caption: string;
+    note?: string;
   };
 };
 
@@ -38,6 +39,13 @@ export default function ExecutionFlow({ execution }: ExecutionFlowProps) {
           {execution.caption}
         </p>
       </Reveal>
+      {execution.note ? (
+        <Reveal delay={0.2}>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/50">
+            {execution.note}
+          </p>
+        </Reveal>
+      ) : null}
     </section>
   );
 }

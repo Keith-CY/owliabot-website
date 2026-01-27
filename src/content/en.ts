@@ -2,6 +2,8 @@ export const content = {
   lang: "en",
   nav: {
     why: "Why",
+    architecture: "Architecture",
+    skills: "Skills",
     signing: "Signing Model",
     execution: "Execution Flow",
     local: "Local-first",
@@ -10,7 +12,9 @@ export const content = {
   hero: {
     title: "An autonomous crypto agent that never crosses your signing boundary.",
     subtitle:
-      "OwliaBot is a crypto-native autonomous agent for on-chain operations.\nDesigned with explicit permissions, progressive signing, and local-first security.",
+      "OwliaBot is a self-hosted, crypto-native agent for on-chain operations.\nMinimal dependencies. Extensible skills. Local-first security.",
+    badge: "Signing model planned",
+    status: "Designed and documented. Implementation in progress.",
     emphasis: "Secure. Private. Controllable by design.",
     ctaPrimary: "Join the Waitlist",
     ctaSecondary: "Read the Architecture",
@@ -27,30 +31,72 @@ export const content = {
         mechanism: "No abstraction over keys. No off-chain shadow execution.",
       },
       {
-        title: "Autonomous",
+        title: "Self-hosted",
         body:
-          "OwliaBot executes tasks autonomously within clearly defined limits. Every action is derived from explicit intent and scoped permissions.",
-        mechanism: "Autonomy without implicit authority.",
+          "Runs fully on your own machine or server. No hosted agents, no remote custody, and no hidden infrastructure dependencies.",
+        mechanism: "Local-first by default. Remote optional by choice.",
       },
       {
-        title: "Secure",
+        title: "Minimal surface",
         body:
-          "A layered signing model separates intent, execution, and authority. High-risk actions require explicit user confirmation, while low-risk automation remains bounded and auditable.",
-        mechanism: "No blind signing. No hidden privilege escalation.",
+          "Fewer dependencies, fewer channels, fewer attack paths. Designed for Telegram + Discord first, with the core kept intentionally small.",
+        mechanism: "<30 deps. No native modules. No browser automation.",
       },
       {
-        title: "Private",
+        title: "Extensible",
         body:
-          "Local-first by design. Private keys never leave your device. There is no hosted key custody and no centralized signing service.",
-        mechanism: "You own the keys. You define the trust.",
+          "Capabilities scale through Skills: JavaScript modules loaded from your workspace, hot-reloaded without touching core code.",
+        mechanism: "Skills define tools, permissions, and security levels.",
       },
     ],
+  },
+  architecture: {
+    title: "Architecture overview",
+    subtitle: "Built to stay small",
+    body:
+      "OwliaBot keeps the core minimal and local-first, then extends outward through Skills. Channels can expand, but the core remains deliberate and auditable.",
+    flowLabel: "Core flow",
+    flow: ["Gateway", "Telegram / Discord", "Agent Runtime", "Skills", "Signer"],
+    bullets: [
+      "Telegram + Discord are first-class entry points.",
+      "Agent runtime builds context, calls tools, and returns responses.",
+      "Signer remains isolated from the bot process.",
+    ],
+    note: "Additional channels are planned without expanding the core surface.",
+  },
+  skills: {
+    title: "Skills system",
+    subtitle: "Composable by design",
+    body:
+      "Skills are JavaScript modules living in your workspace. They define tools, parameters, and security levels without modifying core code.",
+    cards: [
+      {
+        title: "JS module format",
+        body:
+          "Each skill is a directory with a package.json and an index.js implementation.",
+        meta: "Hot reload supported",
+      },
+      {
+        title: "Security levels",
+        body:
+          "Every tool declares its security tier: read, write, or sign.",
+        meta: "Explicit permissions",
+      },
+      {
+        title: "Built-in skills",
+        body:
+          "crypto-price (CoinGecko) and crypto-balance (Alchemy).",
+        meta: "ALCHEMY_API_KEY required for balance",
+      },
+    ],
+    footer: "Install more skills or write your own without expanding the core surface.",
   },
   signing: {
     title: "A 3-tier signing model",
     subtitle: "Autonomy without blind trust.",
     description:
       "OwliaBot separates user intent, automated execution, and on-chain authority into three distinct signing layers. Each tier has a clear purpose, scope, and failure boundary.",
+    status: "Planned. Designed but not yet implemented.",
     tiers: [
       {
         title: "Tier 1: Companion App",
@@ -75,6 +121,7 @@ export const content = {
     title: "Execution Flow",
     steps: ["Intent", "Permission", "Execution", "Audit"],
     caption: "Every action follows an explicit signing path.",
+    note: "Current release focuses on non-signing operations.",
   },
   local: {
     title: "Local-first by design",
@@ -88,7 +135,7 @@ export const content = {
   devices: {
     title: "Everywhere you work",
     body:
-      "Operate securely from desktop, mobile, or web - without changing your trust assumptions.",
+      "Operate securely from desktop, mobile, or web - Telegram and Discord first, more channels planned.",
   },
   waitlist: {
     title: "Join the waitlist",

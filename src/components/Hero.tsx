@@ -8,6 +8,8 @@ type HeroProps = {
     emphasis: string;
     ctaPrimary: string;
     ctaSecondary: string;
+    badge?: string;
+    status?: string;
   };
   githubUrl: string;
 };
@@ -19,6 +21,11 @@ export default function Hero({ hero, githubUrl }: HeroProps) {
     <section className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
       <div className="flex flex-col gap-6">
         <Reveal>
+          {hero.badge ? (
+            <span className="w-fit rounded-full border border-border bg-surface px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/60">
+              {hero.badge}
+            </span>
+          ) : null}
           <h1 className="text-balance text-3xl font-semibold text-foreground sm:text-4xl lg:text-5xl">
             {hero.title}
           </h1>
@@ -33,6 +40,13 @@ export default function Hero({ hero, githubUrl }: HeroProps) {
             ))}
           </p>
         </Reveal>
+        {hero.status ? (
+          <Reveal delay={0.1}>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/50">
+              {hero.status}
+            </p>
+          </Reveal>
+        ) : null}
         <Reveal delay={0.12}>
           <p className="text-sm font-semibold uppercase text-foreground/70">
             {hero.emphasis}
