@@ -1,4 +1,5 @@
-import ThemeToggle from "./ThemeToggle";
+import LanguageSelect from "./LanguageSelect";
+import ThemeSelect from "./ThemeSelect";
 
 type HeaderProps = {
   nav: {
@@ -8,15 +9,9 @@ type HeaderProps = {
     local: string;
     waitlist: string;
   };
-  lang: "en" | "zh";
 };
 
-export default function Header({ nav, lang }: HeaderProps) {
-  const languageToggle =
-    lang === "zh"
-      ? { label: "EN", href: "/en" }
-      : { label: "中文", href: "/zh" };
-
+export default function Header({ nav }: HeaderProps) {
   return (
     <header className="border-b border-border bg-surface-strong/90 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4 sm:px-8 lg:px-12">
@@ -47,13 +42,8 @@ export default function Header({ nav, lang }: HeaderProps) {
           </a>
         </nav>
         <div className="flex items-center gap-2">
-          <a
-            className="rounded-full border border-border bg-surface px-4 py-2 text-xs font-semibold uppercase text-foreground hover:border-accent"
-            href={languageToggle.href}
-          >
-            {languageToggle.label}
-          </a>
-          <ThemeToggle />
+          <LanguageSelect />
+          <ThemeSelect />
         </div>
       </div>
     </header>
