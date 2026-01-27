@@ -8,34 +8,34 @@ export const content = {
     waitlist: "候补名单",
   },
   hero: {
-    title: "一个永远不会越过签名边界的 автономous crypto agent。",
+    title: "一个永远不会越过签名边界的加密自治代理。",
     subtitle:
-      "Clawdbot 是一个加密原生的自治代理，面向链上操作，具备明确权限、分层签名与本地优先的安全设计。",
+      "OwliaBot 是一个加密原生的自治代理，面向链上操作。\n采用明确权限、分层签名与本地优先的安全设计。",
     emphasis: "安全、隐私、可控，皆为设计的一部分。",
     ctaPrimary: "加入候补名单",
     ctaSecondary: "阅读架构说明",
   },
   why: {
-    title: "为什么选择 Clawdbot",
-    subtitle: "只有边界清晰的自治，才值得被信任。",
+    title: "为什么选择 OwliaBot",
+    subtitle: "只有边界清晰的自治才有意义——否则只是盲目执行。",
     items: [
       {
         title: "加密原生",
         body:
-          "为链上工作流、钱包与 DeFi 操作而生。Clawdbot 将交易、签名与执行上下文作为一等公民。",
+          "为链上工作流、钱包与 DeFi 操作而生。OwliaBot 将交易、签名与执行上下文视为一等原语。",
         mechanism: "不对密钥做抽象，不做链下影子执行。",
       },
       {
         title: "自治",
         body:
-          "Clawdbot 在清晰边界内自动执行任务，每一次动作都来自明确意图与受限权限。",
+          "OwliaBot 在清晰边界内自动执行任务。每一次动作都来自明确意图与受限权限。",
         mechanism: "自治不等于隐式授权。",
       },
       {
         title: "安全",
         body:
-          "分层签名模型将意图、执行与权限分离。高风险操作必须用户确认，低风险自动化仍可审计且受限。",
-        mechanism: "拒绝盲签，不存在隐藏升级。",
+          "分层签名模型将意图、执行与权限分离。高风险操作需用户确认，低风险自动化仍可审计且受限。",
+        mechanism: "无盲签。无隐藏权限升级。",
       },
       {
         title: "隐私",
@@ -49,7 +49,7 @@ export const content = {
     title: "三层签名模型",
     subtitle: "自治不等于盲目信任。",
     description:
-      "Clawdbot 将用户意图、自动执行与链上权限分为三个独立签名层级。每一层都有明确用途、范围与失败边界。",
+      "OwliaBot 将用户意图、自动执行与链上权限分为三个独立签名层级。每一层都有明确用途、范围与失败边界。",
     tiers: [
       {
         title: "第一层：伴侣 App",
@@ -76,7 +76,7 @@ export const content = {
   },
   local: {
     title: "本地优先的设计",
-    body: "大多数代理都会索要你的密钥，我们不会。",
+    body: "大多数代理需要密钥托管，OwliaBot 不需要。",
     bullets: [
       "密钥只存在于你的设备",
       "敏感操作在本地执行",
@@ -86,15 +86,16 @@ export const content = {
   devices: {
     title: "随时随地",
     body:
-      "无论桌面、移动端还是 Web，都可以在不改变信任假设的前提下安全使用。",
+      "无论桌面、移动端还是 Web，都能在不改变信任假设的前提下安全使用。",
   },
   waitlist: {
     title: "加入候补名单",
     body: "第一时间获取早期体验与内测更新。",
     privacy: "我们永远不会索要你的私钥。",
+    note: "无需连接钱包。",
   },
   footer: {
-    note: "私钥永不离开你的设备。",
+    note: "私钥永不离开你的设备。没有例外。",
   },
   links: {
     github: "https://github.com/owliabot/owliabot",
