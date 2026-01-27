@@ -6,7 +6,7 @@
 
 **Architecture:** Next.js App Router with `output: "export"`, routes for `/`, `/en`, `/zh`, shared components, and content split into `src/content/en.ts` + `src/content/zh.ts`. Three.js shader renders behind the hero section only. Framer Motion handles minimal staggered reveals.
 
-**Tech Stack:** Next.js (App Router), Tailwind CSS, Three.js, Framer Motion, static export.
+**Tech Stack:** Next.js (App Router), Tailwind CSS, Three.js, Framer Motion, static export, Bun.
 
 ---
 
@@ -34,7 +34,7 @@ module.exports = nextConfig;
 ```
 
 **Step 3: Run dev server sanity check**
-Run: `npm run dev`
+Run: `bun run dev`
 Expected: Dev server starts without errors.
 
 **Step 4: Commit**
@@ -51,16 +51,16 @@ git commit -m "chore: scaffold next.js app router project"
 - Modify: `package.json`
 
 **Step 1: Install deps**
-Run: `npm install three framer-motion`
-Expected: Dependencies added to package.json/lock.
+Run: `bun add three framer-motion`
+Expected: Dependencies added to package.json/bun.lockb.
 
 **Step 2: Verify build**
-Run: `npm run build`
+Run: `bun run build`
 Expected: Build succeeds.
 
 **Step 3: Commit**
 ```bash
-git add package.json package-lock.json
+git add package.json bun.lockb
 git commit -m "chore: add three and framer-motion"
 ```
 
@@ -287,7 +287,7 @@ git commit -m "feat: embed tally waitlist"
 - Modify: `src/app/globals.css`
 
 **Step 1: Run build + export**
-Run: `npm run build`
+Run: `bun run build`
 Expected: Static export succeeds.
 
 **Step 2: Preview export locally**
