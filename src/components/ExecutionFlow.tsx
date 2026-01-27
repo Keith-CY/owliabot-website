@@ -19,7 +19,7 @@ export default function ExecutionFlow({ execution }: ExecutionFlowProps) {
         </div>
       </Reveal>
       <Reveal delay={0.08}>
-        <div className="flex flex-wrap items-center gap-3 text-sm font-semibold uppercase text-foreground/70">
+        <div className="flex flex-wrap items-center gap-3 text-xs font-mono uppercase tracking-[0.2em] text-foreground/70">
           {execution.steps.map((step, index) => (
             <div
               key={step}
@@ -27,7 +27,7 @@ export default function ExecutionFlow({ execution }: ExecutionFlowProps) {
             >
               {step}
               {index < execution.steps.length - 1 && (
-                <span className="ml-3 text-foreground/40">→</span>
+                <span className="ml-3 text-foreground/50">→</span>
               )}
             </div>
           ))}
