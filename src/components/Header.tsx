@@ -1,4 +1,5 @@
 import Image from "next/image";
+import ThemeToggle from "./ThemeToggle";
 
 type HeaderProps = {
   nav: {
@@ -44,12 +45,15 @@ export default function Header({ nav, lang }: HeaderProps) {
             {nav.waitlist}
           </a>
         </nav>
-        <a
-          className="rounded-full border border-border bg-surface px-4 py-2 text-xs font-semibold uppercase text-foreground hover:border-accent hover:text-white"
-          href={languageToggle.href}
-        >
-          {languageToggle.label}
-        </a>
+        <div className="flex items-center gap-2">
+          <a
+            className="rounded-full border border-border bg-surface px-4 py-2 text-xs font-semibold uppercase text-foreground hover:border-accent"
+            href={languageToggle.href}
+          >
+            {languageToggle.label}
+          </a>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );
