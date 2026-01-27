@@ -3,6 +3,7 @@ import Reveal from "./Reveal";
 
 type WaitlistProps = {
   waitlist: {
+    eyebrow: string;
     title: string;
     body: string;
     privacy: string;
@@ -15,9 +16,12 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
     <Reveal>
       <section
         id="waitlist"
-        className="rounded-[36px] border border-border bg-surface px-8 py-12 shadow-[0_20px_60px_rgba(6,8,18,0.45)] backdrop-blur"
+        className="rounded-[36px] border border-border bg-surface px-8 py-12 shadow-[0_20px_60px_rgba(6,8,18,0.32)] backdrop-blur"
       >
         <div className="flex flex-col gap-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/60">
+            {waitlist.eyebrow}
+          </p>
           <h2 className="text-balance text-2xl font-semibold text-foreground sm:text-3xl">
             {waitlist.title}
           </h2>
@@ -30,7 +34,7 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
           <p className="text-pretty text-xs text-foreground/60">
             {waitlist.note}
           </p>
-          <div className="mt-6 overflow-hidden rounded-[28px] border border-border bg-black/30">
+          <div className="mt-6 overflow-hidden rounded-[28px] border border-border bg-surface/80 shadow-[0_12px_30px_rgba(6,8,18,0.25)]">
             <iframe
               className="min-h-[520px] w-full"
               data-tally-src="https://tally.so/r/kdN1Mo?transparentBackground=1&dynamicHeight=1"

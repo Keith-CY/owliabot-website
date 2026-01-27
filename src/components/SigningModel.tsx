@@ -39,7 +39,7 @@ export default function SigningModel({ signing }: SigningModelProps) {
       <div className="grid gap-6 lg:grid-cols-3">
         {signing.tiers.map((tier, index) => (
           <Reveal key={tier.title} delay={0.06 * index}>
-            <div className="rounded-[28px] border border-border bg-surface px-6 py-7 shadow-[0_16px_40px_rgba(6,8,18,0.45)] backdrop-blur">
+            <div className="rounded-[30px] border border-border bg-surface px-6 py-7 shadow-[0_14px_36px_rgba(6,8,18,0.35)] backdrop-blur">
               <p className="text-xs font-semibold uppercase text-foreground/60">
                 {tier.keyword}
               </p>

@@ -26,7 +26,7 @@ export default function Hero({ hero, githubUrl }: HeroProps) {
               {hero.badge}
             </span>
           ) : null}
-          <h1 className="text-balance text-3xl font-semibold text-foreground sm:text-4xl lg:text-5xl">
+          <h1 className="text-balance text-3xl font-semibold leading-[1.05] text-foreground sm:text-4xl lg:text-5xl">
             {hero.title}
           </h1>
         </Reveal>
@@ -55,13 +55,13 @@ export default function Hero({ hero, githubUrl }: HeroProps) {
         <Reveal delay={0.16}>
           <div className="flex flex-wrap gap-4">
             <a
-              className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(107,82,255,0.35)]"
+              className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(107,82,255,0.28)]"
               href="#waitlist"
             >
               {hero.ctaPrimary}
             </a>
             <a
-              className="rounded-full border border-border bg-surface px-6 py-3 text-sm font-semibold text-foreground hover:border-accent"
+              className="rounded-full border border-border bg-surface px-6 py-3 text-sm font-semibold text-foreground transition hover:border-accent"
               href="#architecture"
             >
               {hero.ctaSecondary}
@@ -69,7 +69,7 @@ export default function Hero({ hero, githubUrl }: HeroProps) {
           </div>
         </Reveal>
       </div>
-      <div className="relative overflow-hidden rounded-[36px] border border-border bg-surface p-6 shadow-[0_20px_60px_rgba(10,10,20,0.45)]">
+      <div className="relative overflow-hidden rounded-[36px] border border-border bg-surface p-6 shadow-[0_18px_50px_rgba(10,10,20,0.35)]">
         <div className="absolute inset-0">
           <ShaderHero />
         </div>

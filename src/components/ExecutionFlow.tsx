@@ -2,6 +2,7 @@ import Reveal from "./Reveal";
 
 type ExecutionFlowProps = {
   execution: {
+    eyebrow: string;
     title: string;
     steps: ReadonlyArray<string>;
     caption: string;
@@ -13,7 +14,10 @@ export default function ExecutionFlow({ execution }: ExecutionFlowProps) {
   return (
     <section id="execution" className="flex flex-col gap-8">
       <Reveal>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/60">
+            {execution.eyebrow}
+          </p>
           <h2 className="text-balance text-2xl font-semibold text-foreground sm:text-3xl">
             {execution.title}
           </h2>
@@ -24,7 +28,7 @@ export default function ExecutionFlow({ execution }: ExecutionFlowProps) {
           {execution.steps.map((step, index) => (
             <div
               key={step}
-              className="rounded-full border border-border bg-surface px-4 py-2"
+              className="rounded-full border border-border bg-surface px-4 py-2 shadow-[0_8px_22px_rgba(6,8,18,0.25)]"
             >
               {step}
               {index < execution.steps.length - 1 && (

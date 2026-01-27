@@ -31,7 +31,7 @@ export default function ArchitectureOverview({
         </div>
       </Reveal>
       <Reveal delay={0.08}>
-        <div className="rounded-[28px] border border-border bg-surface px-6 py-6 shadow-[0_16px_40px_rgba(6,8,18,0.45)] backdrop-blur">
+        <div className="rounded-[30px] border border-border bg-surface px-6 py-6 shadow-[0_14px_36px_rgba(6,8,18,0.35)] backdrop-blur">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/60">
             {architecture.flowLabel}
           </p>
@@ -50,7 +50,7 @@ export default function ArchitectureOverview({
       <div className="grid gap-4 md:grid-cols-3">
         {architecture.bullets.map((item, index) => (
           <Reveal key={item} delay={0.1 + index * 0.04}>
-            <div className="rounded-[24px] border border-border bg-surface px-5 py-5 text-sm text-foreground/70">
+            <div className="rounded-[26px] border border-border bg-surface px-5 py-5 text-sm text-foreground/70 shadow-[0_10px_28px_rgba(6,8,18,0.25)]">
               {item}
             </div>
           </Reveal>

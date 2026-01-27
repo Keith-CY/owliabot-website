@@ -33,7 +33,7 @@ export default function SkillsSection({ skills }: SkillsSectionProps) {
       <div className="grid gap-6 md:grid-cols-3">
         {skills.cards.map((card, index) => (
           <Reveal key={card.title} delay={0.06 * index}>
-            <div className="rounded-[28px] border border-border bg-surface px-6 py-7 shadow-[0_16px_40px_rgba(6,8,18,0.45)] backdrop-blur">
+            <div className="rounded-[30px] border border-border bg-surface px-6 py-7 shadow-[0_14px_36px_rgba(6,8,18,0.35)] backdrop-blur">
               <h3 className="text-balance text-lg font-semibold text-foreground">
                 {card.title}
               </h3>

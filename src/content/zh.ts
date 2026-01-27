@@ -20,6 +20,7 @@ export const content = {
     ctaSecondary: "阅读架构说明",
   },
   why: {
+    eyebrow: "原则",
     title: "为什么选择 OwliaBot",
     subtitle: "只有边界清晰的自治才有意义——否则只是盲目执行。",
     items: [
@@ -113,12 +114,14 @@ export const content = {
     footer: "代理永远不会获得超过你明确授权的权力。",
   },
   execution: {
+    eyebrow: "执行",
     title: "执行流程",
     steps: ["意图", "授权", "执行", "审计"],
     caption: "每一次动作都有明确的签名路径。",
     note: "当前版本聚焦不涉及签名的操作。",
   },
   local: {
+    eyebrow: "本地优先",
     title: "本地优先的设计",
     body: "大多数代理需要密钥托管，OwliaBot 不需要。",
     bullets: [
@@ -128,11 +131,13 @@ export const content = {
     ],
   },
   devices: {
+    eyebrow: "通道",
     title: "随时随地",
     body:
       "无论桌面、移动端还是 Web，都能安全使用——Telegram 与 Discord 先行，更多通道规划中。",
   },
   waitlist: {
+    eyebrow: "早期体验",
     title: "加入候补名单",
     body: "第一时间获取早期体验与内测更新。",
     privacy: "我们永远不会索要你的私钥。",

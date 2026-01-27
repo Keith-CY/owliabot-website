@@ -17,6 +17,7 @@ const fragmentShader = `
 
   uniform float u_time;
   uniform vec2 u_resolution;
+  uniform vec2 u_mouse;
 
   varying vec2 vUv;
 
@@ -27,6 +28,8 @@ const fragmentShader = `
   void main() {
     vec2 uv = vUv;
     vec2 st = (uv - 0.5) * vec2(u_resolution.x / u_resolution.y, 1.0);
+    vec2 m = (u_mouse - 0.5) * vec2(u_resolution.x / u_resolution.y, 1.0);
+    st += m * 0.12;
 
     float t = u_time * 0.6;
     float wave = sin(st.x * 4.0 + t) * 0.15 + cos(st.y * 6.0 - t * 1.2) * 0.1;
@@ -34,7 +37,8 @@ const fragmentShader = `
     float n = noise(st * 3.0 + t * 0.4) * 0.08;
 
     float mask = smoothstep(0.8, 0.2, length(st));
-    float glow = clamp(wave + ripple + n, -0.4, 0.6) * mask;
+    float highlight = smoothstep(0.55, 0.0, length(st - m * 0.7)) * 0.06;
+    float glow = clamp(wave + ripple + n + highlight, -0.4, 0.6) * mask;
 
     vec3 base = vec3(0.08, 0.1, 0.16);
     vec3 accent = vec3(0.42, 0.35, 0.95);
@@ -70,6 +74,7 @@ export default function ShaderHero() {
       u_resolution: {
         value: new THREE.Vector2(mount.clientWidth, mount.clientHeight),
       },
+      u_mouse: { value: new THREE.Vector2(0.5, 0.5) },
     };
 
     const geometry = new THREE.PlaneGeometry(2, 2);
@@ -84,9 +89,13 @@ export default function ShaderHero() {
     scene.add(mesh);
 
     let frameId = 0;
+    const mouse = new THREE.Vector2(0.5, 0.5);
+    const target = new THREE.Vector2(0.5, 0.5);
 
     const render = (time: number) => {
       uniforms.u_time.value = time * 0.001;
+      mouse.lerp(target, 0.08);
+      uniforms.u_mouse.value.copy(mouse);
       renderer.render(scene, camera);
       frameId = requestAnimationFrame(render);
     };
@@ -104,11 +113,25 @@ export default function ShaderHero() {
       uniforms.u_resolution.value.set(clientWidth, clientHeight);
     };
 
+    const handlePointerMove = (event: PointerEvent) => {
+      const rect = mount.getBoundingClientRect();
+      target.x = (event.clientX - rect.left) / rect.width;
+      target.y = 1 - (event.clientY - rect.top) / rect.height;
+    };
+
+    const handlePointerLeave = () => {
+      target.set(0.5, 0.5);
+    };
+
     window.addEventListener("resize", handleResize);
+    mount.addEventListener("pointermove", handlePointerMove);
+    mount.addEventListener("pointerleave", handlePointerLeave);
 
     return () => {
       cancelAnimationFrame(frameId);
       window.removeEventListener("resize", handleResize);
+      mount.removeEventListener("pointermove", handlePointerMove);
+      mount.removeEventListener("pointerleave", handlePointerLeave);
       geometry.dispose();
       material.dispose();
       renderer.dispose();

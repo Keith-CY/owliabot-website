@@ -20,6 +20,7 @@ export const content = {
     ctaSecondary: "Read the Architecture",
   },
   why: {
+    eyebrow: "Principles",
     title: "Why OwliaBot",
     subtitle:
       "Autonomy is useful only when boundaries are explicit — otherwise it is just blind execution.",
@@ -118,12 +119,14 @@ export const content = {
       "The agent never gains more authority than you explicitly grant.",
   },
   execution: {
+    eyebrow: "Execution",
     title: "Execution Flow",
     steps: ["Intent", "Permission", "Execution", "Audit"],
     caption: "Every action follows an explicit signing path.",
     note: "Current release focuses on non-signing operations.",
   },
   local: {
+    eyebrow: "Local-first",
     title: "Local-first by design",
     body: "Most agents require key custody. OwliaBot does not.",
     bullets: [
@@ -133,11 +136,13 @@ export const content = {
     ],
   },
   devices: {
+    eyebrow: "Channels",
     title: "Everywhere you work",
     body:
       "Operate securely from desktop, mobile, or web - Telegram and Discord first, more channels planned.",
   },
   waitlist: {
+    eyebrow: "Early access",
     title: "Join the waitlist",
     body: "Be first in line for early access and private beta updates.",
     privacy: "We will never ask for your private keys.",
