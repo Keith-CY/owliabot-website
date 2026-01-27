@@ -21,16 +21,16 @@ export type LandingPageContent = {
     ctaPrimary: string;
     ctaSecondary: string;
   };
-  pillars: {
+  pillars: ReadonlyArray<{
     title: string;
     body: string;
-  }[];
+  }>;
   security: {
     title: string;
-    items: {
+    items: ReadonlyArray<{
       title: string;
       body: string;
-    }[];
+    }>;
   };
   devices: {
     title: string;
@@ -38,10 +38,10 @@ export type LandingPageContent = {
   };
   architecture: {
     title: string;
-    items: {
+    items: ReadonlyArray<{
       title: string;
       body: string;
-    }[];
+    }>;
   };
   waitlist: {
     title: string;

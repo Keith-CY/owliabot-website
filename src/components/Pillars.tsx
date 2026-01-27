@@ -2,10 +2,10 @@ import Reveal from "./Reveal";
 
 type PillarsProps = {
   title: string;
-  pillars: {
+  pillars: ReadonlyArray<{
     title: string;
     body: string;
-  }[];
+  }>;
 };
 
 export default function Pillars({ title, pillars }: PillarsProps) {

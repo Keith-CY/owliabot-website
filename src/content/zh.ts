@@ -44,4 +44,4 @@ export const content = {
   links: {
     github: "https://github.com/owliabot/owliabot",
   },
-};
+} as const;

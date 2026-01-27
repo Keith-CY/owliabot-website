@@ -3,10 +3,10 @@ import Reveal from "./Reveal";
 type SecurityProps = {
   security: {
     title: string;
-    items: {
+    items: ReadonlyArray<{
       title: string;
       body: string;
-    }[];
+    }>;
   };
 };
 

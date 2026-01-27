@@ -3,10 +3,10 @@ import Reveal from "./Reveal";
 type ArchitectureProps = {
   architecture: {
     title: string;
-    items: {
+    items: ReadonlyArray<{
       title: string;
       body: string;
-    }[];
+    }>;
   };
 };
 
