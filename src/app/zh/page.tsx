@@ -1,6 +1,6 @@
 import LandingPage from "@/components/LandingPage";
-import { content } from "@/content/en";
+import { content } from "@/content/zh";
 
-export default function Home() {
+export default function ChineseLandingPage() {
   return <LandingPage content={content} />;
 }
