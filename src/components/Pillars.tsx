@@ -33,7 +33,7 @@ export default function Pillars({ title, subtitle, pillars }: PillarsProps) {
               <p className="mt-3 text-pretty text-sm text-foreground/70">
                 {pillar.body}
               </p>
-              <p className="mt-4 text-xs font-semibold uppercase text-foreground/60">
+              <p className="mt-4 text-xs font-semibold text-foreground/60">
                 {pillar.mechanism}
               </p>
             </div>
