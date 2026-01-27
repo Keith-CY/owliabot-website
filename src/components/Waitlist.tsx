@@ -1,3 +1,4 @@
+import Script from "next/script";
 import Reveal from "./Reveal";
 
 type WaitlistProps = {
@@ -25,9 +26,14 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
           <p className="text-pretty text-sm font-semibold text-foreground">
             {waitlist.privacy}
           </p>
-          <div className="mt-6 rounded-[28px] border border-dashed border-border bg-black/30 px-6 py-10 text-center text-xs font-semibold uppercase text-foreground/60">
-            Tally embed placeholder
+          <div className="mt-6 overflow-hidden rounded-[28px] border border-border bg-black/30">
+            <iframe
+              className="min-h-[520px] w-full"
+              data-tally-src="https://tally.so/r/kdN1Mo?transparentBackground=1&dynamicHeight=1"
+              title="OwliaBot waitlist"
+            />
           </div>
+          <Script src="https://tally.so/widgets/embed.js" strategy="afterInteractive" />
         </div>
       </section>
     </Reveal>
