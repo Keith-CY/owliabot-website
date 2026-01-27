@@ -1,4 +1,3 @@
-import Image from "next/image";
 import ThemeToggle from "./ThemeToggle";
 
 type HeaderProps = {
@@ -21,13 +20,11 @@ export default function Header({ nav, lang }: HeaderProps) {
     <header className="border-b border-border bg-surface-strong/90 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4 sm:px-8 lg:px-12">
         <div className="flex items-center gap-3">
-          <div className="flex size-11 items-center justify-center rounded-2xl border border-border bg-surface shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
-            <Image
-              src="/owliabot.png"
+          <div className="flex size-11 items-center justify-center">
+            <img
+              src="/owliabot.svg"
               alt="Owliabot logo"
-              width={28}
-              height={28}
-              priority
+              className="h-7 w-7 dark:brightness-110"
             />
           </div>
         </div>
