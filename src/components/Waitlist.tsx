@@ -6,6 +6,7 @@ type WaitlistProps = {
     title: string;
     body: string;
     privacy: string;
+    note: string;
   };
 };
 
@@ -25,6 +26,9 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
           </p>
           <p className="text-pretty text-sm font-semibold text-foreground">
             {waitlist.privacy}
+          </p>
+          <p className="text-pretty text-xs text-foreground/60">
+            {waitlist.note}
           </p>
           <div className="mt-6 overflow-hidden rounded-[28px] border border-border bg-black/30">
             <iframe

@@ -62,6 +62,7 @@ export type LandingPageContent = {
     title: string;
     body: string;
     privacy: string;
+    note: string;
   };
   footer: {
     note: string;
