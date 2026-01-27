@@ -13,6 +13,8 @@ type HeroProps = {
 };
 
 export default function Hero({ hero, githubUrl }: HeroProps) {
+  const subtitleLines = hero.subtitle.split("\n");
+
   return (
     <section className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
       <div className="flex flex-col gap-6">
@@ -23,7 +25,12 @@ export default function Hero({ hero, githubUrl }: HeroProps) {
         </Reveal>
         <Reveal delay={0.08}>
           <p className="text-pretty text-base text-foreground/70 sm:text-lg">
-            {hero.subtitle}
+            {subtitleLines.map((line, index) => (
+              <span key={`${line}-${index}`}>
+                {line}
+                {index < subtitleLines.length - 1 && <br />}
+              </span>
+            ))}
           </p>
         </Reveal>
         <Reveal delay={0.12}>
@@ -56,9 +63,15 @@ export default function Hero({ hero, githubUrl }: HeroProps) {
           aria-hidden="true"
           className="relative z-10 min-h-[280px] rounded-[28px] border border-border bg-black/30 backdrop-blur"
         />
-        <p className="relative z-10 mt-4 text-xs text-foreground/70">
-          Every action follows an explicit signing path.
-        </p>
+        <div className="relative z-10 mt-4 flex flex-wrap gap-2 text-[10px] font-semibold uppercase text-foreground/70">
+          <span>Intent</span>
+          <span className="text-foreground/40">→</span>
+          <span>Permission</span>
+          <span className="text-foreground/40">→</span>
+          <span>Execution</span>
+          <span className="text-foreground/40">→</span>
+          <span>Audit</span>
+        </div>
       </div>
     </section>
   );
