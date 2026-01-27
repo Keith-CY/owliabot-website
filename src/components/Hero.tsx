@@ -5,6 +5,7 @@ type HeroProps = {
   hero: {
     title: string;
     subtitle: string;
+    emphasis: string;
     ctaPrimary: string;
     ctaSecondary: string;
   };
@@ -16,13 +17,18 @@ export default function Hero({ hero, githubUrl }: HeroProps) {
     <section className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
       <div className="flex flex-col gap-6">
         <Reveal>
-          <h1 className="text-balance text-4xl font-semibold text-foreground sm:text-5xl lg:text-6xl">
+          <h1 className="text-balance text-3xl font-semibold text-foreground sm:text-4xl lg:text-5xl">
             {hero.title}
           </h1>
         </Reveal>
         <Reveal delay={0.08}>
-          <p className="text-pretty text-lg text-foreground/70 sm:text-xl">
+          <p className="text-pretty text-base text-foreground/70 sm:text-lg">
             {hero.subtitle}
+          </p>
+        </Reveal>
+        <Reveal delay={0.12}>
+          <p className="text-sm font-semibold uppercase text-foreground/70">
+            {hero.emphasis}
           </p>
         </Reveal>
         <Reveal delay={0.16}>
@@ -35,9 +41,7 @@ export default function Hero({ hero, githubUrl }: HeroProps) {
             </a>
             <a
               className="rounded-full border border-border bg-surface px-6 py-3 text-sm font-semibold text-foreground hover:border-accent"
-              href={githubUrl}
-              target="_blank"
-              rel="noreferrer"
+              href="#architecture"
             >
               {hero.ctaSecondary}
             </a>
@@ -52,6 +56,9 @@ export default function Hero({ hero, githubUrl }: HeroProps) {
           aria-hidden="true"
           className="relative z-10 min-h-[280px] rounded-[28px] border border-border bg-black/30 backdrop-blur"
         />
+        <p className="relative z-10 mt-4 text-xs text-foreground/70">
+          Every action follows an explicit signing path.
+        </p>
       </div>
     </section>
   );

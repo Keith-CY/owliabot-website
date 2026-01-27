@@ -3,8 +3,9 @@ import ThemeToggle from "./ThemeToggle";
 type HeaderProps = {
   nav: {
     why: string;
-    security: string;
-    architecture: string;
+    signing: string;
+    execution: string;
+    local: string;
     waitlist: string;
   };
   lang: "en" | "zh";
@@ -32,11 +33,14 @@ export default function Header({ nav, lang }: HeaderProps) {
           <a className="hover:text-foreground" href="#why">
             {nav.why}
           </a>
-          <a className="hover:text-foreground" href="#security">
-            {nav.security}
-          </a>
           <a className="hover:text-foreground" href="#architecture">
-            {nav.architecture}
+            {nav.signing}
+          </a>
+          <a className="hover:text-foreground" href="#execution">
+            {nav.execution}
+          </a>
+          <a className="hover:text-foreground" href="#local">
+            {nav.local}
           </a>
           <a className="hover:text-foreground" href="#waitlist">
             {nav.waitlist}
