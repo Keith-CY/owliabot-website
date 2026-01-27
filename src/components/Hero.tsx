@@ -1,4 +1,5 @@
 import ShaderHero from "./ShaderHero";
+import ShaderBackdrop from "./ShaderBackdrop";
 import Reveal from "./Reveal";
 
 type HeroProps = {
@@ -18,8 +19,11 @@ export default function Hero({ hero, githubUrl }: HeroProps) {
   const subtitleLines = hero.subtitle.split("\n");
 
   return (
-    <section className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
-      <div className="flex flex-col gap-6">
+    <section className="relative grid items-center gap-10 overflow-hidden rounded-[36px] border border-border bg-surface/40 px-6 py-8 shadow-[0_18px_50px_rgba(10,10,20,0.32)] lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
+      <div className="absolute inset-0">
+        <ShaderBackdrop />
+      </div>
+      <div className="relative z-10 flex flex-col gap-6">
         <Reveal>
           {hero.badge ? (
             <span className="w-fit rounded-full border border-border bg-surface px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/60">
@@ -69,13 +73,13 @@ export default function Hero({ hero, githubUrl }: HeroProps) {
           </div>
         </Reveal>
       </div>
-      <div className="relative overflow-hidden rounded-[36px] border border-border bg-surface p-6 shadow-[0_18px_50px_rgba(10,10,20,0.35)]">
+      <div className="relative z-10 overflow-hidden rounded-[32px] border border-border bg-surface/80 p-6 shadow-[0_18px_50px_rgba(10,10,20,0.35)]">
         <div className="absolute inset-0">
           <ShaderHero />
         </div>
         <div
           aria-hidden="true"
-          className="relative z-10 min-h-[280px] rounded-[28px] border border-border bg-black/30 backdrop-blur"
+          className="relative z-10 min-h-[280px] rounded-[26px] border border-border bg-black/30 backdrop-blur"
         />
         <div className="relative z-10 mt-4 flex flex-wrap gap-2 text-[10px] font-semibold uppercase text-foreground/70">
           <span>Intent</span>
