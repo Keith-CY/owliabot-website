@@ -18,6 +18,8 @@ const fragmentShader = `
   uniform float u_time;
   uniform vec2 u_resolution;
   uniform vec2 u_mouse;
+  uniform vec3 u_base;
+  uniform vec3 u_accent;
 
   varying vec2 vUv;
 
@@ -40,11 +42,9 @@ const fragmentShader = `
     float highlight = smoothstep(0.55, 0.0, length(st - m * 0.7)) * 0.06;
     float glow = clamp(wave + ripple + n + highlight, -0.4, 0.6) * mask;
 
-    vec3 base = vec3(0.08, 0.1, 0.16);
-    vec3 accent = vec3(0.42, 0.35, 0.95);
-    vec3 color = mix(base, accent, glow + 0.35);
+    vec3 color = mix(u_base, u_accent, glow + 0.3);
 
-    gl_FragColor = vec4(color, 0.9);
+    gl_FragColor = vec4(color, 0.85);
   }
 `;
 
@@ -75,6 +75,8 @@ export default function ShaderHero() {
         value: new THREE.Vector2(mount.clientWidth, mount.clientHeight),
       },
       u_mouse: { value: new THREE.Vector2(0.5, 0.5) },
+      u_base: { value: new THREE.Color(0.08, 0.1, 0.16) },
+      u_accent: { value: new THREE.Color(0.42, 0.35, 0.95) },
     };
 
     const geometry = new THREE.PlaneGeometry(2, 2);
@@ -91,6 +93,29 @@ export default function ShaderHero() {
     let frameId = 0;
     const mouse = new THREE.Vector2(0.5, 0.5);
     const target = new THREE.Vector2(0.5, 0.5);
+    let observer: MutationObserver | null = null;
+
+    const parseTriplet = (value: string, fallback: [number, number, number]) => {
+      const parts = value.trim().split(/\s+/).map((item) => Number(item));
+      if (parts.length >= 3 && parts.every((item) => Number.isFinite(item))) {
+        return [parts[0], parts[1], parts[2]] as const;
+      }
+      return fallback;
+    };
+
+    const updateColors = () => {
+      const styles = getComputedStyle(document.documentElement);
+      const base = parseTriplet(styles.getPropertyValue("--shader-hero-base"), [14, 16, 26]);
+      const accent = parseTriplet(styles.getPropertyValue("--shader-hero-accent"), [118, 106, 240]);
+      uniforms.u_base.value.setRGB(base[0] / 255, base[1] / 255, base[2] / 255);
+      uniforms.u_accent.value.setRGB(
+        accent[0] / 255,
+        accent[1] / 255,
+        accent[2] / 255
+      );
+    };
+
+    updateColors();
 
     const render = (time: number) => {
       uniforms.u_time.value = time * 0.001;
@@ -126,12 +151,18 @@ export default function ShaderHero() {
     window.addEventListener("resize", handleResize);
     mount.addEventListener("pointermove", handlePointerMove);
     mount.addEventListener("pointerleave", handlePointerLeave);
+    observer = new MutationObserver(() => updateColors());
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "style"],
+    });
 
     return () => {
       cancelAnimationFrame(frameId);
       window.removeEventListener("resize", handleResize);
       mount.removeEventListener("pointermove", handlePointerMove);
       mount.removeEventListener("pointerleave", handlePointerLeave);
+      observer?.disconnect();
       geometry.dispose();
       material.dispose();
       renderer.dispose();

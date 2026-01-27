@@ -113,8 +113,8 @@ export default function LandingPage({ content }: LandingPageProps) {
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <Header nav={content.nav} />
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-28 px-6 pb-24 pt-12 sm:px-8 lg:px-12">
-        <Hero hero={content.hero} githubUrl={content.links.github} />
+      <Hero hero={content.hero} />
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-16 px-6 pb-24 pt-12 sm:px-8 lg:px-12">
         <Pillars eyebrow={content.why.eyebrow} title={content.why.title} subtitle={content.why.subtitle} pillars={content.why.items} />
         <ArchitectureOverview architecture={content.architecture} />
         <SkillsSection skills={content.skills} />

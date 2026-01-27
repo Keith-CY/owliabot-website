@@ -1,30 +1,45 @@
 @import "tailwindcss";
 
 :root {
-  --color-bg: #0b0c12;
-  --color-fg: #e7e9ff;
-  --color-surface: rgba(24, 27, 42, 0.7);
-  --color-surface-strong: rgba(34, 38, 58, 0.9);
-  --color-border: rgba(120, 130, 190, 0.35);
-  --color-accent: #6b52ff;
+  --color-bg: #07080a;
+  --color-fg: #f2f4f7;
+  --color-surface: rgba(255, 255, 255, 0.04);
+  --color-surface-strong: rgba(255, 255, 255, 0.06);
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-accent: #6a5cff;
+  --color-stage: #07080a;
+  --shader-base: 7 8 10;
+  --shader-glow: 36 38 54;
+  --shader-hero-base: 14 16 26;
+  --shader-hero-accent: 118 106 240;
 }
 
 .light {
-  --color-bg: #f6f7fb;
-  --color-fg: #101423;
-  --color-surface: rgba(255, 255, 255, 0.72);
-  --color-surface-strong: rgba(255, 255, 255, 0.9);
-  --color-border: rgba(132, 145, 196, 0.25);
-  --color-accent: #5a5cff;
+  --color-bg: #f6f7fa;
+  --color-fg: #0b0d12;
+  --color-surface: rgba(0, 0, 0, 0.03);
+  --color-surface-strong: rgba(0, 0, 0, 0.05);
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-accent: #5b5cff;
+  --color-stage: #eef0f6;
+  --shader-base: 244 245 249;
+  --shader-glow: 214 218 232;
+  --shader-hero-base: 226 229 240;
+  --shader-hero-accent: 154 144 244;
 }
 
 .dark {
-  --color-bg: #0b0c12;
-  --color-fg: #e7e9ff;
-  --color-surface: rgba(24, 27, 42, 0.7);
-  --color-surface-strong: rgba(34, 38, 58, 0.9);
-  --color-border: rgba(120, 130, 190, 0.35);
-  --color-accent: #6b52ff;
+  --color-bg: #07080a;
+  --color-fg: #f2f4f7;
+  --color-surface: rgba(255, 255, 255, 0.04);
+  --color-surface-strong: rgba(255, 255, 255, 0.06);
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-accent: #6a5cff;
+  --color-stage: #07080a;
+  --shader-base: 7 8 10;
+  --shader-glow: 36 38 54;
+  --shader-hero-base: 14 16 26;
+  --shader-hero-accent: 118 106 240;
 }
 
 @theme inline {
@@ -34,6 +49,7 @@
   --color-surface-strong: var(--color-surface-strong);
   --color-border: var(--color-border);
   --color-accent: var(--color-accent);
+  --color-stage: var(--color-stage);
 }
 
 @layer base {
@@ -52,5 +68,103 @@
 
   p {
     @apply text-pretty;
+  }
+}
+
+@layer utilities {
+  @keyframes drift-slow {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(32px, -18px, 0) scale(1.05);
+    }
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  @keyframes drift-medium {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(-24px, 22px, 0) scale(1.04);
+    }
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  @keyframes drift-soft {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(18px, 16px, 0) scale(1.03);
+    }
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  @keyframes plume-drift {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(-28px, 18px, 0) scale(1.06) rotate(1.5deg);
+    }
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  @keyframes plume-drift-alt {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(22px, -20px, 0) scale(1.04) rotate(-1deg);
+    }
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  @keyframes noise-drift {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 180px 160px;
+    }
+  }
+
+  .drift-slow {
+    animation: drift-slow 22s ease-in-out infinite;
+  }
+
+  .drift-medium {
+    animation: drift-medium 18s ease-in-out infinite;
+  }
+
+  .drift-soft {
+    animation: drift-soft 26s ease-in-out infinite;
+  }
+
+  .plume-drift {
+    animation: plume-drift 26s ease-in-out infinite;
+  }
+
+  .plume-drift-alt {
+    animation: plume-drift-alt 21s ease-in-out infinite;
+  }
+
+  .noise-film {
+    background-image: url("/noise.svg");
+    background-size: 220px 220px;
+    background-repeat: repeat;
+    animation: noise-drift 18s linear infinite;
   }
 }

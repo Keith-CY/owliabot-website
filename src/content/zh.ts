@@ -12,8 +12,8 @@ export const content = {
   hero: {
     title: "一个永远不会越过签名边界的加密自治代理。",
     subtitle:
-      "OwliaBot 是一个自托管的加密原生代理，面向链上操作。\n极简依赖，可扩展 Skills，本地优先安全模型。",
-    badge: "签名模型规划中",
+      "OwliaBot 是一个自托管的加密原生代理，面向链上操作，\n依赖极简、Skills 可扩展、本地优先安全。",
+    badge: "三层签名模型",
     status: "已完成设计与文档，正在实现。",
     emphasis: "安全、隐私、可控，皆为设计的一部分。",
     ctaPrimary: "加入候补名单",

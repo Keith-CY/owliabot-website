@@ -24,11 +24,11 @@ export default function ExecutionFlow({ execution }: ExecutionFlowProps) {
         </div>
       </Reveal>
       <Reveal delay={0.08}>
-        <div className="flex flex-wrap items-center gap-3 text-xs font-mono uppercase tracking-[0.2em] text-foreground/70">
+        <div className="flex flex-wrap items-center gap-3 text-xs font-mono uppercase tracking-[0.24em] text-foreground/70">
           {execution.steps.map((step, index) => (
             <div
               key={step}
-              className="rounded-full border border-border bg-surface px-4 py-2 shadow-[0_8px_22px_rgba(6,8,18,0.25)]"
+              className="rounded-full border border-border bg-surface/70 px-4 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]"
             >
               {step}
               {index < execution.steps.length - 1 && (

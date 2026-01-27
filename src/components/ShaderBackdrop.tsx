@@ -17,6 +17,8 @@ const fragmentShader = `
 
   uniform float u_time;
   uniform vec2 u_resolution;
+  uniform vec3 u_base;
+  uniform vec3 u_glow;
 
   varying vec2 vUv;
 
@@ -44,9 +46,10 @@ const fragmentShader = `
     float swirl = sin(st.x * 2.0 + t * 1.4) * 0.15 + cos(st.y * 2.6 - t) * 0.12;
     float mist = smoothstep(-0.4, 0.4, flow + swirl);
 
-    vec3 base = vec3(0.04, 0.05, 0.08);
-    vec3 glow = vec3(0.18, 0.2, 0.32);
-    vec3 color = mix(base, glow, mist * 0.35);
+    vec3 color = mix(u_base, u_glow, mist * 0.35);
+    float dist = distance(uv, vec2(0.5));
+    float vignette = 1.0 - smoothstep(0.35, 0.95, dist);
+    color *= mix(0.75, 1.0, vignette);
 
     gl_FragColor = vec4(color, 0.85);
   }
@@ -78,6 +81,8 @@ export default function ShaderBackdrop() {
       u_resolution: {
         value: new THREE.Vector2(mount.clientWidth, mount.clientHeight),
       },
+      u_base: { value: new THREE.Color(0.04, 0.05, 0.08) },
+      u_glow: { value: new THREE.Color(0.18, 0.2, 0.32) },
     };
 
     const geometry = new THREE.PlaneGeometry(2, 2);
@@ -92,6 +97,25 @@ export default function ShaderBackdrop() {
     scene.add(mesh);
 
     let frameId = 0;
+    let observer: MutationObserver | null = null;
+
+    const parseTriplet = (value: string, fallback: [number, number, number]) => {
+      const parts = value.trim().split(/\s+/).map((item) => Number(item));
+      if (parts.length >= 3 && parts.every((item) => Number.isFinite(item))) {
+        return [parts[0], parts[1], parts[2]] as const;
+      }
+      return fallback;
+    };
+
+    const updateColors = () => {
+      const styles = getComputedStyle(document.documentElement);
+      const base = parseTriplet(styles.getPropertyValue("--shader-base"), [7, 8, 10]);
+      const glow = parseTriplet(styles.getPropertyValue("--shader-glow"), [36, 38, 54]);
+      uniforms.u_base.value.setRGB(base[0] / 255, base[1] / 255, base[2] / 255);
+      uniforms.u_glow.value.setRGB(glow[0] / 255, glow[1] / 255, glow[2] / 255);
+    };
+
+    updateColors();
 
     const render = (time: number) => {
       uniforms.u_time.value = time * 0.001;
@@ -113,10 +137,16 @@ export default function ShaderBackdrop() {
     };
 
     window.addEventListener("resize", handleResize);
+    observer = new MutationObserver(() => updateColors());
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "style"],
+    });
 
     return () => {
       cancelAnimationFrame(frameId);
       window.removeEventListener("resize", handleResize);
+      observer?.disconnect();
       geometry.dispose();
       material.dispose();
       renderer.dispose();

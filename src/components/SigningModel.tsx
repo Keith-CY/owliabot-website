@@ -17,7 +17,7 @@ type SigningModelProps = {
 
 export default function SigningModel({ signing }: SigningModelProps) {
   return (
-    <section id="signing" className="flex flex-col gap-8 border-t border-border pt-12">
+    <section id="signing" className="flex flex-col gap-8 border-t border-border/60 pt-12">
       <Reveal>
         <div className="flex flex-col gap-3">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/60">
@@ -39,7 +39,7 @@ export default function SigningModel({ signing }: SigningModelProps) {
       <div className="grid gap-6 lg:grid-cols-3">
         {signing.tiers.map((tier, index) => (
           <Reveal key={tier.title} delay={0.06 * index}>
-            <div className="rounded-[30px] border border-border bg-surface px-6 py-7 shadow-[0_14px_36px_rgba(6,8,18,0.35)] backdrop-blur">
+            <div className="rounded-[28px] border border-border bg-surface/70 px-6 py-7 shadow-[0_10px_24px_rgba(4,6,10,0.14),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur dark:shadow-[0_10px_24px_rgba(4,6,10,0.22),_inset_0_1px_0_rgba(255,255,255,0.14)]">
               <p className="text-xs font-semibold uppercase text-foreground/60">
                 {tier.keyword}
               </p>

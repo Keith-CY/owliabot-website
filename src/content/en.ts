@@ -12,8 +12,8 @@ export const content = {
   hero: {
     title: "An autonomous crypto agent that never crosses your signing boundary.",
     subtitle:
-      "OwliaBot is a self-hosted, crypto-native agent for on-chain operations.\nMinimal dependencies. Extensible skills. Local-first security.",
-    badge: "Signing model planned",
+      "OwliaBot is a self-hosted, crypto-native agent for on-chain operations,\nwith minimal dependencies, extensible skills, and local-first security.",
+    badge: "Three-tier signing model",
     status: "Designed and documented. Implementation in progress.",
     emphasis: "Secure. Private. Controllable by design.",
     ctaPrimary: "Join the Waitlist",

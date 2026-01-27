@@ -16,7 +16,7 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
     <Reveal>
       <section
         id="waitlist"
-        className="rounded-[36px] border border-border bg-surface px-8 py-12 shadow-[0_20px_60px_rgba(6,8,18,0.32)] backdrop-blur"
+        className="rounded-[34px] border border-border bg-surface/70 px-8 py-12 shadow-[0_14px_32px_rgba(4,6,10,0.16),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur dark:shadow-[0_14px_32px_rgba(4,6,10,0.22),_inset_0_1px_0_rgba(255,255,255,0.14)]"
       >
         <div className="flex flex-col gap-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/60">
@@ -34,10 +34,10 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
           <p className="text-pretty text-xs text-foreground/60">
             {waitlist.note}
           </p>
-          <div className="mt-6 overflow-hidden rounded-[28px] border border-border bg-surface/80 shadow-[0_12px_30px_rgba(6,8,18,0.25)]">
+          <div className="mt-6 overflow-hidden rounded-[26px] border border-border bg-surface/80 shadow-[0_10px_22px_rgba(4,6,10,0.14),_inset_0_1px_0_rgba(255,255,255,0.35)] dark:shadow-[0_10px_22px_rgba(4,6,10,0.2),_inset_0_1px_0_rgba(255,255,255,0.12)]">
             <iframe
               className="min-h-[520px] w-full"
-              data-tally-src="https://tally.so/r/kdN1Mo?transparentBackground=1&dynamicHeight=1"
+              data-tally-src="https://tally.so/r/RGD10d?transparentBackground=1&dynamicHeight=1"
               title="OwliaBot waitlist"
             />
           </div>

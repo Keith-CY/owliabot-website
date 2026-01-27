@@ -11,7 +11,7 @@ type LocalFirstProps = {
 
 export default function LocalFirst({ local }: LocalFirstProps) {
   return (
-    <section id="local" className="rounded-[34px] border border-border bg-surface px-8 py-10 shadow-[0_16px_40px_rgba(6,8,18,0.32)] backdrop-blur">
+    <section id="local" className="rounded-[32px] border border-border bg-surface/70 px-8 py-10 shadow-[0_12px_28px_rgba(4,6,10,0.16),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur dark:shadow-[0_12px_28px_rgba(4,6,10,0.22),_inset_0_1px_0_rgba(255,255,255,0.14)]">
       <div className="flex flex-col gap-6">
         <Reveal>
           <div className="flex flex-col gap-3">
@@ -31,7 +31,7 @@ export default function LocalFirst({ local }: LocalFirstProps) {
         <ul className="grid gap-3 text-sm text-foreground/70 sm:grid-cols-3">
           {local.bullets.map((bullet, index) => (
             <Reveal key={bullet} delay={0.12 + index * 0.04}>
-              <li className="rounded-[22px] border border-border bg-surface px-4 py-3 shadow-[0_8px_20px_rgba(6,8,18,0.2)]">
+              <li className="rounded-[20px] border border-border bg-surface/70 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
                 {bullet}
               </li>
             </Reveal>
