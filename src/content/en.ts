@@ -2,7 +2,7 @@ export const content = {
   lang: "en",
   nav: { why: "Why", security: "Security", architecture: "Architecture", waitlist: "Waitlist" },
   hero: {
-    title: "A crypto-native clawdbot for autonomous operation — secure and private by design.",
+    title: "A crypto-native clawdbot for autonomous operation - secure and private by design.",
     subtitle: "Self-hosted AI agent for crypto ops, accessible on mobile, desktop, and web.",
     ctaPrimary: "Join the Waitlist",
     ctaSecondary: "View GitHub",
@@ -14,7 +14,7 @@ export const content = {
     { title: "Private", body: "Local-first by design. Keys never leave your device." },
   ],
   security: {
-    title: "3‑tier signing model",
+    title: "3-tier signing model",
     items: [
       { title: "Tier 1: Companion App", body: "User-confirmed signing for any high-value action." },
       { title: "Tier 2: Session Keys", body: "Low-risk automation with limits and rotation." },

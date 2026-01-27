@@ -28,7 +28,7 @@ export const content = {
   architecture: {
     title: "本地优先的架构",
     items: [
-      { title: "Local-first", body: "敏感操作留在本地。" },
+      { title: "本地优先", body: "敏感操作留在本地。" },
       { title: "最小依赖", body: "攻击面更小，更易审计。" },
       { title: "可审计", body: "流程透明，代码可查。" },
     ],
