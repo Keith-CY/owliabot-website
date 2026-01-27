@@ -16,10 +16,13 @@ type SigningModelProps = {
 
 export default function SigningModel({ signing }: SigningModelProps) {
   return (
-    <section id="architecture" className="flex flex-col gap-8">
+    <section
+      id="architecture"
+      className="flex flex-col gap-8 border-t border-border pt-12"
+    >
       <Reveal>
         <div className="flex flex-col gap-3">
-          <p className="text-xs font-semibold uppercase text-foreground/60">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/60">
             {signing.subtitle}
           </p>
           <h2 className="text-balance text-2xl font-semibold text-foreground sm:text-3xl">
