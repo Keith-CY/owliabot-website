@@ -1,3 +1,5 @@
+import ShaderHero from "./ShaderHero";
+
 type HeroProps = {
   hero: {
     title: string;
@@ -35,10 +37,13 @@ export default function Hero({ hero, githubUrl }: HeroProps) {
           </a>
         </div>
       </div>
-      <div className="rounded-[36px] border border-border bg-surface p-6 shadow-[0_20px_60px_rgba(10,10,20,0.45)]">
+      <div className="relative overflow-hidden rounded-[36px] border border-border bg-surface p-6 shadow-[0_20px_60px_rgba(10,10,20,0.45)]">
+        <div className="absolute inset-0">
+          <ShaderHero />
+        </div>
         <div
           aria-hidden="true"
-          className="min-h-[280px] rounded-[28px] border border-border bg-black/40"
+          className="relative z-10 min-h-[280px] rounded-[28px] border border-border bg-black/30 backdrop-blur"
         />
       </div>
     </section>
