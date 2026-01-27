@@ -10,32 +10,33 @@ export const content = {
   hero: {
     title: "An autonomous crypto agent that never crosses your signing boundary.",
     subtitle:
-      "Clawdbot is a crypto-native autonomous agent for on-chain operations, designed with explicit permissions, progressive signing, and local-first security.",
+      "OwliaBot is a crypto-native autonomous agent for on-chain operations.\nDesigned with explicit permissions, progressive signing, and local-first security.",
     emphasis: "Secure. Private. Controllable by design.",
     ctaPrimary: "Join the Waitlist",
     ctaSecondary: "Read the Architecture",
   },
   why: {
-    title: "Why Clawdbot",
-    subtitle: "Autonomy is useful only when boundaries are explicit.",
+    title: "Why OwliaBot",
+    subtitle:
+      "Autonomy is useful only when boundaries are explicit — otherwise it is just blind execution.",
     items: [
       {
         title: "Crypto-native",
         body:
-          "Built for on-chain workflows, wallets, and DeFi-native operations. Clawdbot understands transactions, signatures, and execution contexts as first-class primitives.",
+          "Built for on-chain workflows, wallets, and DeFi-native operations. OwliaBot understands transactions, signatures, and execution contexts as first-class primitives.",
         mechanism: "No abstraction over keys. No off-chain shadow execution.",
       },
       {
         title: "Autonomous",
         body:
-          "Clawdbot executes tasks autonomously within clearly defined limits. Every action is derived from explicit intent and scoped permissions.",
+          "OwliaBot executes tasks autonomously within clearly defined limits. Every action is derived from explicit intent and scoped permissions.",
         mechanism: "Autonomy without implicit authority.",
       },
       {
         title: "Secure",
         body:
           "A layered signing model separates intent, execution, and authority. High-risk actions require explicit user confirmation, while low-risk automation remains bounded and auditable.",
-        mechanism: "No blind signing. No hidden escalation.",
+        mechanism: "No blind signing. No hidden privilege escalation.",
       },
       {
         title: "Private",
@@ -49,7 +50,7 @@ export const content = {
     title: "A 3-tier signing model",
     subtitle: "Autonomy without blind trust.",
     description:
-      "Clawdbot separates user intent, automated execution, and on-chain authority into three distinct signing layers. Each tier has a clear purpose, scope, and failure boundary.",
+      "OwliaBot separates user intent, automated execution, and on-chain authority into three distinct signing layers. Each tier has a clear purpose, scope, and failure boundary.",
     tiers: [
       {
         title: "Tier 1: Companion App",
@@ -77,7 +78,7 @@ export const content = {
   },
   local: {
     title: "Local-first by design",
-    body: "Most agents ask for your keys. We never do.",
+    body: "Most agents require key custody. OwliaBot does not.",
     bullets: [
       "Keys live on your device",
       "Sensitive operations run locally",
@@ -93,9 +94,10 @@ export const content = {
     title: "Join the waitlist",
     body: "Be first in line for early access and private beta updates.",
     privacy: "We will never ask for your private keys.",
+    note: "No wallet connection required.",
   },
   footer: {
-    note: "Private keys never leave your device.",
+    note: "Private keys never leave your device. No exceptions.",
   },
   links: {
     github: "https://github.com/owliabot/owliabot",
