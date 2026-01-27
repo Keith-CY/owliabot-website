@@ -1,37 +1,93 @@
 export const content = {
   lang: "en",
-  nav: { why: "Why", security: "Security", architecture: "Architecture", waitlist: "Waitlist" },
-  hero: {
-    title: "A crypto-native clawdbot for autonomous operation - secure and private by design.",
-    subtitle: "Self-hosted AI agent for crypto ops, accessible on mobile, desktop, and web.",
-    ctaPrimary: "Join the Waitlist",
-    ctaSecondary: "View GitHub",
+  nav: {
+    why: "Why",
+    signing: "Signing Model",
+    execution: "Execution Flow",
+    local: "Local-first",
+    waitlist: "Waitlist",
   },
-  pillars: [
-    { title: "Crypto-native", body: "Built for on-chain workflows, wallets, and DeFi-native operations." },
-    { title: "Autonomous", body: "Agentic execution with clear boundaries and human control." },
-    { title: "Secure", body: "Layered signing model with strict permissioning and auditability." },
-    { title: "Private", body: "Local-first by design. Keys never leave your device." },
-  ],
-  security: {
-    title: "3-tier signing model",
+  hero: {
+    title: "An autonomous crypto agent that never crosses your signing boundary.",
+    subtitle:
+      "Clawdbot is a crypto-native autonomous agent for on-chain operations, designed with explicit permissions, progressive signing, and local-first security.",
+    emphasis: "Secure. Private. Controllable by design.",
+    ctaPrimary: "Join the Waitlist",
+    ctaSecondary: "Read the Architecture",
+  },
+  why: {
+    title: "Why Clawdbot",
+    subtitle: "Autonomy is useful only when boundaries are explicit.",
     items: [
-      { title: "Tier 1: Companion App", body: "User-confirmed signing for any high-value action." },
-      { title: "Tier 2: Session Keys", body: "Low-risk automation with limits and rotation." },
-      { title: "Tier 3: Smart Wallet", body: "Granular permissions for advanced strategies." },
+      {
+        title: "Crypto-native",
+        body:
+          "Built for on-chain workflows, wallets, and DeFi-native operations. Clawdbot understands transactions, signatures, and execution contexts as first-class primitives.",
+        mechanism: "No abstraction over keys. No off-chain shadow execution.",
+      },
+      {
+        title: "Autonomous",
+        body:
+          "Clawdbot executes tasks autonomously within clearly defined limits. Every action is derived from explicit intent and scoped permissions.",
+        mechanism: "Autonomy without implicit authority.",
+      },
+      {
+        title: "Secure",
+        body:
+          "A layered signing model separates intent, execution, and authority. High-risk actions require explicit user confirmation, while low-risk automation remains bounded and auditable.",
+        mechanism: "No blind signing. No hidden escalation.",
+      },
+      {
+        title: "Private",
+        body:
+          "Local-first by design. Private keys never leave your device. There is no hosted key custody and no centralized signing service.",
+        mechanism: "You own the keys. You define the trust.",
+      },
+    ],
+  },
+  signing: {
+    title: "A 3-tier signing model",
+    subtitle: "Autonomy without blind trust.",
+    description:
+      "Clawdbot separates user intent, automated execution, and on-chain authority into three distinct signing layers. Each tier has a clear purpose, scope, and failure boundary.",
+    tiers: [
+      {
+        title: "Tier 1: Companion App",
+        body: "User-confirmed signing for any high-value or sensitive action. This is where intent is explicitly approved.",
+        keyword: "Explicit consent",
+      },
+      {
+        title: "Tier 2: Session Keys",
+        body: "Scoped, time-limited keys for low-risk automation. Permissions are tightly bounded and automatically rotated.",
+        keyword: "Scoped execution",
+      },
+      {
+        title: "Tier 3: Smart Wallet",
+        body: "On-chain policy enforcement for advanced strategies. The wallet defines what is possible - not the agent.",
+        keyword: "Enforced authority",
+      },
+    ],
+    footer:
+      "The agent never gains more authority than you explicitly grant.",
+  },
+  execution: {
+    title: "Execution Flow",
+    steps: ["Intent", "Permission", "Execution", "Audit"],
+    caption: "Every action follows an explicit signing path.",
+  },
+  local: {
+    title: "Local-first by design",
+    body: "Most agents ask for your keys. We never do.",
+    bullets: [
+      "Keys live on your device",
+      "Sensitive operations run locally",
+      "Remote execution is optional and explicit",
     ],
   },
   devices: {
     title: "Everywhere you work",
-    body: "Mobile, desktop, and web access for fast, secure ops.",
-  },
-  architecture: {
-    title: "Local-first by design",
-    items: [
-      { title: "Local-first", body: "Sensitive ops stay on your device." },
-      { title: "Minimal deps", body: "Small surface area, easy audits." },
-      { title: "Auditable", body: "Transparent, inspectable workflows." },
-    ],
+    body:
+      "Operate securely from desktop, mobile, or web - without changing your trust assumptions.",
   },
   waitlist: {
     title: "Join the waitlist",
