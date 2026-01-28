@@ -12,7 +12,8 @@ const SYSTEM_PROMPT = `你是 OwliaBot 的需求收集助手。你的目标是�
 - 当需求足够清晰时（通常2-3轮对话后），将 shouldContinue 设为 false
 - 始终用中文回复
 
-你必须返回有效的 JSON 格式：
+CRITICAL: 你必须只返回一个有效的 JSON 对象，不要包含任何其他文本、解释或 markdown 代码块。
+直接返回这个格式：
 {
   "reply": "你的文字回复（包含总结和追问）",
   "summaryPoints": ["要点1", "要点2", "要点3"],
@@ -31,6 +32,7 @@ export async function submitUserMessage(
       generationConfig: {
         temperature: 0.7,
         maxOutputTokens: 1024,
+        responseMimeType: "application/json",
       },
     });
 
@@ -48,9 +50,21 @@ export async function submitUserMessage(
     const result = await chat.sendMessage(userInput);
     const responseText = result.response.text();
 
-    // Parse JSON response
-    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+    // Log the raw response for debugging
+    console.log('AI raw response:', responseText);
+
+    // Try to extract JSON from response (handle markdown code blocks)
+    let jsonText = responseText.trim();
+
+    // Remove markdown code blocks if present
+    if (jsonText.startsWith('```')) {
+      jsonText = jsonText.replace(/^```(?:json)?\s*\n?/, '').replace(/\n?```\s*$/, '');
+    }
+
+    // Try to find JSON object
+    const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
+      console.error('Failed to find JSON in response:', responseText);
       throw new Error('AI response is not valid JSON');
     }
 
