@@ -1,13 +1,16 @@
 'use client'
 
 import { motion } from 'framer-motion';
+import { Renderer } from '@json-render/react';
 import type { Message as MessageType } from '@/types/waitlist';
+import { waitlistRegistry } from './waitlist/WaitlistRegistry';
 
 type MessageProps = {
   message: MessageType;
+  uiTree?: any; // For AI messages with UI tree
 };
 
-export default function Message({ message }: MessageProps) {
+export default function Message({ message, uiTree }: MessageProps) {
   const isUser = message.role === 'user';
 
   return (
@@ -18,13 +21,19 @@ export default function Message({ message }: MessageProps) {
       className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}
     >
       <div
-        className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+        className={`max-w-[85%] rounded-2xl px-4 py-3 ${
           isUser
             ? 'bg-foreground text-background'
             : 'bg-surface border border-border text-foreground'
         }`}
       >
-        <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+        {isUser ? (
+          <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+        ) : uiTree ? (
+          <Renderer tree={uiTree} components={waitlistRegistry} />
+        ) : (
+          <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+        )}
       </div>
     </motion.div>
   );
