@@ -1,7 +1,8 @@
 'use server'
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { Message, AIResponse } from '@/types/waitlist';
+import { Client } from '@notionhq/client';
+import { Message, AIResponse, NotionSubmission } from '@/types/waitlist';
 
 const SYSTEM_PROMPT = `你是 OwliaBot 的需求收集助手。你的目标是通过对话深入理解用户的真实需求。
 
@@ -64,5 +65,60 @@ export async function submitUserMessage(
   } catch (error) {
     console.error('Error in submitUserMessage:', error);
     throw new Error('Failed to get AI response');
+  }
+}
+
+export async function submitToNotion(data: NotionSubmission): Promise<void> {
+  try {
+    const notion = new Client({ auth: process.env.NOTION_API_KEY });
+
+    await notion.pages.create({
+      parent: { database_id: process.env.NOTION_DATABASE_ID! },
+      properties: {
+        Email: {
+          title: [
+            {
+              text: {
+                content: data.email,
+              },
+            },
+          ],
+        },
+        'Submitted At': {
+          date: {
+            start: new Date().toISOString(),
+          },
+        },
+        Requirements: {
+          rich_text: [
+            {
+              text: {
+                content: data.summaryPoints.map((point, i) => `${i + 1}. ${point}`).join('\n\n'),
+              },
+            },
+          ],
+        },
+        Conversation: {
+          rich_text: [
+            {
+              text: {
+                content: JSON.stringify(data.messages, null, 2),
+              },
+            },
+          ],
+        },
+        'Summary Points Count': {
+          number: data.summaryPoints.length,
+        },
+        Status: {
+          select: {
+            name: 'New',
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Error submitting to Notion:', error);
+    throw new Error('Failed to submit to Notion');
   }
 }
