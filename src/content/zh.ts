@@ -5,7 +5,7 @@ export const content = {
     architecture: "架构总览",
     skills: "Skills 系统",
     security: "安全账户",
-    waitlist: "候补名单",
+    waitlist: "共建 OwliaBot",
   },
   hero: {
     title: "一个永远不会越过签名边界的加密自治 AI Agent。",
@@ -122,11 +122,11 @@ export const content = {
     },
   },
   waitlist: {
-    eyebrow: "早期体验",
-    title: "加入候补名单",
-    body: "第一时间获取早期体验与内测更新。",
-    privacy: "我们永远不会索要你的私钥。",
-    note: "无需连接钱包。",
+    eyebrow: "你不是用户，是共建者",
+    title: "你希望 OwliaBot 帮你做什么？",
+    body: "描述你最希望 OwliaBot 实现的功能，我们会优先实现。",
+    privacy: "我们永远不会索要你的私钥，无需连接钱包。",
+    note: "",
   },
   footer: {
     note: "私钥永不离开你的设备。没有例外。",

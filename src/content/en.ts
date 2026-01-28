@@ -5,7 +5,7 @@ export const content = {
     architecture: "Architecture",
     skills: "Skills",
     security: "Secure Accounts",
-    waitlist: "Waitlist",
+    waitlist: "Co-build OwliaBot",
   },
   hero: {
     title: "An autonomous crypto agent that never crosses your signing boundary.",
@@ -127,11 +127,11 @@ export const content = {
     },
   },
   waitlist: {
-    eyebrow: "Early access",
-    title: "Join the waitlist",
-    body: "Be first in line for early access and private beta updates.",
-    privacy: "We will never ask for your private keys.",
-    note: "No wallet connection required.",
+    eyebrow: "You are not a user, you are a co-builder",
+    title: "What do you want OwliaBot to do?",
+    body: "Describe the features you want most, and we will prioritize them.",
+    privacy: "We will never ask for your private keys. No wallet connection required.",
+    note: "",
   },
   footer: {
     note: "Private keys never leave your device. No exceptions.",
@@ -143,7 +143,7 @@ export const content = {
     scenarios: [
       {
         id: "security",
-        label: "🔐 Address Security",
+        label: "Address Security",
         messages: [
           { role: "user", content: "Monitor security status of 0x123...xyz" },
           { role: "assistant", content: "OK, I will monitor on-chain risks for this address.\nI will alert you immediately if any anomalies occur." },
@@ -153,7 +153,7 @@ export const content = {
       },
       {
         id: "social",
-        label: "📰 X Account Monitor",
+        label: "X Monitor",
         messages: [
           { role: "user", content: "Monitor this X account: @example_xyz" },
           { role: "assistant", content: "Monitoring started.\nI will summarize and alert you on important updates." },
@@ -164,7 +164,7 @@ export const content = {
       },
       {
         id: "yield",
-        label: "📈 Yield Discovery",
+        label: "Yield Discovery",
         messages: [
           { role: "user", content: "Find stable high-yield opportunities" },
           { role: "assistant", content: "Understood. Screening for viable yield strategies based on on-chain data." },

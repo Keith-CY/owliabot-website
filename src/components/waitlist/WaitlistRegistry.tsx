@@ -2,16 +2,10 @@
 
 import { ComponentType } from 'react';
 import { useWaitlist } from '@/contexts/WaitlistContext';
+import type { ComponentRenderProps } from '@json-render/react';
 
-type ElementProps = {
-  element: {
-    type: string;
-    props: any;
-  };
-  children?: React.ReactNode;
-};
-
-export const Text: ComponentType<ElementProps> = ({ element }) => {
+export const Text: ComponentType<ComponentRenderProps> = ({ element }) => {
+  console.log('[Text Component] Rendering:', element);
   return (
     <div className="text-sm text-foreground/90 whitespace-pre-wrap">
       {element.props.content}
@@ -19,7 +13,8 @@ export const Text: ComponentType<ElementProps> = ({ element }) => {
   );
 };
 
-export const CheckboxGroup: ComponentType<ElementProps> = ({ element }) => {
+export const CheckboxGroup: ComponentType<ComponentRenderProps> = ({ element }) => {
+  console.log('[CheckboxGroup Component] Rendering:', element);
   const { label, options } = element.props;
   const { selectedOptions, toggleOption } = useWaitlist();
 
@@ -50,7 +45,8 @@ export const CheckboxGroup: ComponentType<ElementProps> = ({ element }) => {
   );
 };
 
-export const Question: ComponentType<ElementProps> = ({ element }) => {
+export const Question: ComponentType<ComponentRenderProps> = ({ element }) => {
+  console.log('[Question Component] Rendering:', element);
   return (
     <div className="text-sm font-medium text-foreground/90 mt-2">
       {element.props.text}

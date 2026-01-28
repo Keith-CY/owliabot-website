@@ -12,7 +12,7 @@ type HeaderProps = {
 };
 
 export default function Header({ nav }: HeaderProps) {
-  const waitlistUrl = "https://tally.so/r/RGD10d";
+
 
   return (
     <header className="fixed top-0 w-full z-40 bg-transparent transition-all duration-300">
@@ -47,9 +47,7 @@ export default function Header({ nav }: HeaderProps) {
             <ThemeSelect />
             <a
               className="whitespace-nowrap rounded-full bg-foreground px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-background shadow-[0_10px_22px_rgba(5,6,12,0.22),_inset_0_1px_0_rgba(255,255,255,0.6)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(5,6,12,0.28),_inset_0_1px_0_rgba(255,255,255,0.7)]"
-              href={waitlistUrl}
-              target="_blank"
-              rel="noreferrer noopener"
+              href="#building"
             >
               {nav.waitlist}
             </a>

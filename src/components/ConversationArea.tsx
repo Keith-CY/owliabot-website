@@ -51,6 +51,8 @@ function ConversationAreaInner({
     }
   };
 
+  console.log('[ConversationArea] Rendering with:', { messagesCount: messages.length, uiTreesCount: uiTrees.length });
+
   return (
     <div className="flex flex-col gap-4">
       {/* Messages */}
@@ -65,6 +67,8 @@ function ConversationAreaInner({
             const uiTree = message.role === 'assistant' && aiMessageIndex >= 0
               ? uiTrees[aiMessageIndex]
               : undefined;
+
+            console.log('[ConversationArea] Rendering message:', { index, role: message.role, aiMessageIndex, hasUiTree: !!uiTree });
 
             return (
               <Message

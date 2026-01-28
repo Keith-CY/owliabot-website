@@ -45,8 +45,20 @@ export async function submitUserMessage(
   userInput: string,
   selections?: string[]
 ): Promise<AIResponse> {
+  console.log('=== submitUserMessage called ===');
+  console.log('Messages:', JSON.stringify(messages, null, 2));
+  console.log('User input:', userInput);
+  console.log('Selections:', selections);
+  console.log('GEMINI_API_KEY exists:', !!process.env.GEMINI_API_KEY);
+
   try {
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+    if (!process.env.GEMINI_API_KEY) {
+      throw new Error('GEMINI_API_KEY is not configured');
+    }
+
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    console.log('GoogleGenerativeAI initialized');
+
     const model = genAI.getGenerativeModel({
       model: "gemini-2.5-flash-lite",
       systemInstruction: SYSTEM_PROMPT,
@@ -56,6 +68,7 @@ export async function submitUserMessage(
         responseMimeType: "application/json",
       },
     });
+    console.log('Model initialized');
 
     // Build conversation history
     const conversationHistory = messages.map(msg => {
@@ -70,21 +83,26 @@ export async function submitUserMessage(
       };
     });
 
+    console.log('Conversation history built:', conversationHistory.length, 'messages');
+
     // Create chat with history
     const chat = model.startChat({
       history: conversationHistory,
     });
+    console.log('Chat started');
 
     // Include selections in current message
     let currentInput = userInput;
     if (selections && selections.length > 0) {
       currentInput += `\n\n[用户选择了: ${selections.join(', ')}]`;
     }
+    console.log('Current input prepared:', currentInput);
 
+    console.log('Sending message to Gemini...');
     const result = await chat.sendMessage(currentInput);
-    const responseText = result.response.text();
+    console.log('Gemini response received');
 
-    // Log the raw response for debugging
+    const responseText = result.response.text();
     console.log('AI raw response:', responseText);
 
     // Try to extract JSON from response (handle markdown code blocks)
@@ -102,7 +120,10 @@ export async function submitUserMessage(
       throw new Error('AI response is not valid JSON');
     }
 
+    console.log('JSON matched, parsing...');
     const aiResponse: AIResponse = JSON.parse(jsonMatch[0]);
+    console.log('AI response parsed successfully:', JSON.stringify(aiResponse, null, 2));
+    console.log('=== submitUserMessage returning ===');
     return aiResponse;
   } catch (error) {
     console.error('Error in submitUserMessage:', error);
@@ -116,9 +137,25 @@ export async function submitUserMessage(
 }
 
 export async function submitToNotion(data: NotionSubmission): Promise<void> {
-  try {
-    const notion = new Client({ auth: process.env.NOTION_API_KEY });
+  console.log('=== submitToNotion called ===');
+  console.log('Email:', data.email);
+  console.log('Summary points:', data.summaryPoints);
+  console.log('Messages count:', data.messages.length);
+  console.log('NOTION_API_KEY exists:', !!process.env.NOTION_API_KEY);
+  console.log('NOTION_DATABASE_ID:', process.env.NOTION_DATABASE_ID);
 
+  try {
+    if (!process.env.NOTION_API_KEY) {
+      throw new Error('NOTION_API_KEY is not configured');
+    }
+    if (!process.env.NOTION_DATABASE_ID) {
+      throw new Error('NOTION_DATABASE_ID is not configured');
+    }
+
+    const notion = new Client({ auth: process.env.NOTION_API_KEY });
+    console.log('Notion client created');
+
+    console.log('Creating page in database...');
     await notion.pages.create({
       parent: { database_id: process.env.NOTION_DATABASE_ID! },
       properties: {
@@ -164,8 +201,16 @@ export async function submitToNotion(data: NotionSubmission): Promise<void> {
         },
       },
     });
+    console.log('Page created successfully in Notion');
   } catch (error) {
     console.error('Error submitting to Notion:', error);
-    throw new Error('Failed to submit to Notion');
+    if (error instanceof Error) {
+      console.error('Error name:', error.name);
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+    }
+    // Log the full error object for Notion API errors
+    console.error('Full error object:', JSON.stringify(error, null, 2));
+    throw new Error(`Failed to submit to Notion: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }

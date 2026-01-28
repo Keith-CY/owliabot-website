@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion';
-import { Renderer } from '@json-render/react';
+import { Renderer, JSONUIProvider } from '@json-render/react';
 import type { Message as MessageType } from '@/types/waitlist';
 import { waitlistRegistry } from './waitlist/WaitlistRegistry';
 
@@ -12,6 +12,8 @@ type MessageProps = {
 
 export default function Message({ message, uiTree }: MessageProps) {
   const isUser = message.role === 'user';
+
+  console.log('[Message] Rendering:', { role: message.role, hasUiTree: !!uiTree, uiTree });
 
   return (
     <motion.div
@@ -30,7 +32,22 @@ export default function Message({ message, uiTree }: MessageProps) {
         {isUser ? (
           <p className="text-sm whitespace-pre-wrap">{message.content}</p>
         ) : uiTree ? (
-          <Renderer tree={uiTree} components={waitlistRegistry} />
+          <div>
+            {console.log('[Message] Children:', uiTree.children)}
+            <JSONUIProvider registry={waitlistRegistry}>
+              {uiTree.children && uiTree.children.map((child: any, index: number) => {
+                console.log('[Message] Rendering child:', child);
+                const Component = waitlistRegistry[child.type as keyof typeof waitlistRegistry];
+                if (Component) {
+                  console.log('[Message] Found component for type:', child.type);
+                  return <Component key={index} element={child} />;
+                } else {
+                  console.log('[Message] No component found for type:', child.type);
+                  return <p key={index} style={{ color: 'orange' }}>Unknown component: {child.type}</p>;
+                }
+              })}
+            </JSONUIProvider>
+          </div>
         ) : (
           <p className="text-sm whitespace-pre-wrap">{message.content}</p>
         )}

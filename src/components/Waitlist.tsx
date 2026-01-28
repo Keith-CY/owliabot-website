@@ -39,7 +39,9 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
     setIsLoading(true);
 
     try {
+      console.log('[Waitlist] Calling submitUserMessage with:', { messages, userInput, selections });
       const aiResponse = await submitUserMessage(messages, userInput, selections);
+      console.log('[Waitlist] AI response received:', aiResponse);
 
       // Add AI message with placeholder content (actual UI from uiTree)
       const aiMessage: Message = {
@@ -47,6 +49,9 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
         content: JSON.stringify(aiResponse.summaryPoints), // Fallback content
         timestamp: Date.now(),
       };
+      console.log('[Waitlist] Adding AI message:', aiMessage);
+      console.log('[Waitlist] UI tree:', aiResponse.uiTree);
+
       setMessages((prev) => [...prev, aiMessage]);
       setUiTrees((prev) => [...prev, aiResponse.uiTree]);
       setSummaryPoints(aiResponse.summaryPoints);
@@ -93,7 +98,7 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
   return (
     <Reveal>
       <section
-        id="waitlist"
+        id="building"
         className="rounded-[34px] border border-border bg-surface/70 px-8 py-12 shadow-[0_10px_24px_rgba(4,6,10,0.06),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur dark:shadow-[0_10px_24px_rgba(4,6,10,0.12),_inset_0_1px_0_rgba(255,255,255,0.14)]"
       >
         <div className="flex flex-col gap-6">
@@ -106,12 +111,16 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
 
           {stage === 'EXPLORING' && (
             <>
-              <p className="text-pretty text-sm font-semibold text-foreground">
-                {waitlist.privacy}
-              </p>
-              <p className="text-pretty text-xs text-foreground/60">
-                {waitlist.note}
-              </p>
+              {waitlist.privacy && (
+                <p className="text-pretty text-xs text-foreground/60">
+                  {waitlist.privacy}
+                </p>
+              )}
+              {waitlist.note && (
+                <p className="text-pretty text-xs text-foreground/60">
+                  {waitlist.note}
+                </p>
+              )}
               <ConversationArea
                 messages={messages}
                 uiTrees={uiTrees}
