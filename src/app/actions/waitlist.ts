@@ -42,7 +42,8 @@ CRITICAL: 你必须返回这个 JSON 格式：
 
 export async function submitUserMessage(
   messages: Message[],
-  userInput: string
+  userInput: string,
+  selections?: string[]
 ): Promise<AIResponse> {
   try {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
@@ -57,17 +58,30 @@ export async function submitUserMessage(
     });
 
     // Build conversation history
-    const conversationHistory = messages.map(msg => ({
-      role: msg.role === 'user' ? 'user' : 'model',
-      parts: [{ text: msg.content }],
-    }));
+    const conversationHistory = messages.map(msg => {
+      let content = msg.content;
+      // Include selected options in user messages
+      if (msg.role === 'user' && msg.selectedOptions && msg.selectedOptions.length > 0) {
+        content += `\n\n[用户选择了: ${msg.selectedOptions.join(', ')}]`;
+      }
+      return {
+        role: msg.role === 'user' ? 'user' : 'model',
+        parts: [{ text: content }],
+      };
+    });
 
     // Create chat with history
     const chat = model.startChat({
       history: conversationHistory,
     });
 
-    const result = await chat.sendMessage(userInput);
+    // Include selections in current message
+    let currentInput = userInput;
+    if (selections && selections.length > 0) {
+      currentInput += `\n\n[用户选择了: ${selections.join(', ')}]`;
+    }
+
+    const result = await chat.sendMessage(currentInput);
     const responseText = result.response.text();
 
     // Log the raw response for debugging

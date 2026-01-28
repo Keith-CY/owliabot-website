@@ -40,7 +40,7 @@ export default function Hero({ hero, illustration }: HeroProps) {
       </div>
 
       {/* Content Container */}
-      <div className="relative mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-6xl flex-col items-center justify-center gap-12 px-6 py-24 sm:px-8 lg:min-h-screen lg:flex-row lg:gap-6 lg:px-12 lg:pt-0">
+      <div className="relative mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-6xl flex-col items-center justify-center gap-12 px-6 py-24 sm:px-8 lg:min-h-screen lg:flex-row lg:gap-6 lg:px-12 lg:pt-32">
 
         {/* Left Column: Text (60%) */}
         <div className="flex w-full flex-col items-start gap-8 text-left lg:w-[60%] lg:pr-8">

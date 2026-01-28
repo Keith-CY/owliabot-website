@@ -39,7 +39,7 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
     setIsLoading(true);
 
     try {
-      const aiResponse = await submitUserMessage(messages, userInput);
+      const aiResponse = await submitUserMessage(messages, userInput, selections);
 
       // Add AI message with placeholder content (actual UI from uiTree)
       const aiMessage: Message = {
