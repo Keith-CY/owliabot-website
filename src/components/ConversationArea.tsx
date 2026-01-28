@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import type { Message as MessageType } from '@/types/waitlist';
 import Message from './Message';
 import TypingIndicator from './TypingIndicator';
-import { WaitlistProvider, useWaitlist } from '@/contexts/WaitlistContext';
+import { useWaitlist } from '@/contexts/WaitlistContext';
 
 type ConversationAreaProps = {
   messages: MessageType[];
@@ -17,7 +17,7 @@ type ConversationAreaProps = {
   onComplete: () => void;
 };
 
-function ConversationAreaInner({
+export default function ConversationArea({
   messages,
   uiTrees,
   isLoading,
@@ -44,7 +44,6 @@ function ConversationAreaInner({
       const selections = Array.from(selectedOptions);
       onSendMessage(input.trim(), selections);
       setInput('');
-      clearSelections();
     }
   };
 
@@ -54,8 +53,6 @@ function ConversationAreaInner({
       handleSubmit(e);
     }
   };
-
-  console.log('[ConversationArea] Rendering with:', { messagesCount: messages.length, uiTreesCount: uiTrees.length });
 
   return (
     <div className="flex flex-col gap-4">
@@ -71,8 +68,6 @@ function ConversationAreaInner({
             const uiTree = message.role === 'assistant' && aiMessageIndex >= 0
               ? uiTrees[aiMessageIndex]
               : undefined;
-
-            console.log('[ConversationArea] Rendering message:', { index, role: message.role, aiMessageIndex, hasUiTree: !!uiTree });
 
             return (
               <Message
@@ -100,7 +95,7 @@ function ConversationAreaInner({
           onKeyDown={handleKeyDown}
           placeholder={
             !hasConfirmedRequirements && messages.length === 0
-              ? "描述你想追踪的活动、代币或事件..."
+              ? "向 OwliaBot 描述你的需求..."
               : isInConversation
                 ? "继续补充需求详情..."
                 : "继续描述其他需求..."
@@ -143,13 +138,5 @@ function ConversationAreaInner({
         </div>
       </form>
     </div>
-  );
-}
-
-export default function ConversationArea(props: ConversationAreaProps) {
-  return (
-    <WaitlistProvider>
-      <ConversationAreaInner {...props} />
-    </WaitlistProvider>
   );
 }

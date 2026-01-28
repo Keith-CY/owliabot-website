@@ -5,7 +5,6 @@ import { useWaitlist } from '@/contexts/WaitlistContext';
 import type { ComponentRenderProps } from '@json-render/react';
 
 export const Text: ComponentType<ComponentRenderProps> = ({ element }) => {
-  console.log('[Text Component] Rendering:', element);
   return (
     <div className="text-sm text-foreground/90 whitespace-pre-wrap">
       {element.props.content as string}
@@ -14,7 +13,6 @@ export const Text: ComponentType<ComponentRenderProps> = ({ element }) => {
 };
 
 export const CheckboxGroup: ComponentType<ComponentRenderProps> = ({ element }) => {
-  console.log('[CheckboxGroup Component] Rendering:', element);
   const { label, options } = element.props as { label: string; options: { id: string; label: string }[] };
   const { selectedOptions, toggleOption } = useWaitlist();
 
@@ -30,9 +28,9 @@ export const CheckboxGroup: ComponentType<ComponentRenderProps> = ({ element }) 
             <input
               type="checkbox"
               name="waitlist-options"
-              value={option.id}
-              checked={selectedOptions.has(option.id)}
-              onChange={() => toggleOption(option.id)}
+              value={option.label}
+              checked={selectedOptions.has(option.label)}
+              onChange={() => toggleOption(option.label)}
               className="w-4 h-4 rounded border-border bg-background text-foreground focus:ring-2 focus:ring-foreground/20 cursor-pointer"
             />
             <span className="text-sm text-foreground/80 group-hover:text-foreground">
@@ -46,7 +44,6 @@ export const CheckboxGroup: ComponentType<ComponentRenderProps> = ({ element }) 
 };
 
 export const Question: ComponentType<ComponentRenderProps> = ({ element }) => {
-  console.log('[Question Component] Rendering:', element);
   return (
     <div className="text-sm font-medium text-foreground/90 mt-2">
       {element.props.text as string}

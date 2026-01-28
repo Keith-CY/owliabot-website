@@ -13,8 +13,6 @@ type MessageProps = {
 export default function Message({ message, uiTree }: MessageProps) {
   const isUser = message.role === 'user';
 
-  console.log('[Message] Rendering:', { role: message.role, hasUiTree: !!uiTree, uiTree });
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -34,15 +32,14 @@ export default function Message({ message, uiTree }: MessageProps) {
           <div>
             <JSONUIProvider registry={waitlistRegistry}>
               {uiTree.children && uiTree.children.map((child: any, index: number) => {
-                console.log('[Message] Rendering child:', child);
                 const Component = waitlistRegistry[child.type as keyof typeof waitlistRegistry];
-                if (Component) {
-                  console.log('[Message] Found component for type:', child.type);
-                  return <Component key={index} element={child} />;
-                } else {
-                  console.log('[Message] No component found for type:', child.type);
-                  return <p key={index} style={{ color: 'orange' }}>Unknown component: {child.type}</p>;
-                }
+                return Component ? (
+                  <Component key={index} element={child} />
+                ) : (
+                  <p key={index} style={{ color: 'orange' }}>
+                    Unknown component: {child.type}
+                  </p>
+                );
               })}
             </JSONUIProvider>
           </div>

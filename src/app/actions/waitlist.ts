@@ -7,14 +7,25 @@ import { Message, AIResponse, NotionSubmission } from '@/types/waitlist';
 const SYSTEM_PROMPT = `你是 OwliaBot 的需求收集助手。你的目标是快速理解用户的真实需求。
 
 工作流程：
-1. 第一次回复：将用户输入总结成1-3个需求要点，然后提供3-5个相关的多选项，让用户勾选感兴趣的功能
-2. 后续回复：根据用户的选择和补充，询问"还有其他需求吗？"
+1. 第一次回复：用一句话确认用户意图，不要分点展开；然后提供3-5个相关的多选项，让用户勾选感兴趣的功能
+2. 后续回复：根据用户的选择和补充，引导用户继续补充当前需求细节
 3. 不要过度追问细节，保持简洁高效
 
 可用组件：
 - Text: 显示文本消息
 - CheckboxGroup: 多选框组（options 数组包含 id 和 label）
 - Question: 显示问题
+
+输入格式说明：
+用户的当前消息将使用以下结构：
+[BaseIntent] 当前需求的基准意图(首句或当前需求标题)
+[SelectedOptions] 用户已勾选的功能选项(逗号分隔)
+[NewInput] 用户本轮补充输入
+
+输出要求：
+- 必须输出 intentType: "refine" | "new" | "unclear"
+- 当 intentType 为 "unclear" 时，只输出澄清问题，不要给大量选项
+- 若检测到首句包含多个需求，输出 requirements 数组，并仅提供第一个需求的选项
 
 CRITICAL: 你必须返回这个 JSON 格式：
 {
@@ -32,12 +43,24 @@ CRITICAL: 你必须返回这个 JSON 格式：
           ]
         }
       },
-      { "type": "Question", "props": { "text": "还有其他需求吗？" } }
+      { "type": "Question", "props": { "text": "澄清问题(仅在 unclear 时)" } }
     ]
   },
   "summaryPoints": ["要点1", "要点2"],
-  "shouldContinue": true
-}`;
+  "shouldContinue": true,
+  "intentType": "refine",
+  "clarifyQuestion": "当 intentType=unclear 时填写",
+  "requirements": [
+    { "title": "需求标题1", "summary": "需求摘要1" },
+    { "title": "需求标题2", "summary": "需求摘要2" }
+  ]
+}
+
+补充约束：
+- "X 账户" 指社交平台 X(原 Twitter)的账号，不是链上钱包/交易账户。
+- 选项必须与用户提到的平台一致(如: Telegram 就给 Telegram 相关选项; X 就给 X 相关选项)。
+- 避免生成与用户需求无关的内容(比如把 X 账号误解为"账户余额/交易记录")。
+`;
 
 const SUMMARIZATION_PROMPT = `你是 OwliaBot 的需求总结助手。
 
@@ -67,22 +90,14 @@ CRITICAL: 你必须返回这个 JSON 格式：
 
 export async function submitUserMessage(
   messages: Message[],
-  userInput: string,
-  selections?: string[]
+  userInput: string
 ): Promise<AIResponse> {
-  console.log('=== submitUserMessage called ===');
-  console.log('Messages:', JSON.stringify(messages, null, 2));
-  console.log('User input:', userInput);
-  console.log('Selections:', selections);
-  console.log('GEMINI_API_KEY exists:', !!process.env.GEMINI_API_KEY);
-
   try {
     if (!process.env.GEMINI_API_KEY) {
       throw new Error('GEMINI_API_KEY is not configured');
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    console.log('GoogleGenerativeAI initialized');
 
     const model = genAI.getGenerativeModel({
       model: "gemini-2.5-flash-lite",
@@ -93,7 +108,6 @@ export async function submitUserMessage(
         responseMimeType: "application/json",
       },
     });
-    console.log('Model initialized');
 
     // Build conversation history
     const conversationHistory = messages.map(msg => {
@@ -108,27 +122,15 @@ export async function submitUserMessage(
       };
     });
 
-    console.log('Conversation history built:', conversationHistory.length, 'messages');
-
     // Create chat with history
     const chat = model.startChat({
       history: conversationHistory,
     });
-    console.log('Chat started');
 
-    // Include selections in current message
     let currentInput = userInput;
-    if (selections && selections.length > 0) {
-      currentInput += `\n\n[用户选择了: ${selections.join(', ')}]`;
-    }
-    console.log('Current input prepared:', currentInput);
-
-    console.log('Sending message to Gemini...');
     const result = await chat.sendMessage(currentInput);
-    console.log('Gemini response received');
 
     const responseText = result.response.text();
-    console.log('AI raw response:', responseText);
 
     // Try to extract JSON from response (handle markdown code blocks)
     let jsonText = responseText.trim();
@@ -141,14 +143,11 @@ export async function submitUserMessage(
     // Try to find JSON object
     const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
-      console.error('Failed to find JSON in response:', responseText);
+      console.error('Failed to find JSON in response');
       throw new Error('AI response is not valid JSON');
     }
 
-    console.log('JSON matched, parsing...');
     const aiResponse: AIResponse = JSON.parse(jsonMatch[0]);
-    console.log('AI response parsed successfully:', JSON.stringify(aiResponse, null, 2));
-    console.log('=== submitUserMessage returning ===');
     return aiResponse;
   } catch (error) {
     console.error('Error in submitUserMessage:', error);
@@ -164,9 +163,6 @@ export async function submitUserMessage(
 export async function summarizeRequirement(
   messages: Message[]
 ): Promise<string> {
-  console.log('=== summarizeRequirement called ===');
-  console.log('Messages to summarize:', messages.length);
-
   try {
     if (!process.env.GEMINI_API_KEY) {
       throw new Error('GEMINI_API_KEY is not configured');
@@ -195,13 +191,11 @@ export async function summarizeRequirement(
       };
     });
 
-    console.log('Sending summarization request to Gemini...');
     const result = await model.generateContent({
       contents: conversationHistory,
     });
 
     const responseText = result.response.text();
-    console.log('AI summarization response:', responseText);
 
     // Parse JSON response
     let jsonText = responseText.trim();
@@ -211,14 +205,13 @@ export async function summarizeRequirement(
 
     const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
-      console.error('Failed to find JSON in response:', responseText);
+      console.error('Failed to find JSON in response');
       // Fallback: use first user message
       const firstUserMessage = messages.find(m => m.role === 'user');
       return firstUserMessage?.content || '需求总结失败';
     }
 
     const parsed = JSON.parse(jsonMatch[0]);
-    console.log('Summary generated:', parsed.summary);
     return parsed.summary;
   } catch (error) {
     console.error('Error in summarizeRequirement:', error);

@@ -27,6 +27,12 @@ export type AIResponse = {
   shouldContinue: boolean;
   selectedOptions?: string[]; // For tracking user selections
   summary?: string; // For summarization mode
+  intentType?: 'refine' | 'new' | 'unclear';
+  clarifyQuestion?: string;
+  requirements?: Array<{
+    title: string;
+    summary: string;
+  }>;
 };
 
 export type NotionSubmission = {
