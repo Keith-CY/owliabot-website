@@ -20,10 +20,10 @@ export default function Security({ security }: SecurityProps) {
           </h2>
         </div>
       </Reveal>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid items-stretch gap-6 lg:grid-cols-3">
         {security.items.map((item, index) => (
           <Reveal key={item.title} delay={0.06 * index}>
-            <div className="rounded-[28px] border border-border bg-surface px-6 py-7 shadow-[0_16px_40px_rgba(6,8,18,0.45)] backdrop-blur">
+            <div className="h-full rounded-[28px] border border-border bg-surface px-6 py-7 shadow-[0_16px_40px_rgba(6,8,18,0.45)] backdrop-blur">
               <h3 className="text-balance text-lg font-semibold text-foreground">
                 {item.title}
               </h3>

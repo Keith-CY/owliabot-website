@@ -47,10 +47,10 @@ export default function ArchitectureOverview({
           </div>
         </div>
       </Reveal>
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid items-stretch gap-4 md:grid-cols-3">
         {architecture.bullets.map((item, index) => (
           <Reveal key={item} delay={0.1 + index * 0.04}>
-            <div className="rounded-[24px] border border-border bg-surface/70 px-5 py-5 text-sm text-foreground/70 shadow-[0_8px_18px_rgba(4,6,10,0.12),_inset_0_1px_0_rgba(255,255,255,0.4)] dark:shadow-[0_8px_18px_rgba(4,6,10,0.2),_inset_0_1px_0_rgba(255,255,255,0.12)]">
+            <div className="h-full rounded-[24px] border border-border bg-surface/70 px-5 py-5 text-sm text-foreground/70 shadow-[0_8px_18px_rgba(4,6,10,0.12),_inset_0_1px_0_rgba(255,255,255,0.4)] dark:shadow-[0_8px_18px_rgba(4,6,10,0.2),_inset_0_1px_0_rgba(255,255,255,0.12)]">
               {item}
             </div>
           </Reveal>

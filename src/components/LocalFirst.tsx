@@ -28,10 +28,10 @@ export default function LocalFirst({ local }: LocalFirstProps) {
             {local.body}
           </p>
         </Reveal>
-        <ul className="grid gap-3 text-sm text-foreground/70 sm:grid-cols-3">
+        <ul className="grid items-stretch gap-3 text-sm text-foreground/70 sm:grid-cols-3">
           {local.bullets.map((bullet, index) => (
             <Reveal key={bullet} delay={0.12 + index * 0.04}>
-              <li className="rounded-[20px] border border-border bg-surface/70 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
+              <li className="h-full rounded-[20px] border border-border bg-surface/70 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
                 {bullet}
               </li>
             </Reveal>
