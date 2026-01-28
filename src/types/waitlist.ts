@@ -15,9 +15,10 @@ export type ConversationState = {
 };
 
 export type AIResponse = {
-  reply: string;
+  uiTree: any; // json-render tree structure
   summaryPoints: string[];
   shouldContinue: boolean;
+  selectedOptions?: string[]; // For tracking user selections
 };
 
 export type NotionSubmission = {
