@@ -1,6 +1,7 @@
 'use client'
 
 import { ComponentType } from 'react';
+import { useWaitlist } from '@/contexts/WaitlistContext';
 
 type ElementProps = {
   element: {
@@ -20,6 +21,7 @@ export const Text: ComponentType<ElementProps> = ({ element }) => {
 
 export const CheckboxGroup: ComponentType<ElementProps> = ({ element }) => {
   const { label, options } = element.props;
+  const { selectedOptions, toggleOption } = useWaitlist();
 
   return (
     <div className="flex flex-col gap-3 my-4">
@@ -34,7 +36,9 @@ export const CheckboxGroup: ComponentType<ElementProps> = ({ element }) => {
               type="checkbox"
               name="waitlist-options"
               value={option.id}
-              className="w-4 h-4 rounded border-border bg-background text-foreground focus:ring-2 focus:ring-foreground/20"
+              checked={selectedOptions.has(option.id)}
+              onChange={() => toggleOption(option.id)}
+              className="w-4 h-4 rounded border-border bg-background text-foreground focus:ring-2 focus:ring-foreground/20 cursor-pointer"
             />
             <span className="text-sm text-foreground/80 group-hover:text-foreground">
               {option.label}

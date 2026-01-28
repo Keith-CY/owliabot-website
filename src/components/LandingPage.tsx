@@ -25,6 +25,18 @@ export type LandingPageContent = {
     badge?: string;
     status?: string;
   };
+  hero_illustration: {
+    scenarios: ReadonlyArray<{
+      id: string;
+      label: string;
+      messages: ReadonlyArray<{
+        role: "user" | "assistant";
+        content: string;
+        type?: "alert" | "info" | "success";
+        actions?: ReadonlyArray<string>;
+      }>;
+    }>;
+  };
   why: {
     eyebrow: string;
     title: string;
@@ -96,7 +108,7 @@ export default function LandingPage({ content }: LandingPageProps) {
   return (
     <div className="min-h-dvh overflow-hidden bg-background text-foreground">
       <Header nav={content.nav} />
-      <Hero hero={content.hero} />
+      <Hero hero={content.hero} illustration={content.hero_illustration} />
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-40 px-6 pb-24 pt-12 sm:px-8 lg:px-12">
         <Pillars eyebrow={content.why.eyebrow} title={content.why.title} subtitle={content.why.subtitle} pillars={content.why.items} />
 

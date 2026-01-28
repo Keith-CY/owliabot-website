@@ -134,4 +134,39 @@ export const content = {
   links: {
     github: "https://github.com/owliabot/owliabot",
   },
+  hero_illustration: {
+    scenarios: [
+      {
+        id: "security",
+        label: "地址监控",
+        messages: [
+          { role: "user", content: "监控地址 0x123...xyz 的安全状态" },
+          { role: "assistant", content: "好的，我会持续监控该地址的链上风险。\n当出现异常或需要你处理时，我会第一时间提醒你。" },
+          { role: "assistant", content: "⚠️ 检测到风险\nWBTC / USDC 仓位健康度已低于 1.05\n该仓位接近清算阈值", type: "alert" },
+          { role: "assistant", content: "建议操作：", actions: ["补充抵押资产", "偿还部分借款", "👉 立即前往处理"] },
+        ],
+      },
+      {
+        id: "social",
+        label: "X 监控",
+        messages: [
+          { role: "user", content: "帮我监控这个 X 账户：@example_xyz" },
+          { role: "assistant", content: "已开始监控该账户。\n我会在出现重要动态时为你总结并提醒。" },
+          { role: "assistant", content: "📢 新动态提醒\n该账户刚发布了一条新推文，内容涉及：", type: "info" },
+          { role: "assistant", content: "新 DeFi 项目合作\n流动性计划调整\n预计发布时间为下周" },
+          { role: "assistant", content: "需要我帮你进一步分析吗？" },
+        ],
+      },
+      {
+        id: "yield",
+        label: "机会发现",
+        messages: [
+          { role: "user", content: "帮我找一些稳健的高收益理财机会" },
+          { role: "assistant", content: "明白，我会基于当前链上数据为你筛选可行的收益方案。" },
+          { role: "assistant", content: "💡 发现潜在收益机会\n协议：Aave\n资产：USDC\n当前年化收益约 6.8%\n风险等级：中低", type: "success" },
+          { role: "assistant", content: "是否需要我持续跟踪，或在条件变化时提醒你？" },
+        ],
+      },
+    ],
+  },
 } as const;

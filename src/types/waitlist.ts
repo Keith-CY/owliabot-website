@@ -2,6 +2,7 @@ export type Message = {
   role: 'user' | 'assistant';
   content: string;
   timestamp: number;
+  selectedOptions?: string[]; // For user messages with checkbox selections
 };
 
 export type ConversationStage = 'EXPLORING' | 'SUMMARY' | 'EMAIL_INPUT' | 'SUCCESS';

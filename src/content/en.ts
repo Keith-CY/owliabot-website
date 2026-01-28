@@ -139,4 +139,39 @@ export const content = {
   links: {
     github: "https://github.com/owliabot/owliabot",
   },
+  hero_illustration: {
+    scenarios: [
+      {
+        id: "security",
+        label: "🔐 Address Security",
+        messages: [
+          { role: "user", content: "Monitor security status of 0x123...xyz" },
+          { role: "assistant", content: "OK, I will monitor on-chain risks for this address.\nI will alert you immediately if any anomalies occur." },
+          { role: "assistant", content: "⚠️ Risk Detected\nWBTC / USDC health factor below 1.05\nApproaching liquidation threshold", type: "alert" },
+          { role: "assistant", content: "Suggested Actions:", actions: ["Add Collateral", "Repay Debt", "👉 Handle Immediately"] },
+        ],
+      },
+      {
+        id: "social",
+        label: "📰 X Account Monitor",
+        messages: [
+          { role: "user", content: "Monitor this X account: @example_xyz" },
+          { role: "assistant", content: "Monitoring started.\nI will summarize and alert you on important updates." },
+          { role: "assistant", content: "📢 New Update Alert\nThe account just posted a tweet regarding:", type: "info" },
+          { role: "assistant", content: "New DeFi Partnership\nLiquidity Plan Adjustment\nExpected launch next week" },
+          { role: "assistant", content: "Do you need further analysis?" },
+        ],
+      },
+      {
+        id: "yield",
+        label: "📈 Yield Discovery",
+        messages: [
+          { role: "user", content: "Find stable high-yield opportunities" },
+          { role: "assistant", content: "Understood. Screening for viable yield strategies based on on-chain data." },
+          { role: "assistant", content: "💡 Opportunity Found\nProtocol: Aave\nAsset: USDC\nCurrent APY: ~6.8%\nRisk Level: Low-Mid", type: "success" },
+          { role: "assistant", content: "Should I track this or alert you on changes?" },
+        ],
+      },
+    ],
+  },
 } as const;

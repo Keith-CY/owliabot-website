@@ -27,12 +27,13 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showCompleteButton, setShowCompleteButton] = useState(false);
 
-  const handleSendMessage = async (userInput: string) => {
-    // Add user message
+  const handleSendMessage = async (userInput: string, selections?: string[]) => {
+    // Add user message with selections
     const userMessage: Message = {
       role: 'user',
       content: userInput,
       timestamp: Date.now(),
+      selectedOptions: selections && selections.length > 0 ? selections : undefined,
     };
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);

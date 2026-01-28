@@ -4,17 +4,18 @@ import { useState, useRef, useEffect } from 'react';
 import type { Message as MessageType } from '@/types/waitlist';
 import Message from './Message';
 import TypingIndicator from './TypingIndicator';
+import { WaitlistProvider, useWaitlist } from '@/contexts/WaitlistContext';
 
 type ConversationAreaProps = {
   messages: MessageType[];
   uiTrees: any[]; // UI trees for AI messages
   isLoading: boolean;
-  onSendMessage: (message: string) => void;
+  onSendMessage: (message: string, selections?: string[]) => void;
   onComplete: () => void;
   showCompleteButton: boolean;
 };
 
-export default function ConversationArea({
+function ConversationAreaInner({
   messages,
   uiTrees,
   isLoading,
@@ -25,19 +26,21 @@ export default function ConversationArea({
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { selectedOptions, clearSelections } = useWaitlist();
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
 
-
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim() && !isLoading) {
-      onSendMessage(input.trim());
+      // Include selected options with the message
+      const selections = Array.from(selectedOptions);
+      onSendMessage(input.trim(), selections);
       setInput('');
+      clearSelections();
     }
   };
 
@@ -115,5 +118,13 @@ export default function ConversationArea({
         </div>
       </form>
     </div>
+  );
+}
+
+export default function ConversationArea(props: ConversationAreaProps) {
+  return (
+    <WaitlistProvider>
+      <ConversationAreaInner {...props} />
+    </WaitlistProvider>
   );
 }
