@@ -23,17 +23,15 @@ export default function Message({ message, uiTree }: MessageProps) {
       className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}
     >
       <div
-        className={`max-w-[85%] rounded-2xl px-4 py-3 ${
-          isUser
+        className={`max-w-[85%] rounded-2xl px-4 py-3 ${isUser
             ? 'bg-foreground text-background'
             : 'bg-surface border border-border text-foreground'
-        }`}
+          }`}
       >
         {isUser ? (
           <p className="text-sm whitespace-pre-wrap">{message.content}</p>
         ) : uiTree ? (
           <div>
-            {console.log('[Message] Children:', uiTree.children)}
             <JSONUIProvider registry={waitlistRegistry}>
               {uiTree.children && uiTree.children.map((child: any, index: number) => {
                 console.log('[Message] Rendering child:', child);

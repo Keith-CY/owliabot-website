@@ -39,6 +39,31 @@ CRITICAL: 你必须返回这个 JSON 格式：
   "shouldContinue": true
 }`;
 
+const SUMMARIZATION_PROMPT = `你是 OwliaBot 的需求总结助手。
+
+任务：根据用户与助手的对话历史，生成一个简洁的需求总结（1-2句话）。
+
+要求：
+1. 总结要包含关键信息：目标、资产、关键信息等
+2. 简洁明了，不超过50字
+3. 使用自然语言，不要使用标签格式
+
+示例输入对话：
+用户：我想追踪 Pendle 的活动
+助手：请问目标资产是？
+用户：任意资产都可以
+助手：需要关注哪些关键信息？
+用户：结束时间
+
+示例输出：
+"追踪 Pendle 的活动，目标资产：任意，关键信息：结束时间"
+
+CRITICAL: 你必须返回这个 JSON 格式：
+{
+  "summary": "你生成的简洁需求总结"
+}`;
+
+
 
 export async function submitUserMessage(
   messages: Message[],
@@ -136,10 +161,78 @@ export async function submitUserMessage(
   }
 }
 
+export async function summarizeRequirement(
+  messages: Message[]
+): Promise<string> {
+  console.log('=== summarizeRequirement called ===');
+  console.log('Messages to summarize:', messages.length);
+
+  try {
+    if (!process.env.GEMINI_API_KEY) {
+      throw new Error('GEMINI_API_KEY is not configured');
+    }
+
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash-lite",
+      systemInstruction: SUMMARIZATION_PROMPT,
+      generationConfig: {
+        temperature: 0.3,
+        maxOutputTokens: 256,
+        responseMimeType: "application/json",
+      },
+    });
+
+    // Build conversation history for summarization
+    const conversationHistory = messages.map(msg => {
+      let content = msg.content;
+      if (msg.role === 'user' && msg.selectedOptions && msg.selectedOptions.length > 0) {
+        content += `\n\n[用户选择了: ${msg.selectedOptions.join(', ')}]`;
+      }
+      return {
+        role: msg.role === 'user' ? 'user' : 'model',
+        parts: [{ text: content }],
+      };
+    });
+
+    console.log('Sending summarization request to Gemini...');
+    const result = await model.generateContent({
+      contents: conversationHistory,
+    });
+
+    const responseText = result.response.text();
+    console.log('AI summarization response:', responseText);
+
+    // Parse JSON response
+    let jsonText = responseText.trim();
+    if (jsonText.startsWith('```')) {
+      jsonText = jsonText.replace(/^```(?:json)?\s*\n?/, '').replace(/\n?```\s*$/, '');
+    }
+
+    const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      console.error('Failed to find JSON in response:', responseText);
+      // Fallback: use first user message
+      const firstUserMessage = messages.find(m => m.role === 'user');
+      return firstUserMessage?.content || '需求总结失败';
+    }
+
+    const parsed = JSON.parse(jsonMatch[0]);
+    console.log('Summary generated:', parsed.summary);
+    return parsed.summary;
+  } catch (error) {
+    console.error('Error in summarizeRequirement:', error);
+    // Fallback: use first user message
+    const firstUserMessage = messages.find(m => m.role === 'user');
+    return firstUserMessage?.content || '需求总结失败';
+  }
+}
+
+
 export async function submitToNotion(data: NotionSubmission): Promise<void> {
   console.log('=== submitToNotion called ===');
   console.log('Email:', data.email);
-  console.log('Summary points:', data.summaryPoints);
+  console.log('Confirmed requirements:', data.confirmedRequirements.length);
   console.log('Messages count:', data.messages.length);
   console.log('NOTION_API_KEY exists:', !!process.env.NOTION_API_KEY);
   console.log('NOTION_DATABASE_ID:', process.env.NOTION_DATABASE_ID);
@@ -177,7 +270,9 @@ export async function submitToNotion(data: NotionSubmission): Promise<void> {
           rich_text: [
             {
               text: {
-                content: data.summaryPoints.map((point, i) => `${i + 1}. ${point}`).join('\n\n'),
+                content: data.confirmedRequirements
+                  .map((req, i) => `${i + 1}. ${req.summary}`)
+                  .join('\n\n'),
               },
             },
           ],
@@ -192,7 +287,7 @@ export async function submitToNotion(data: NotionSubmission): Promise<void> {
           ],
         },
         'Summary Points Count': {
-          number: data.summaryPoints.length,
+          number: data.confirmedRequirements.length,
         },
         Status: {
           select: {

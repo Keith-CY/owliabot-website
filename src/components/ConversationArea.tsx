@@ -8,20 +8,24 @@ import { WaitlistProvider, useWaitlist } from '@/contexts/WaitlistContext';
 
 type ConversationAreaProps = {
   messages: MessageType[];
-  uiTrees: any[]; // UI trees for AI messages
+  uiTrees: any[];
   isLoading: boolean;
+  isInConversation: boolean;
+  hasConfirmedRequirements: boolean;
   onSendMessage: (message: string, selections?: string[]) => void;
+  onConfirmRequirement: () => void;
   onComplete: () => void;
-  showCompleteButton: boolean;
 };
 
 function ConversationAreaInner({
   messages,
   uiTrees,
   isLoading,
+  isInConversation,
+  hasConfirmedRequirements,
   onSendMessage,
+  onConfirmRequirement,
   onComplete,
-  showCompleteButton,
 }: ConversationAreaProps) {
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -94,7 +98,13 @@ function ConversationAreaInner({
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={messages.length === 0 ? "你希望 OwliaBot 帮你实现什么样的功能？" : "继续描述你的需求..."}
+          placeholder={
+            !hasConfirmedRequirements && messages.length === 0
+              ? "描述你想追踪的活动、代币或事件..."
+              : isInConversation
+                ? "继续补充需求详情..."
+                : "继续描述其他需求..."
+          }
           disabled={isLoading}
           rows={3}
           className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus:ring-2 focus:ring-foreground/20 disabled:opacity-50 resize-none"
@@ -109,14 +119,25 @@ function ConversationAreaInner({
             发送
           </button>
 
-          {showCompleteButton && (
+          {isInConversation && (
+            <button
+              type="button"
+              onClick={onConfirmRequirement}
+              disabled={isLoading || messages.length === 0}
+              className="flex-1 rounded-full border-2 border-foreground px-6 py-2.5 text-sm font-semibold text-foreground transition hover:bg-foreground/10 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              确认当前需求
+            </button>
+          )}
+
+          {!isInConversation && hasConfirmedRequirements && (
             <button
               type="button"
               onClick={onComplete}
               disabled={isLoading}
               className="flex-1 rounded-full border-2 border-foreground px-6 py-2.5 text-sm font-semibold text-foreground transition hover:bg-foreground/10 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              我希望 OwliaBot 帮我实现这些内容
+              我希望 OwliaBot 实现这些功能
             </button>
           )}
         </div>

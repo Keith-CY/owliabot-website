@@ -1,15 +1,16 @@
 'use client'
 
 import { useState } from 'react';
+import type { ConfirmedRequirement } from '@/types/waitlist';
 
 type SummaryViewProps = {
-  summaryPoints: string[];
+  confirmedRequirements: ConfirmedRequirement[];
   onSubmit: (email: string) => void;
   isLoading: boolean;
 };
 
 export default function SummaryView({
-  summaryPoints,
+  confirmedRequirements,
   onSubmit,
   isLoading,
 }: SummaryViewProps) {
@@ -30,13 +31,13 @@ export default function SummaryView({
           你的需求总结：
         </h3>
         <ul className="flex flex-col gap-2">
-          {summaryPoints.map((point, index) => (
+          {confirmedRequirements.map((req, index) => (
             <li
-              key={index}
+              key={req.id}
               className="flex gap-3 text-sm text-foreground/80"
             >
               <span className="font-semibold text-foreground">{index + 1}.</span>
-              <span>{point}</span>
+              <span>{req.summary}</span>
             </li>
           ))}
         </ul>

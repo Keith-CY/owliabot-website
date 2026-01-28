@@ -32,5 +32,5 @@ export type AIResponse = {
 export type NotionSubmission = {
   email: string;
   messages: Message[];
-  confirmedRequirements: ConfirmedRequirement[]; // Changed from summaryPoints
+  confirmedRequirements: ConfirmedRequirement[];
 };

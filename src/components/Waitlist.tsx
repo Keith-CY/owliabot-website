@@ -6,8 +6,9 @@ import SectionHeader from "./SectionHeader";
 import ConversationArea from './ConversationArea';
 import SummaryView from './SummaryView';
 import SuccessView from './SuccessView';
-import { submitUserMessage, submitToNotion } from '@/app/actions/waitlist';
-import type { Message, ConversationStage } from '@/types/waitlist';
+import RequirementCard from './RequirementCard';
+import { submitUserMessage, submitToNotion, summarizeRequirement } from '@/app/actions/waitlist';
+import type { Message, ConversationStage, ConfirmedRequirement } from '@/types/waitlist';
 
 type WaitlistProps = {
   waitlist: {
@@ -22,10 +23,12 @@ type WaitlistProps = {
 export default function Waitlist({ waitlist }: WaitlistProps) {
   const [stage, setStage] = useState<ConversationStage>('EXPLORING');
   const [messages, setMessages] = useState<Message[]>([]);
-  const [uiTrees, setUiTrees] = useState<any[]>([]); // Store UI trees for AI messages
+  const [uiTrees, setUiTrees] = useState<any[]>([]);
   const [summaryPoints, setSummaryPoints] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [showCompleteButton, setShowCompleteButton] = useState(false);
+  const [confirmedRequirements, setConfirmedRequirements] = useState<ConfirmedRequirement[]>([]);
+  const [currentConversation, setCurrentConversation] = useState<Message[]>([]);
+  const [isInConversation, setIsInConversation] = useState(false);
 
   const handleSendMessage = async (userInput: string, selections?: string[]) => {
     // Add user message with selections
@@ -35,46 +38,89 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
       timestamp: Date.now(),
       selectedOptions: selections && selections.length > 0 ? selections : undefined,
     };
+
+    const newConversation = [...currentConversation, userMessage];
+    setCurrentConversation(newConversation);
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
 
+    // Set isInConversation to true after first message
+    if (currentConversation.length === 0) {
+      setIsInConversation(true);
+    }
+
     try {
-      console.log('[Waitlist] Calling submitUserMessage with:', { messages, userInput, selections });
-      const aiResponse = await submitUserMessage(messages, userInput, selections);
+      console.log('[Waitlist] Calling submitUserMessage with:', { messages: newConversation, userInput, selections });
+      const aiResponse = await submitUserMessage(newConversation, userInput, selections);
       console.log('[Waitlist] AI response received:', aiResponse);
 
-      // Add AI message with placeholder content (actual UI from uiTree)
+      // Add AI message
       const aiMessage: Message = {
         role: 'assistant',
-        content: JSON.stringify(aiResponse.summaryPoints), // Fallback content
+        content: JSON.stringify(aiResponse.summaryPoints),
         timestamp: Date.now(),
       };
-      console.log('[Waitlist] Adding AI message:', aiMessage);
-      console.log('[Waitlist] UI tree:', aiResponse.uiTree);
 
+      setCurrentConversation((prev) => [...prev, aiMessage]);
       setMessages((prev) => [...prev, aiMessage]);
       setUiTrees((prev) => [...prev, aiResponse.uiTree]);
       setSummaryPoints(aiResponse.summaryPoints);
-
-      // Show complete button if AI signals ready
-      if (!aiResponse.shouldContinue) {
-        setShowCompleteButton(true);
-      }
     } catch (error) {
       console.error('Error sending message:', error);
-      // Add error message
       const errorMessage: Message = {
         role: 'assistant',
         content: '抱歉，发生了错误。请稍后再试。',
         timestamp: Date.now(),
       };
+      setCurrentConversation((prev) => [...prev, errorMessage]);
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleConfirmRequirement = async () => {
+    if (currentConversation.length === 0) return;
+
+    setIsLoading(true);
+    try {
+      // Get AI summary of the conversation
+      const summary = await summarizeRequirement(currentConversation);
+
+      // Create confirmed requirement
+      const newRequirement: ConfirmedRequirement = {
+        id: `req-${Date.now()}`,
+        summary,
+        timestamp: Date.now(),
+      };
+
+      // Add to confirmed requirements
+      setConfirmedRequirements((prev) => [...prev, newRequirement]);
+
+      // Clear current conversation
+      setCurrentConversation([]);
+      setIsInConversation(false);
+    } catch (error) {
+      console.error('Error confirming requirement:', error);
+      alert('确认需求失败，请稍后再试。');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleComplete = () => {
+    // If in conversation, prevent completion
+    if (isInConversation) {
+      alert('请先确认当前需求');
+      return;
+    }
+
+    // If no confirmed requirements, prevent completion
+    if (confirmedRequirements.length === 0) {
+      alert('请至少添加一个需求');
+      return;
+    }
+
     setStage('SUMMARY');
   };
 
@@ -84,7 +130,7 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
       await submitToNotion({
         email,
         messages,
-        summaryPoints,
+        confirmedRequirements,
       });
       setStage('SUCCESS');
     } catch (error) {
@@ -121,20 +167,35 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
                   {waitlist.note}
                 </p>
               )}
+
+              {confirmedRequirements.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  {confirmedRequirements.map((req, index) => (
+                    <RequirementCard
+                      key={req.id}
+                      requirement={req}
+                      index={index}
+                    />
+                  ))}
+                </div>
+              )}
+
               <ConversationArea
-                messages={messages}
+                messages={currentConversation}
                 uiTrees={uiTrees}
                 isLoading={isLoading}
+                isInConversation={isInConversation}
+                hasConfirmedRequirements={confirmedRequirements.length > 0}
                 onSendMessage={handleSendMessage}
+                onConfirmRequirement={handleConfirmRequirement}
                 onComplete={handleComplete}
-                showCompleteButton={showCompleteButton}
               />
             </>
           )}
 
           {stage === 'SUMMARY' && (
             <SummaryView
-              summaryPoints={summaryPoints}
+              confirmedRequirements={confirmedRequirements}
               onSubmit={handleEmailSubmit}
               isLoading={isLoading}
             />

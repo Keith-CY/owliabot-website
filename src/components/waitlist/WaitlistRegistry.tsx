@@ -8,14 +8,14 @@ export const Text: ComponentType<ComponentRenderProps> = ({ element }) => {
   console.log('[Text Component] Rendering:', element);
   return (
     <div className="text-sm text-foreground/90 whitespace-pre-wrap">
-      {element.props.content}
+      {element.props.content as string}
     </div>
   );
 };
 
 export const CheckboxGroup: ComponentType<ComponentRenderProps> = ({ element }) => {
   console.log('[CheckboxGroup Component] Rendering:', element);
-  const { label, options } = element.props;
+  const { label, options } = element.props as { label: string; options: { id: string; label: string }[] };
   const { selectedOptions, toggleOption } = useWaitlist();
 
   return (
@@ -49,7 +49,7 @@ export const Question: ComponentType<ComponentRenderProps> = ({ element }) => {
   console.log('[Question Component] Rendering:', element);
   return (
     <div className="text-sm font-medium text-foreground/90 mt-2">
-      {element.props.text}
+      {element.props.text as string}
     </div>
   );
 };
