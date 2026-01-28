@@ -22,6 +22,7 @@ type WaitlistProps = {
 export default function Waitlist({ waitlist }: WaitlistProps) {
   const [stage, setStage] = useState<ConversationStage>('EXPLORING');
   const [messages, setMessages] = useState<Message[]>([]);
+  const [uiTrees, setUiTrees] = useState<any[]>([]); // Store UI trees for AI messages
   const [summaryPoints, setSummaryPoints] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showCompleteButton, setShowCompleteButton] = useState(false);
@@ -39,13 +40,14 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
     try {
       const aiResponse = await submitUserMessage(messages, userInput);
 
-      // Add AI message
+      // Add AI message with placeholder content (actual UI from uiTree)
       const aiMessage: Message = {
         role: 'assistant',
-        content: aiResponse.reply,
+        content: JSON.stringify(aiResponse.summaryPoints), // Fallback content
         timestamp: Date.now(),
       };
       setMessages((prev) => [...prev, aiMessage]);
+      setUiTrees((prev) => [...prev, aiResponse.uiTree]);
       setSummaryPoints(aiResponse.summaryPoints);
 
       // Show complete button if AI signals ready
@@ -111,6 +113,7 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
               </p>
               <ConversationArea
                 messages={messages}
+                uiTrees={uiTrees}
                 isLoading={isLoading}
                 onSendMessage={handleSendMessage}
                 onComplete={handleComplete}

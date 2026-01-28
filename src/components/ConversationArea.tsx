@@ -7,6 +7,7 @@ import TypingIndicator from './TypingIndicator';
 
 type ConversationAreaProps = {
   messages: MessageType[];
+  uiTrees: any[]; // UI trees for AI messages
   isLoading: boolean;
   onSendMessage: (message: string) => void;
   onComplete: () => void;
@@ -15,6 +16,7 @@ type ConversationAreaProps = {
 
 export default function ConversationArea({
   messages,
+  uiTrees,
   isLoading,
   onSendMessage,
   onComplete,
@@ -51,9 +53,24 @@ export default function ConversationArea({
       {/* Messages */}
       {messages.length > 0 && (
         <div className="flex flex-col gap-3 max-h-96 overflow-y-auto px-2">
-          {messages.map((message, index) => (
-            <Message key={`${message.timestamp}-${index}`} message={message} />
-          ))}
+          {messages.map((message, index) => {
+            // Calculate AI message index for uiTree lookup
+            const aiMessageIndex = messages
+              .slice(0, index + 1)
+              .filter(m => m.role === 'assistant')
+              .length - 1;
+            const uiTree = message.role === 'assistant' && aiMessageIndex >= 0
+              ? uiTrees[aiMessageIndex]
+              : undefined;
+
+            return (
+              <Message
+                key={`${message.timestamp}-${index}`}
+                message={message}
+                uiTree={uiTree}
+              />
+            );
+          })}
           {isLoading && (
             <div className="flex justify-start">
               <TypingIndicator />
