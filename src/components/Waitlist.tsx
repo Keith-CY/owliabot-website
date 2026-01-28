@@ -1,4 +1,13 @@
+'use client'
+
+import { useState } from 'react';
 import Reveal from "./Reveal";
+import SectionHeader from "./SectionHeader";
+import ConversationArea from './ConversationArea';
+import SummaryView from './SummaryView';
+import SuccessView from './SuccessView';
+import { submitUserMessage, submitToNotion } from '@/app/actions/waitlist';
+import type { Message, ConversationStage } from '@/types/waitlist';
 
 type WaitlistProps = {
   waitlist: {
@@ -11,7 +20,72 @@ type WaitlistProps = {
 };
 
 export default function Waitlist({ waitlist }: WaitlistProps) {
-  const waitlistUrl = "https://tally.so/r/RGD10d";
+  const [stage, setStage] = useState<ConversationStage>('EXPLORING');
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [summaryPoints, setSummaryPoints] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showCompleteButton, setShowCompleteButton] = useState(false);
+
+  const handleSendMessage = async (userInput: string) => {
+    // Add user message
+    const userMessage: Message = {
+      role: 'user',
+      content: userInput,
+      timestamp: Date.now(),
+    };
+    setMessages((prev) => [...prev, userMessage]);
+    setIsLoading(true);
+
+    try {
+      const aiResponse = await submitUserMessage(messages, userInput);
+
+      // Add AI message
+      const aiMessage: Message = {
+        role: 'assistant',
+        content: aiResponse.reply,
+        timestamp: Date.now(),
+      };
+      setMessages((prev) => [...prev, aiMessage]);
+      setSummaryPoints(aiResponse.summaryPoints);
+
+      // Show complete button if AI signals ready
+      if (!aiResponse.shouldContinue) {
+        setShowCompleteButton(true);
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      // Add error message
+      const errorMessage: Message = {
+        role: 'assistant',
+        content: '抱歉，发生了错误。请稍后再试。',
+        timestamp: Date.now(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleComplete = () => {
+    setStage('SUMMARY');
+  };
+
+  const handleEmailSubmit = async (email: string) => {
+    setIsLoading(true);
+    try {
+      await submitToNotion({
+        email,
+        messages,
+        summaryPoints,
+      });
+      setStage('SUCCESS');
+    } catch (error) {
+      console.error('Error submitting to Notion:', error);
+      alert('提交失败，请稍后再试。');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Reveal>
@@ -19,30 +93,40 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
         id="waitlist"
         className="rounded-[34px] border border-border bg-surface/70 px-8 py-12 shadow-[0_14px_32px_rgba(4,6,10,0.16),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur dark:shadow-[0_14px_32px_rgba(4,6,10,0.22),_inset_0_1px_0_rgba(255,255,255,0.14)]"
       >
-        <div className="flex flex-col gap-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/60">
-            {waitlist.eyebrow}
-          </p>
-          <h2 className="text-balance text-2xl font-semibold text-foreground sm:text-3xl">
-            {waitlist.title}
-          </h2>
-          <p className="text-pretty text-base text-foreground/70">
-            {waitlist.body}
-          </p>
-          <p className="text-pretty text-sm font-semibold text-foreground">
-            {waitlist.privacy}
-          </p>
-          <p className="text-pretty text-xs text-foreground/60">
-            {waitlist.note}
-          </p>
-          <a
-            className="mt-6 inline-flex items-center justify-center rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background shadow-[0_12px_30px_rgba(5,6,12,0.22),_inset_0_1px_0_rgba(255,255,255,0.6)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(5,6,12,0.28),_inset_0_1px_0_rgba(255,255,255,0.7)]"
-            href={waitlistUrl}
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            {waitlist.title}
-          </a>
+        <div className="flex flex-col gap-6">
+          <SectionHeader
+            eyebrow={waitlist.eyebrow}
+            title={waitlist.title}
+            subtitle={waitlist.body}
+          />
+
+          {stage === 'EXPLORING' && (
+            <>
+              <p className="text-pretty text-sm font-semibold text-foreground">
+                {waitlist.privacy}
+              </p>
+              <p className="text-pretty text-xs text-foreground/60">
+                {waitlist.note}
+              </p>
+              <ConversationArea
+                messages={messages}
+                isLoading={isLoading}
+                onSendMessage={handleSendMessage}
+                onComplete={handleComplete}
+                showCompleteButton={showCompleteButton}
+              />
+            </>
+          )}
+
+          {stage === 'SUMMARY' && (
+            <SummaryView
+              summaryPoints={summaryPoints}
+              onSubmit={handleEmailSubmit}
+              isLoading={isLoading}
+            />
+          )}
+
+          {stage === 'SUCCESS' && <SuccessView />}
         </div>
       </section>
     </Reveal>
