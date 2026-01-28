@@ -29,10 +29,7 @@ export default function ConversationArea({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
 
-  // Auto-focus textarea on mount
-  useEffect(() => {
-    textareaRef.current?.focus();
-  }, []);
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

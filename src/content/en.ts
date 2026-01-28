@@ -1,12 +1,10 @@
 export const content = {
   lang: "en",
   nav: {
-    why: "Why",
+    why: "Why OwliaBot",
     architecture: "Architecture",
     skills: "Skills",
-    signing: "Signing Model",
-    execution: "Execution Flow",
-    local: "Local-first",
+    security: "Secure Accounts",
     waitlist: "Waitlist",
   },
   hero: {
@@ -23,7 +21,7 @@ export const content = {
     eyebrow: "Principles",
     title: "Why OwliaBot",
     subtitle:
-      "Autonomy is useful only when boundaries are explicit — otherwise it is just blind execution.",
+      "Autonomy is useful only when boundaries are explicit. Otherwise, it is just blind execution.",
     items: [
       {
         title: "Crypto-native",
@@ -38,15 +36,15 @@ export const content = {
         mechanism: "Local-first by default. Remote optional by choice.",
       },
       {
-        title: "Minimal surface",
+        title: "Secure Accounts",
         body:
-          "Fewer dependencies, fewer channels, fewer attack paths. Designed for Telegram + Discord first, with the core kept intentionally small.",
-        mechanism: "<30 deps. No native modules. No browser automation.",
+          "Separates user intent, automated execution, and on-chain authority into three distinct signing layers. Each layer has a clear purpose, scope, and failure boundary.",
+        mechanism: "Each layer holds only the minimum authority needed for its role.",
       },
       {
         title: "Extensible",
         body:
-          "Capabilities scale through Skills: JavaScript modules loaded from your workspace, hot-reloaded without touching core code.",
+          "Capabilities scale through Skills. Some Skills are purpose-built for crypto and on-chain scenarios, supporting transactions, assets, contracts, and on-chain data.",
         mechanism: "Skills define tools, permissions, and security levels.",
       },
     ],
@@ -92,12 +90,13 @@ export const content = {
     ],
     footer: "Install more skills or write your own without expanding the core surface.",
   },
-  signing: {
-    title: "A 3-tier signing model",
+  security: {
+    eyebrow: "Secure Accounts",
+    title: "Three-tier Signing Model",
     subtitle: "Autonomy without blind trust.",
     description:
       "OwliaBot separates user intent, automated execution, and on-chain authority into three distinct signing layers. Each tier has a clear purpose, scope, and failure boundary.",
-    status: "Planned. Designed but not yet implemented.",
+    status: "Planned: Designed and documented. Implementation in progress.",
     tiers: [
       {
         title: "Tier 1: Companion App",
@@ -111,35 +110,21 @@ export const content = {
       },
       {
         title: "Tier 3: Smart Wallet",
-        body: "On-chain policy enforcement for advanced strategies. The wallet defines what is possible - not the agent.",
+        body: "On-chain policy enforcement for advanced strategies. The wallet defines what is possible - not the AI agent.",
         keyword: "Enforced authority",
       },
     ],
     footer:
-      "The agent never gains more authority than you explicitly grant.",
-  },
-  execution: {
-    eyebrow: "Execution",
-    title: "Execution Flow",
-    steps: ["Intent", "Permission", "Execution", "Audit"],
-    caption: "Every action follows an explicit signing path.",
-    note: "Current release focuses on non-signing operations.",
-  },
-  local: {
-    eyebrow: "Local-first",
-    title: "Local-first by design",
-    body: "Most agents require key custody. OwliaBot does not.",
-    bullets: [
-      "Keys live on your device",
-      "Sensitive operations run locally",
-      "Remote execution is optional and explicit",
-    ],
-  },
-  devices: {
-    eyebrow: "Channels",
-    title: "Everywhere you work",
-    body:
-      "Operate securely from desktop, mobile, or web - Telegram and Discord first, more channels planned.",
+      "The AI agent never gains more authority than you explicitly grant.",
+    local: {
+      title: "Private keys remain under your control",
+      body: "Most AI agents require private key custody. OwliaBot does not.",
+      bullets: [
+        "Private keys belong to you, never delegated to the agent",
+        "Low-risk automation runs locally with strict bounds",
+        "On-chain strategies fully constrained by contracts",
+      ],
+    },
   },
   waitlist: {
     eyebrow: "Early access",

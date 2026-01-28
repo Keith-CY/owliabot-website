@@ -11,7 +11,7 @@ type DevicesProps = {
 export default function Devices({ devices }: DevicesProps) {
   return (
     <Reveal>
-      <section className="rounded-[32px] border border-border bg-surface/70 px-8 py-10 shadow-[0_12px_28px_rgba(4,6,10,0.16),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur dark:shadow-[0_12px_28px_rgba(4,6,10,0.22),_inset_0_1px_0_rgba(255,255,255,0.14)]">
+      <section className="rounded-[32px] border border-border bg-surface/70 px-8 py-10 shadow-[0_8px_20px_rgba(4,6,10,0.06),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur dark:shadow-[0_8px_20px_rgba(4,6,10,0.12),_inset_0_1px_0_rgba(255,255,255,0.14)]">
         <div className="flex flex-col gap-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/60">
             {devices.eyebrow}

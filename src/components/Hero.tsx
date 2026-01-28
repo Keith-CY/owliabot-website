@@ -19,10 +19,10 @@ export default function Hero({ hero }: HeroProps) {
   const subtitleLines = hero.subtitle.split("\n");
 
   return (
-    <section className="relative overflow-hidden border-b border-border bg-stage">
+    <section className="relative overflow-hidden border-b border-border bg-background">
       <div className="absolute inset-0">
         <ShaderBackdrop />
-        <div className="absolute inset-0 bg-stage/70" />
+        <div className="absolute inset-0 bg-background/70" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.05] mix-blend-soft-light noise-film" />
         <div className="pointer-events-none absolute -right-24 -top-16 h-[520px] w-[520px] opacity-30 plume-drift dark:opacity-50">
           <svg
@@ -189,7 +189,7 @@ export default function Hero({ hero }: HeroProps) {
           </svg>
         </div>
       </div>
-      <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center gap-6 px-6 pb-6 pt-12 text-center sm:px-8 lg:px-12">
+      <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center gap-6 px-6 pb-6 pt-28 text-center sm:px-8 lg:px-12">
         <Reveal>
           {hero.badge ? (
             <span className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-surface/60 px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55 backdrop-blur">
@@ -239,7 +239,7 @@ export default function Hero({ hero }: HeroProps) {
       </div>
       <div className="relative mx-auto w-full max-w-5xl px-6 pb-6 sm:px-8 lg:px-12 -mt-1">
         <Reveal delay={0.22}>
-          <div className="rounded-[32px] border border-border/40 bg-surface/50 p-3 shadow-[0_8px_20px_rgba(4,6,10,0.1),_inset_0_1px_0_rgba(255,255,255,0.28)] backdrop-blur dark:shadow-[0_10px_24px_rgba(4,6,10,0.18),_inset_0_1px_0_rgba(255,255,255,0.12)]">
+          <div className="rounded-[32px] border border-border/40 bg-surface/50 pt-3 px-3 pb-4 shadow-[0_8px_20px_rgba(4,6,10,0.1),_inset_0_1px_0_rgba(255,255,255,0.28)] backdrop-blur dark:shadow-[0_10px_24px_rgba(4,6,10,0.18),_inset_0_1px_0_rgba(255,255,255,0.12)]">
             <div className="group relative overflow-hidden rounded-[26px] border border-border/50 bg-surface/50 shadow-[inset_0_1px_0_rgba(255,255,255,0.16),_inset_0_-32px_60px_rgba(4,6,10,0.16)]">
               <div className="absolute inset-0">
                 <ShaderHero />
