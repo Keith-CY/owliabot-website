@@ -1,4 +1,3 @@
-import Script from "next/script";
 import Reveal from "./Reveal";
 
 type WaitlistProps = {
@@ -12,6 +11,8 @@ type WaitlistProps = {
 };
 
 export default function Waitlist({ waitlist }: WaitlistProps) {
+  const waitlistUrl = "https://tally.so/r/RGD10d";
+
   return (
     <Reveal>
       <section
@@ -34,14 +35,14 @@ export default function Waitlist({ waitlist }: WaitlistProps) {
           <p className="text-pretty text-xs text-foreground/60">
             {waitlist.note}
           </p>
-          <div className="mt-6 overflow-hidden rounded-[26px] border border-border bg-surface/80 shadow-[0_10px_22px_rgba(4,6,10,0.14),_inset_0_1px_0_rgba(255,255,255,0.35)] dark:shadow-[0_10px_22px_rgba(4,6,10,0.2),_inset_0_1px_0_rgba(255,255,255,0.12)]">
-            <iframe
-              className="min-h-[520px] w-full"
-              data-tally-src="https://tally.so/r/RGD10d?transparentBackground=1&dynamicHeight=1"
-              title="OwliaBot waitlist"
-            />
-          </div>
-          <Script src="https://tally.so/widgets/embed.js" strategy="afterInteractive" />
+          <a
+            className="mt-6 inline-flex items-center justify-center rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background shadow-[0_12px_30px_rgba(5,6,12,0.22),_inset_0_1px_0_rgba(255,255,255,0.6)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(5,6,12,0.28),_inset_0_1px_0_rgba(255,255,255,0.7)]"
+            href={waitlistUrl}
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            {waitlist.title}
+          </a>
         </div>
       </section>
     </Reveal>
