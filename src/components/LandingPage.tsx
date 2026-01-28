@@ -109,7 +109,7 @@ export default function LandingPage({ content }: LandingPageProps) {
     <div className="min-h-dvh overflow-hidden bg-background text-foreground">
       <Header nav={content.nav} />
       <Hero hero={content.hero} illustration={content.hero_illustration} />
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-40 px-6 pb-24 pt-12 sm:px-8 lg:px-12">
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-32 px-6 pb-24 pt-24 sm:px-8 lg:px-12">
         <Pillars eyebrow={content.why.eyebrow} title={content.why.title} subtitle={content.why.subtitle} pillars={content.why.items} />
 
         <div className="relative isolate">
