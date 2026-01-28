@@ -27,6 +27,7 @@ export async function submitUserMessage(
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
     const model = genAI.getGenerativeModel({
       model: "gemini-2.5-flash-lite",
+      systemInstruction: SYSTEM_PROMPT,
       generationConfig: {
         temperature: 0.7,
         maxOutputTokens: 1024,
@@ -39,16 +40,9 @@ export async function submitUserMessage(
       parts: [{ text: msg.content }],
     }));
 
-    // Add new user message
-    conversationHistory.push({
-      role: 'user',
-      parts: [{ text: userInput }],
-    });
-
-    // Create chat with system instruction
+    // Create chat with history
     const chat = model.startChat({
-      history: conversationHistory.slice(0, -1),
-      systemInstruction: SYSTEM_PROMPT,
+      history: conversationHistory,
     });
 
     const result = await chat.sendMessage(userInput);
@@ -64,7 +58,12 @@ export async function submitUserMessage(
     return aiResponse;
   } catch (error) {
     console.error('Error in submitUserMessage:', error);
-    throw new Error('Failed to get AI response');
+    // Log more details for debugging
+    if (error instanceof Error) {
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+    }
+    throw new Error(`Failed to get AI response: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
