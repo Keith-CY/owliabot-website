@@ -215,6 +215,13 @@ export async function summarizeRequirement(
   }
 }
 
+function chunkString(str: string, size: number): string[] {
+  const chunks: string[] = [];
+  for (let i = 0; i < str.length; i += size) {
+    chunks.push(str.slice(i, i + size));
+  }
+  return chunks;
+}
 
 export async function submitToNotion(data: NotionSubmission): Promise<void> {
   try {
@@ -226,6 +233,11 @@ export async function submitToNotion(data: NotionSubmission): Promise<void> {
     }
 
     const notion = new Client({ auth: process.env.NOTION_API_KEY });
+
+    const conversationJson = JSON.stringify(data.messages, null, 2);
+    const richTextChunks = chunkString(conversationJson, 2000).map((chunk) => ({
+      text: { content: chunk },
+    }));
 
     await notion.pages.create({
       parent: { database_id: process.env.NOTION_DATABASE_ID! },
@@ -277,13 +289,7 @@ export async function submitToNotion(data: NotionSubmission): Promise<void> {
           object: 'block',
           type: 'code',
           code: {
-            rich_text: [
-              {
-                text: {
-                  content: JSON.stringify(data.messages, null, 2),
-                },
-              },
-            ],
+            rich_text: richTextChunks,
             language: 'json',
           },
         },
