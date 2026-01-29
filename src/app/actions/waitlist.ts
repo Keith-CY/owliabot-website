@@ -217,13 +217,6 @@ export async function summarizeRequirement(
 
 
 export async function submitToNotion(data: NotionSubmission): Promise<void> {
-  console.log('=== submitToNotion called ===');
-  console.log('Email:', data.email);
-  console.log('Confirmed requirements:', data.confirmedRequirements.length);
-  console.log('Messages count:', data.messages.length);
-  console.log('NOTION_API_KEY exists:', !!process.env.NOTION_API_KEY);
-  console.log('NOTION_DATABASE_ID:', process.env.NOTION_DATABASE_ID);
-
   try {
     if (!process.env.NOTION_API_KEY) {
       throw new Error('NOTION_API_KEY is not configured');
@@ -233,9 +226,7 @@ export async function submitToNotion(data: NotionSubmission): Promise<void> {
     }
 
     const notion = new Client({ auth: process.env.NOTION_API_KEY });
-    console.log('Notion client created');
 
-    console.log('Creating page in database...');
     await notion.pages.create({
       parent: { database_id: process.env.NOTION_DATABASE_ID! },
       properties: {
@@ -283,16 +274,8 @@ export async function submitToNotion(data: NotionSubmission): Promise<void> {
         },
       },
     });
-    console.log('Page created successfully in Notion');
   } catch (error) {
-    console.error('Error submitting to Notion:', error);
-    if (error instanceof Error) {
-      console.error('Error name:', error.name);
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
-    }
-    // Log the full error object for Notion API errors
-    console.error('Full error object:', JSON.stringify(error, null, 2));
+    console.error('Error submitting to Notion:', error instanceof Error ? error.message : 'Unknown error');
     throw new Error(`Failed to submit to Notion: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
