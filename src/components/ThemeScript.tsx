@@ -8,7 +8,7 @@ export default function ThemeScript() {
     const cookie = document.cookie.split('; ').find((row) => row.startsWith('theme='));
     const value = cookie ? decodeURIComponent(cookie.split('=')[1]) : 'system';
     const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const resolved = value === 'system' ? (systemDark ? 'dark' : 'light') : value;
+    const resolved = value === 'dark' ? 'dark' : value === 'light' ? 'light' : (systemDark ? 'dark' : 'light');
     const root = document.documentElement;
     root.classList.remove('light', 'dark');
     root.classList.add(resolved);
@@ -19,6 +19,7 @@ export default function ThemeScript() {
     try {
       const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       const fallbackTheme = systemDark ? 'dark' : 'light';
+      document.documentElement.classList.remove('light', 'dark');
       document.documentElement.classList.add(fallbackTheme);
       document.documentElement.style.colorScheme = fallbackTheme;
     } catch (fallbackError) {
