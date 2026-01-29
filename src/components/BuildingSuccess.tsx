@@ -8,7 +8,7 @@ type SuccessCopy = {
   note: string;
 };
 
-export default function SuccessView({ copy }: { copy: SuccessCopy }) {
+export default function BuildingSuccess({ copy }: { copy: SuccessCopy }) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}

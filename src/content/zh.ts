@@ -5,7 +5,7 @@ export const content = {
     architecture: "架构总览",
     skills: "Skills 系统",
     security: "安全账户",
-    waitlist: "共建 OwliaBot",
+    building: "共建 OwliaBot",
   },
   hero: {
     title: "一个永远不会越过签名边界的加密自治 AI Agent。",
@@ -14,7 +14,7 @@ export const content = {
     badge: "三层签名模型",
     status: "已完成设计与文档，正在实现。",
     emphasis: "安全、隐私、可控，皆为设计的一部分。",
-    ctaPrimary: "加入候补名单",
+    ctaPrimary: "共建 OwliaBot",
     ctaSecondary: "阅读架构说明",
   },
   why: {
@@ -121,7 +121,7 @@ export const content = {
       ],
     },
   },
-  waitlist: {
+  building: {
     eyebrow: "你不是用户，是共建者",
     title: "你希望 OwliaBot 帮你做什么？",
     body: "描述你最希望 OwliaBot 实现的功能，我们会优先实现。",
@@ -159,9 +159,11 @@ export const content = {
   },
   footer: {
     note: "私钥永不离开你的设备。没有例外。",
+    signature: "OwliaBot made with ❤️ · 2026",
   },
   links: {
     github: "https://github.com/owliabot/owliabot",
+    x: "https://x.com/OwliaBot",
   },
   hero_illustration: {
     scenarios: [

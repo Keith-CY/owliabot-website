@@ -4,16 +4,16 @@ import { useState } from 'react';
 import Reveal from "./Reveal";
 import SectionHeader from "./SectionHeader";
 import ConversationArea from './ConversationArea';
-import SummaryView from './SummaryView';
-import SuccessView from './SuccessView';
+import BuildingSummary from './BuildingSummary';
+import BuildingSuccess from './BuildingSuccess';
 import RequirementCard from './RequirementCard';
 import { submitUserMessage, submitToNotion, summarizeRequirement } from '@/app/actions/waitlist';
-import type { Message, ConversationStage, ConfirmedRequirement, UITreeNode } from '@/types/waitlist';
-import { WaitlistProvider, useWaitlist } from '@/contexts/WaitlistContext';
+import type { Message, ConversationStage, ConfirmedRequirement, UITreeNode } from '@/types/building';
+import { BuildingProvider, useBuilding } from '@/contexts/BuildingContext';
 
-type WaitlistProps = {
+type BuildingProps = {
   lang: "en" | "zh";
-  waitlist: {
+  building: {
     eyebrow: string;
     title: string;
     body: string;
@@ -56,19 +56,18 @@ type PendingRequirement = {
   summary: string;
 };
 
-function WaitlistInner({ waitlist, lang }: WaitlistProps) {
+function BuildingInner({ building, lang }: BuildingProps) {
   const [stage, setStage] = useState<ConversationStage>('EXPLORING');
   const [messages, setMessages] = useState<Message[]>([]);
   const [uiTrees, setUiTrees] = useState<UITreeNode[]>([]);
-  const [summaryPoints, setSummaryPoints] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [confirmedRequirements, setConfirmedRequirements] = useState<ConfirmedRequirement[]>([]);
   const [currentConversation, setCurrentConversation] = useState<Message[]>([]);
   const [isInConversation, setIsInConversation] = useState(false);
   const [baseIntent, setBaseIntent] = useState<string | null>(null);
   const [pendingRequirements, setPendingRequirements] = useState<PendingRequirement[]>([]);
-  const { clearSelections, selectedOptions } = useWaitlist();
-  const prompts = waitlist.prompts;
+  const { clearSelections, selectedOptions } = useBuilding();
+  const prompts = building.prompts;
 
   const sanitizeUiTree = (
     uiTree: UITreeNode | undefined,
@@ -127,12 +126,6 @@ function WaitlistInner({ waitlist, lang }: WaitlistProps) {
     forceNewConversation = false,
     allowSplit = true
   ) => {
-    console.log('[Waitlist] handleSendMessage invoked:', {
-      userInput,
-      selections,
-      currentConversationLength: currentConversation.length,
-      currentConversationLastRole: currentConversation.at(-1)?.role,
-    });
     const activeBaseIntent = baseIntentOverride ?? baseIntent ?? userInput;
     // Add user message with selections
     const userMessage: Message = {
@@ -144,10 +137,6 @@ function WaitlistInner({ waitlist, lang }: WaitlistProps) {
 
     const isNewConversation = forceNewConversation || currentConversation.length === 0;
     const newConversation = isNewConversation ? [userMessage] : [...currentConversation, userMessage];
-    console.log('[Waitlist] newConversation prepared:', {
-      newConversationLength: newConversation.length,
-      newConversationRoles: newConversation.map((m) => m.role),
-    });
     setCurrentConversation(newConversation);
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
@@ -160,9 +149,7 @@ function WaitlistInner({ waitlist, lang }: WaitlistProps) {
 
     try {
       const structuredInput = buildStructuredInput(activeBaseIntent, selections, userInput, lang);
-      console.log('[Waitlist] Calling submitUserMessage with:', { messages: newConversation, userInput, selections });
       const aiResponse = await submitUserMessage(newConversation, structuredInput);
-      console.log('[Waitlist] AI response received:', aiResponse);
 
       const intentType = aiResponse.intentType ?? 'refine';
       const requirements = aiResponse.requirements ?? [];
@@ -185,7 +172,6 @@ function WaitlistInner({ waitlist, lang }: WaitlistProps) {
           setCurrentConversation((prev) => [...prev, noticeMessage]);
           setMessages((prev) => [...prev, noticeMessage]);
           setUiTrees((prev) => [...prev, noticeUiTree]);
-          setSummaryPoints([]);
           const followupInput = buildStructuredInput(firstText, selections, firstText, lang);
           const followupResponse = await submitUserMessage(newConversation, followupInput);
           const followupIntent = followupResponse.intentType ?? 'refine';
@@ -204,7 +190,6 @@ function WaitlistInner({ waitlist, lang }: WaitlistProps) {
           if (followupUiTree) {
             setUiTrees((prev) => [...prev, followupUiTree]);
           }
-          setSummaryPoints(followupResponse.summaryPoints ?? []);
           return;
         }
         if (first?.summary || first?.title) {
@@ -231,7 +216,6 @@ function WaitlistInner({ waitlist, lang }: WaitlistProps) {
         setCurrentConversation((prev) => [...prev, queuedMessage]);
         setMessages((prev) => [...prev, queuedMessage]);
         setUiTrees((prev) => [...prev, queuedUiTree]);
-        setSummaryPoints([]);
         return;
       }
 
@@ -253,7 +237,6 @@ function WaitlistInner({ waitlist, lang }: WaitlistProps) {
       if (sanitizedUiTree) {
         setUiTrees((prev) => [...prev, sanitizedUiTree]);
       }
-      setSummaryPoints(aiResponse.summaryPoints);
     } catch (error) {
       console.error('Error sending message:', error);
       const errorMessage: Message = {
@@ -271,11 +254,6 @@ function WaitlistInner({ waitlist, lang }: WaitlistProps) {
   const handleConfirmRequirement = async () => {
     if (currentConversation.length === 0) return;
 
-    console.log('[Waitlist] handleConfirmRequirement invoked:', {
-      currentConversationLength: currentConversation.length,
-      currentConversationRoles: currentConversation.map((m) => m.role),
-      currentConversationLastRole: currentConversation.at(-1)?.role,
-    });
     setIsLoading(true);
     let nextRequirementSeed: string | null = null;
     try {
@@ -306,7 +284,6 @@ function WaitlistInner({ waitlist, lang }: WaitlistProps) {
       // Clear current conversation
       setCurrentConversation([]);
       setUiTrees([]);
-      setSummaryPoints([]);
       setIsInConversation(false);
       clearSelections();
 
@@ -369,22 +346,22 @@ function WaitlistInner({ waitlist, lang }: WaitlistProps) {
       >
         <div className="flex flex-col gap-6">
           <SectionHeader
-            eyebrow={waitlist.eyebrow}
-            title={waitlist.title}
-            subtitle={waitlist.body}
+            eyebrow={building.eyebrow}
+            title={building.title}
+            subtitle={building.body}
             withDecoration={false}
           />
 
           {stage === 'EXPLORING' && (
             <>
-              {waitlist.privacy && (
+              {building.privacy && (
                 <p className="text-pretty text-xs text-foreground/60">
-                  {waitlist.privacy}
+                  {building.privacy}
                 </p>
               )}
-              {waitlist.note && (
+              {building.note && (
                 <p className="text-pretty text-xs text-foreground/60">
-                  {waitlist.note}
+                  {building.note}
                 </p>
               )}
 
@@ -406,7 +383,7 @@ function WaitlistInner({ waitlist, lang }: WaitlistProps) {
                 isLoading={isLoading}
                 isInConversation={isInConversation}
                 hasConfirmedRequirements={confirmedRequirements.length > 0}
-                inputCopy={waitlist.input}
+                inputCopy={building.input}
                 onSendMessage={handleSendMessage}
                 onConfirmRequirement={handleConfirmRequirement}
                 onComplete={handleComplete}
@@ -415,25 +392,25 @@ function WaitlistInner({ waitlist, lang }: WaitlistProps) {
           )}
 
           {stage === 'SUMMARY' && (
-            <SummaryView
+            <BuildingSummary
               confirmedRequirements={confirmedRequirements}
-              copy={waitlist.summary}
+              copy={building.summary}
               onSubmit={handleEmailSubmit}
               isLoading={isLoading}
             />
           )}
 
-          {stage === 'SUCCESS' && <SuccessView copy={waitlist.success} />}
+          {stage === 'SUCCESS' && <BuildingSuccess copy={building.success} />}
         </div>
       </section>
     </Reveal>
   );
 }
 
-export default function Waitlist(props: WaitlistProps) {
+export default function Building(props: BuildingProps) {
   return (
-    <WaitlistProvider>
-      <WaitlistInner {...props} />
-    </WaitlistProvider>
+    <BuildingProvider>
+      <BuildingInner {...props} />
+    </BuildingProvider>
   );
 }

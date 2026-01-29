@@ -3,8 +3,8 @@
 import { motion } from 'framer-motion';
 import { JSONUIProvider } from '@json-render/react';
 import type { UIElement } from '@json-render/core';
-import type { Message as MessageType, UITreeNode } from '@/types/waitlist';
-import { waitlistRegistry } from './waitlist/WaitlistRegistry';
+import type { Message as MessageType, UITreeNode } from '@/types/building';
+import { buildingRegistry } from './building/BuildingRegistry';
 
 type MessageProps = {
   message: MessageType;
@@ -31,9 +31,9 @@ export default function Message({ message, uiTree }: MessageProps) {
           <p className="text-sm whitespace-pre-wrap">{message.content}</p>
         ) : uiTree ? (
           <div>
-            <JSONUIProvider registry={waitlistRegistry}>
+            <JSONUIProvider registry={buildingRegistry}>
               {uiTree.children && uiTree.children.map((child, index) => {
-                const Component = waitlistRegistry[child.type as keyof typeof waitlistRegistry];
+                const Component = buildingRegistry[child.type as keyof typeof buildingRegistry];
                 const element = {
                   ...child,
                   key: child.key ?? index,

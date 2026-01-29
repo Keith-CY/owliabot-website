@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion';
-import type { ConfirmedRequirement } from '@/types/waitlist';
+import type { ConfirmedRequirement } from '@/types/building';
 
 type RequirementCardProps = {
   requirement: ConfirmedRequirement;

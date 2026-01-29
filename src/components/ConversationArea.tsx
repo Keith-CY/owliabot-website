@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react';
-import type { Message as MessageType, UITreeNode } from '@/types/waitlist';
+import type { Message as MessageType, UITreeNode } from '@/types/building';
 import Message from './Message';
 import TypingIndicator from './TypingIndicator';
-import { useWaitlist } from '@/contexts/WaitlistContext';
+import { useBuilding } from '@/contexts/BuildingContext';
 
 type ConversationAreaProps = {
   messages: MessageType[];
@@ -39,7 +39,7 @@ export default function ConversationArea({
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { selectedOptions } = useWaitlist();
+  const { selectedOptions } = useBuilding();
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {

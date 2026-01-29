@@ -2,15 +2,15 @@
 
 import { createContext, useContext, useState, ReactNode } from 'react';
 
-type WaitlistContextType = {
+type BuildingContextType = {
   selectedOptions: Set<string>;
   toggleOption: (optionId: string) => void;
   clearSelections: () => void;
 };
 
-const WaitlistContext = createContext<WaitlistContextType | undefined>(undefined);
+const BuildingContext = createContext<BuildingContextType | undefined>(undefined);
 
-export function WaitlistProvider({ children }: { children: ReactNode }) {
+export function BuildingProvider({ children }: { children: ReactNode }) {
   const [selectedOptions, setSelectedOptions] = useState<Set<string>>(new Set());
 
   const toggleOption = (optionId: string) => {
@@ -30,16 +30,16 @@ export function WaitlistProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <WaitlistContext.Provider value={{ selectedOptions, toggleOption, clearSelections }}>
+    <BuildingContext.Provider value={{ selectedOptions, toggleOption, clearSelections }}>
       {children}
-    </WaitlistContext.Provider>
+    </BuildingContext.Provider>
   );
 }
 
-export function useWaitlist() {
-  const context = useContext(WaitlistContext);
+export function useBuilding() {
+  const context = useContext(BuildingContext);
   if (!context) {
-    throw new Error('useWaitlist must be used within WaitlistProvider');
+    throw new Error('useBuilding must be used within BuildingProvider');
   }
   return context;
 }

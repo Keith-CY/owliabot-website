@@ -5,7 +5,7 @@ export const content = {
     architecture: "Architecture",
     skills: "Skills",
     security: "Secure Accounts",
-    waitlist: "Co-build OwliaBot",
+    building: "Co-build OwliaBot",
   },
   hero: {
     title: "An autonomous crypto agent that never crosses your signing boundary.",
@@ -14,7 +14,7 @@ export const content = {
     badge: "Three-tier signing model",
     status: "Designed and documented. Implementation in progress.",
     emphasis: "Secure. Private. Controllable by design.",
-    ctaPrimary: "Join the Waitlist",
+    ctaPrimary: "Co-build OwliaBot",
     ctaSecondary: "Read the Architecture",
   },
   why: {
@@ -126,7 +126,7 @@ export const content = {
       ],
     },
   },
-  waitlist: {
+  building: {
     eyebrow: "You are not a user, you are a co-builder",
     title: "What do you want OwliaBot to do?",
     body: "Describe the features you want most, and we will prioritize them.",
@@ -164,9 +164,11 @@ export const content = {
   },
   footer: {
     note: "Private keys never leave your device. No exceptions.",
+    signature: "OwliaBot made with ❤️ · 2026",
   },
   links: {
     github: "https://github.com/owliabot/owliabot",
+    x: "https://x.com/OwliaBot",
   },
   hero_illustration: {
     scenarios: [

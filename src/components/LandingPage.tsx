@@ -4,7 +4,7 @@ import Pillars from "./Pillars";
 import ArchitectureOverview from "./ArchitectureOverview";
 import SkillsSection from "./SkillsSection";
 import SecurityModel from "./SecurityModel";
-import Waitlist from "./Waitlist";
+import Building from "./Building";
 import Footer from "./Footer";
 
 export type LandingPageContent = {
@@ -14,7 +14,7 @@ export type LandingPageContent = {
     architecture: string;
     skills: string;
     security: string;
-    waitlist: string;
+    building: string;
   };
   hero: {
     title: string;
@@ -85,7 +85,7 @@ export type LandingPageContent = {
     }>;
     footer?: string;
   };
-  waitlist: {
+  building: {
     eyebrow: string;
     title: string;
     body: string;
@@ -123,9 +123,11 @@ export type LandingPageContent = {
   };
   footer: {
     note: string;
+    signature: string;
   };
   links: {
     github: string;
+    x: string;
   };
 };
 
@@ -135,8 +137,8 @@ type LandingPageProps = {
 
 export default function LandingPage({ content }: LandingPageProps) {
   return (
-    <div className="min-h-dvh overflow-hidden bg-background text-foreground">
-      <Header nav={content.nav} />
+    <div id="top" className="min-h-dvh overflow-hidden bg-background text-foreground">
+      <Header nav={content.nav} links={{ x: content.links.x }} />
       <Hero hero={content.hero} illustration={content.hero_illustration} />
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-32 px-6 pb-24 pt-24 sm:px-8 lg:px-12">
         <Pillars eyebrow={content.why.eyebrow} title={content.why.title} subtitle={content.why.subtitle} pillars={content.why.items} />
@@ -152,9 +154,9 @@ export default function LandingPage({ content }: LandingPageProps) {
         </div>
 
         <SkillsSection skills={content.skills} />
-        <Waitlist waitlist={content.waitlist} lang={content.lang} />
+        <Building building={content.building} lang={content.lang} />
       </main>
-      <Footer note={content.footer.note} />
+      <Footer note={content.footer.note} signature={content.footer.signature} links={content.links} />
     </div>
   );
 }

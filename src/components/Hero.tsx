@@ -27,7 +27,6 @@ type HeroProps = {
 };
 
 export default function Hero({ hero, illustration }: HeroProps) {
-  const waitlistUrl = "https://tally.so/r/RGD10d";
   const subtitleLines = hero.subtitle.split("\n");
 
   return (
@@ -74,9 +73,7 @@ export default function Hero({ hero, illustration }: HeroProps) {
             <div className="flex flex-wrap items-center gap-4">
               <a
                 className="rounded-full bg-foreground px-8 py-4 text-sm font-semibold text-background shadow-[0_12px_30px_rgba(5,6,12,0.22),_inset_0_1px_0_rgba(255,255,255,0.6)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(5,6,12,0.28),_inset_0_1px_0_rgba(255,255,255,0.7)]"
-                href={waitlistUrl}
-                target="_blank"
-                rel="noreferrer noopener"
+                href="#building"
               >
                 {hero.ctaPrimary}
               </a>
