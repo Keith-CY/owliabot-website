@@ -235,9 +235,15 @@ export async function submitToNotion(data: NotionSubmission): Promise<void> {
     const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
     const conversationJson = JSON.stringify(data.messages, null, 2);
-    const richTextChunks = chunkString(conversationJson, 2000).map((chunk) => ({
+    let richTextChunks = chunkString(conversationJson, 2000).map((chunk) => ({
       text: { content: chunk },
     }));
+
+    const MAX_CHUNKS = 100;
+    if (richTextChunks.length > MAX_CHUNKS) {
+      richTextChunks = richTextChunks.slice(0, MAX_CHUNKS - 1);
+      richTextChunks.push({ text: { content: '\n\n...[Conversation truncated due to length]' } });
+    }
 
     await notion.pages.create({
       parent: { database_id: process.env.NOTION_DATABASE_ID! },
