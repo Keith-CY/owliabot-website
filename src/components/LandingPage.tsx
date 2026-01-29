@@ -91,6 +91,35 @@ export type LandingPageContent = {
     body: string;
     privacy: string;
     note: string;
+    prompts: {
+      noticeMultiple: string;
+      noticeQueued: string;
+      refineHint: string;
+      unclearFallback: string;
+      confirmError: string;
+      confirmRequired: string;
+      requireAtLeastOne: string;
+    };
+    input: {
+      placeholderInitial: string;
+      placeholderFollowup: string;
+      placeholderAdditional: string;
+      send: string;
+      confirmCurrent: string;
+      complete: string;
+    };
+    summary: {
+      title: string;
+      emailLabel: string;
+      emailPlaceholder: string;
+      submit: string;
+      submitting: string;
+    };
+    success: {
+      title: string;
+      body: string;
+      note: string;
+    };
   };
   footer: {
     note: string;
@@ -123,7 +152,7 @@ export default function LandingPage({ content }: LandingPageProps) {
         </div>
 
         <SkillsSection skills={content.skills} />
-        <Waitlist waitlist={content.waitlist} />
+        <Waitlist waitlist={content.waitlist} lang={content.lang} />
       </main>
       <Footer note={content.footer.note} />
     </div>

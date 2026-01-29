@@ -1,17 +1,25 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react';
-import type { Message as MessageType } from '@/types/waitlist';
+import type { Message as MessageType, UITreeNode } from '@/types/waitlist';
 import Message from './Message';
 import TypingIndicator from './TypingIndicator';
 import { useWaitlist } from '@/contexts/WaitlistContext';
 
 type ConversationAreaProps = {
   messages: MessageType[];
-  uiTrees: any[];
+  uiTrees: UITreeNode[];
   isLoading: boolean;
   isInConversation: boolean;
   hasConfirmedRequirements: boolean;
+  inputCopy: {
+    placeholderInitial: string;
+    placeholderFollowup: string;
+    placeholderAdditional: string;
+    send: string;
+    confirmCurrent: string;
+    complete: string;
+  };
   onSendMessage: (message: string, selections?: string[]) => void;
   onConfirmRequirement: () => void;
   onComplete: () => void;
@@ -23,6 +31,7 @@ export default function ConversationArea({
   isLoading,
   isInConversation,
   hasConfirmedRequirements,
+  inputCopy,
   onSendMessage,
   onConfirmRequirement,
   onComplete,
@@ -30,7 +39,7 @@ export default function ConversationArea({
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { selectedOptions, clearSelections } = useWaitlist();
+  const { selectedOptions } = useWaitlist();
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -95,10 +104,10 @@ export default function ConversationArea({
           onKeyDown={handleKeyDown}
           placeholder={
             !hasConfirmedRequirements && messages.length === 0
-              ? "向 OwliaBot 描述你的需求..."
+              ? inputCopy.placeholderInitial
               : isInConversation
-                ? "继续补充需求详情..."
-                : "继续描述其他需求..."
+                ? inputCopy.placeholderFollowup
+                : inputCopy.placeholderAdditional
           }
           disabled={isLoading}
           rows={3}
@@ -111,7 +120,7 @@ export default function ConversationArea({
             disabled={!input.trim() || isLoading}
             className="flex-1 rounded-full bg-foreground px-6 py-2.5 text-sm font-semibold text-background transition hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            发送
+            {inputCopy.send}
           </button>
 
           {isInConversation && (
@@ -121,7 +130,7 @@ export default function ConversationArea({
               disabled={isLoading || messages.length === 0}
               className="flex-1 rounded-full border-2 border-foreground px-6 py-2.5 text-sm font-semibold text-foreground transition hover:bg-foreground/10 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              确认当前需求
+              {inputCopy.confirmCurrent}
             </button>
           )}
 
@@ -132,7 +141,7 @@ export default function ConversationArea({
               disabled={isLoading}
               className="flex-1 rounded-full border-2 border-foreground px-6 py-2.5 text-sm font-semibold text-foreground transition hover:bg-foreground/10 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              我希望 OwliaBot 实现这些功能
+              {inputCopy.complete}
             </button>
           )}
         </div>

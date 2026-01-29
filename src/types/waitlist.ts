@@ -21,8 +21,14 @@ export type ConversationState = {
   email: string;
 };
 
+export type UITreeNode = {
+  type: string;
+  props?: Record<string, unknown>;
+  children?: UITreeNode[];
+};
+
 export type AIResponse = {
-  uiTree: any; // json-render tree structure
+  uiTree: UITreeNode; // json-render tree structure
   summaryPoints: string[];
   shouldContinue: boolean;
   selectedOptions?: string[]; // For tracking user selections

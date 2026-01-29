@@ -1,13 +1,13 @@
 'use client'
 
 import { motion } from 'framer-motion';
-import { Renderer, JSONUIProvider } from '@json-render/react';
-import type { Message as MessageType } from '@/types/waitlist';
+import { JSONUIProvider } from '@json-render/react';
+import type { Message as MessageType, UITreeNode } from '@/types/waitlist';
 import { waitlistRegistry } from './waitlist/WaitlistRegistry';
 
 type MessageProps = {
   message: MessageType;
-  uiTree?: any; // For AI messages with UI tree
+  uiTree?: UITreeNode; // For AI messages with UI tree
 };
 
 export default function Message({ message, uiTree }: MessageProps) {
@@ -31,7 +31,7 @@ export default function Message({ message, uiTree }: MessageProps) {
         ) : uiTree ? (
           <div>
             <JSONUIProvider registry={waitlistRegistry}>
-              {uiTree.children && uiTree.children.map((child: any, index: number) => {
+              {uiTree.children && uiTree.children.map((child, index) => {
                 const Component = waitlistRegistry[child.type as keyof typeof waitlistRegistry];
                 return Component ? (
                   <Component key={index} element={child} />

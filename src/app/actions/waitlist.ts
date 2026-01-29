@@ -18,6 +18,7 @@ const SYSTEM_PROMPT = `你是 OwliaBot 的需求收集助手。你的目标是�
 
 输入格式说明：
 用户的当前消息将使用以下结构：
+[Locale] 当前页面语言(zh 或 en)
 [BaseIntent] 当前需求的基准意图(首句或当前需求标题)
 [SelectedOptions] 用户已勾选的功能选项(逗号分隔)
 [NewInput] 用户本轮补充输入
@@ -26,6 +27,7 @@ const SYSTEM_PROMPT = `你是 OwliaBot 的需求收集助手。你的目标是�
 - 必须输出 intentType: "refine" | "new" | "unclear"
 - 当 intentType 为 "unclear" 时，只输出澄清问题，不要给大量选项
 - 若检测到首句包含多个需求，输出 requirements 数组，并仅提供第一个需求的选项
+- 回复语言：优先使用 [Locale] 指定的语言；若无法确定，则跟随用户输入语言
 
 CRITICAL: 你必须返回这个 JSON 格式：
 {
@@ -127,28 +129,17 @@ export async function submitUserMessage(
       history: conversationHistory,
     });
 
-    let currentInput = userInput;
+    const currentInput = userInput;
     const result = await chat.sendMessage(currentInput);
 
     const responseText = result.response.text();
-
-    // Try to extract JSON from response (handle markdown code blocks)
-    let jsonText = responseText.trim();
-
-    // Remove markdown code blocks if present
-    if (jsonText.startsWith('```')) {
-      jsonText = jsonText.replace(/^```(?:json)?\s*\n?/, '').replace(/\n?```\s*$/, '');
-    }
-
-    // Try to find JSON object
-    const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
-      console.error('Failed to find JSON in response');
+    try {
+      const aiResponse: AIResponse = JSON.parse(responseText);
+      return aiResponse;
+    } catch (parseError) {
+      console.error('Failed to parse AI response as JSON:', responseText, parseError);
       throw new Error('AI response is not valid JSON');
     }
-
-    const aiResponse: AIResponse = JSON.parse(jsonMatch[0]);
-    return aiResponse;
   } catch (error) {
     console.error('Error in submitUserMessage:', error);
     // Log more details for debugging
@@ -196,23 +187,14 @@ export async function summarizeRequirement(
     });
 
     const responseText = result.response.text();
-
-    // Parse JSON response
-    let jsonText = responseText.trim();
-    if (jsonText.startsWith('```')) {
-      jsonText = jsonText.replace(/^```(?:json)?\s*\n?/, '').replace(/\n?```\s*$/, '');
-    }
-
-    const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
-      console.error('Failed to find JSON in response');
-      // Fallback: use first user message
+    try {
+      const parsed = JSON.parse(responseText);
+      return parsed.summary;
+    } catch (parseError) {
+      console.error('Failed to parse summary JSON:', responseText, parseError);
       const firstUserMessage = messages.find(m => m.role === 'user');
       return firstUserMessage?.content || '需求总结失败';
     }
-
-    const parsed = JSON.parse(jsonMatch[0]);
-    return parsed.summary;
   } catch (error) {
     console.error('Error in summarizeRequirement:', error);
     // Fallback: use first user message

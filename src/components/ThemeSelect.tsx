@@ -21,39 +21,19 @@ export default function ThemeSelect() {
   };
 
   useEffect(() => {
-    // 1. Read from cookie on mount (client-only)
     const cookie = document.cookie
       .split('; ')
       .find(row => row.startsWith('theme='));
     const storedTheme = cookie ? decodeURIComponent(cookie.split('=')[1]) : 'system';
 
-    // 2. Update state if different from default "system"
     if (storedTheme !== "system") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTheme(storedTheme);
     }
 
-    // 3. Set up media query and listener
     const query = window.matchMedia("(prefers-color-scheme: dark)");
     mediaRef.current = query;
-
-    // 4. Apply the resolved theme immediately
     applyTheme(storedTheme, query);
-
-    const handler = () => {
-      // We only care about system preference changes if the current theme is "system"
-      // But we need to check the LATEST theme state, or use 'system' if that's what we want to support dynamic switching for.
-      // However, since 'applyTheme' depends on 'theme' state in the dep array below, the effect re-runs on theme change.
-      // So inside this effect instance, 'theme' is constant. 
-      // The original code re-bound the event listener on every theme change. We can keep that pattern or optimize.
-      // Keeping original pattern for safety but referencing 'storedTheme' or 'theme' correctly is tricky if we split initialization.
-      // To keep it simple: We just re-use the effect logic for updates, but we need initialization logic SEPARATE or integrated.
-    };
-
-    // Actually, let's keep it clean. We need one effect for initialization and one for updates? 
-    // Or just one effect that handles both.
-    // Let's stick to the previous pattern but JUST fix the initialization.
-    // The previous pattern had `useEffect(..., [theme])`.
-    // It bound the listener every time.
   }, []);
 
   // Separate effect for handling theme changes and system preference listeners

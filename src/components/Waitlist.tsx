@@ -8,16 +8,46 @@ import SummaryView from './SummaryView';
 import SuccessView from './SuccessView';
 import RequirementCard from './RequirementCard';
 import { submitUserMessage, submitToNotion, summarizeRequirement } from '@/app/actions/waitlist';
-import type { Message, ConversationStage, ConfirmedRequirement } from '@/types/waitlist';
+import type { Message, ConversationStage, ConfirmedRequirement, UITreeNode } from '@/types/waitlist';
 import { WaitlistProvider, useWaitlist } from '@/contexts/WaitlistContext';
 
 type WaitlistProps = {
+  lang: "en" | "zh";
   waitlist: {
     eyebrow: string;
     title: string;
     body: string;
     privacy: string;
     note: string;
+    prompts: {
+      noticeMultiple: string;
+      noticeQueued: string;
+      refineHint: string;
+      unclearFallback: string;
+      confirmError: string;
+      confirmRequired: string;
+      requireAtLeastOne: string;
+    };
+    input: {
+      placeholderInitial: string;
+      placeholderFollowup: string;
+      placeholderAdditional: string;
+      send: string;
+      confirmCurrent: string;
+      complete: string;
+    };
+    summary: {
+      title: string;
+      emailLabel: string;
+      emailPlaceholder: string;
+      submit: string;
+      submitting: string;
+    };
+    success: {
+      title: string;
+      body: string;
+      note: string;
+    };
   };
 };
 
@@ -26,10 +56,10 @@ type PendingRequirement = {
   summary: string;
 };
 
-function WaitlistInner({ waitlist }: WaitlistProps) {
+function WaitlistInner({ waitlist, lang }: WaitlistProps) {
   const [stage, setStage] = useState<ConversationStage>('EXPLORING');
   const [messages, setMessages] = useState<Message[]>([]);
-  const [uiTrees, setUiTrees] = useState<any[]>([]);
+  const [uiTrees, setUiTrees] = useState<UITreeNode[]>([]);
   const [summaryPoints, setSummaryPoints] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [confirmedRequirements, setConfirmedRequirements] = useState<ConfirmedRequirement[]>([]);
@@ -38,10 +68,56 @@ function WaitlistInner({ waitlist }: WaitlistProps) {
   const [baseIntent, setBaseIntent] = useState<string | null>(null);
   const [pendingRequirements, setPendingRequirements] = useState<PendingRequirement[]>([]);
   const { clearSelections, selectedOptions } = useWaitlist();
+  const prompts = waitlist.prompts;
 
-  const buildStructuredInput = (base: string, selections: string[], newInput: string) => {
-    const selectedText = selections.length > 0 ? selections.join(', ') : '无';
-    return `[BaseIntent] ${base}\n[SelectedOptions] ${selectedText}\n[NewInput] ${newInput}`;
+  const sanitizeUiTree = (
+    uiTree: UITreeNode | undefined,
+    intentType: string,
+    clarifyQuestion?: string
+  ) => {
+    if (!uiTree?.children) return uiTree;
+    const mappedChildren = uiTree.children.map((child) => {
+      if (child.type !== 'Question') return child;
+      const childProps =
+        child.props && typeof child.props === 'object'
+          ? (child.props as Record<string, unknown>)
+          : {};
+      if (intentType === 'unclear') {
+        return {
+          ...child,
+          props: {
+            ...childProps,
+            text: clarifyQuestion || childProps.text,
+          },
+        };
+      }
+      return {
+        ...child,
+        props: {
+          ...childProps,
+          text: prompts.refineHint,
+        },
+      };
+    });
+    const hasQuestion = mappedChildren.some((child) => child.type === 'Question');
+    if (intentType === 'unclear' && !hasQuestion) {
+      mappedChildren.push({
+        type: 'Question',
+        props: {
+          text: clarifyQuestion || prompts.unclearFallback,
+        },
+      });
+    }
+    return {
+      ...uiTree,
+      children: mappedChildren,
+    };
+  };
+
+  const buildStructuredInput = (base: string, selections: string[], newInput: string, locale: "en" | "zh") => {
+    const emptySelection = locale === "zh" ? "无" : "none";
+    const selectedText = selections.length > 0 ? selections.join(', ') : emptySelection;
+    return `[Locale] ${locale}\n[BaseIntent] ${base}\n[SelectedOptions] ${selectedText}\n[NewInput] ${newInput}`;
   };
 
   const handleSendMessage = async (
@@ -83,7 +159,7 @@ function WaitlistInner({ waitlist }: WaitlistProps) {
     }
 
     try {
-      const structuredInput = buildStructuredInput(activeBaseIntent, selections, userInput);
+      const structuredInput = buildStructuredInput(activeBaseIntent, selections, userInput, lang);
       console.log('[Waitlist] Calling submitUserMessage with:', { messages: newConversation, userInput, selections });
       const aiResponse = await submitUserMessage(newConversation, structuredInput);
       console.log('[Waitlist] AI response received:', aiResponse);
@@ -96,8 +172,8 @@ function WaitlistInner({ waitlist }: WaitlistProps) {
           setPendingRequirements(rest);
           const firstText = first?.summary || first?.title || userInput;
           setBaseIntent(firstText);
-          const noticeText = '检测到多个需求，我们先确认第一个。';
-          const noticeUiTree = {
+          const noticeText = prompts.noticeMultiple;
+          const noticeUiTree: UITreeNode = {
             type: 'root',
             children: [{ type: 'Text', props: { content: noticeText } }],
           };
@@ -110,45 +186,14 @@ function WaitlistInner({ waitlist }: WaitlistProps) {
           setMessages((prev) => [...prev, noticeMessage]);
           setUiTrees((prev) => [...prev, noticeUiTree]);
           setSummaryPoints([]);
-          const followupInput = buildStructuredInput(firstText, selections, firstText);
+          const followupInput = buildStructuredInput(firstText, selections, firstText, lang);
           const followupResponse = await submitUserMessage(newConversation, followupInput);
           const followupIntent = followupResponse.intentType ?? 'refine';
-          const followupUiTree = followupResponse.uiTree?.children
-            ? (() => {
-              const mappedChildren = followupResponse.uiTree.children.map((child: any) => {
-                if (child.type !== 'Question') return child;
-                if (followupIntent === 'unclear') {
-                  return {
-                    ...child,
-                    props: {
-                      ...child.props,
-                      text: followupResponse.clarifyQuestion || child.props?.text,
-                    },
-                  };
-                }
-                return {
-                  ...child,
-                  props: {
-                    ...child.props,
-                    text: '如需补充当前需求细节，请继续输入',
-                  },
-                };
-              });
-              const hasQuestion = mappedChildren.some((child: any) => child.type === 'Question');
-              if (followupIntent === 'unclear' && !hasQuestion) {
-                mappedChildren.push({
-                  type: 'Question',
-                  props: {
-                    text: followupResponse.clarifyQuestion || '请确认这是补充当前需求，还是新需求？',
-                  },
-                });
-              }
-              return {
-                ...followupResponse.uiTree,
-                children: mappedChildren,
-              };
-            })()
-            : followupResponse.uiTree;
+          const followupUiTree = sanitizeUiTree(
+            followupResponse.uiTree,
+            followupIntent,
+            followupResponse.clarifyQuestion
+          );
           const followupMessage: Message = {
             role: 'assistant',
             content: JSON.stringify(followupResponse.summaryPoints ?? []),
@@ -171,11 +216,11 @@ function WaitlistInner({ waitlist }: WaitlistProps) {
           : [{ title: userInput, summary: userInput }];
         setPendingRequirements((prev) => [...prev, ...queuedRequirements]);
         setCurrentConversation((prev) => prev.slice(0, -1));
-        const queuedText = '检测到新的需求，已加入待确认队列，将在当前需求确认后继续。';
-        const queuedUiTree = {
-          type: 'root',
-          children: [{ type: 'Text', props: { content: queuedText } }],
-        };
+        const queuedText = prompts.noticeQueued;
+          const queuedUiTree: UITreeNode = {
+            type: 'root',
+            children: [{ type: 'Text', props: { content: queuedText } }],
+          };
         const queuedMessage: Message = {
           role: 'assistant',
           content: queuedText,
@@ -188,42 +233,11 @@ function WaitlistInner({ waitlist }: WaitlistProps) {
         return;
       }
 
-      const sanitizedUiTree = aiResponse.uiTree?.children
-        ? (() => {
-          const mappedChildren = aiResponse.uiTree.children.map((child: any) => {
-            if (child.type !== 'Question') return child;
-            if (intentType === 'unclear') {
-              return {
-                ...child,
-                props: {
-                  ...child.props,
-                  text: aiResponse.clarifyQuestion || child.props?.text,
-                },
-              };
-            }
-            return {
-              ...child,
-              props: {
-                ...child.props,
-                text: '如需补充当前需求细节，请继续输入',
-              },
-            };
-          });
-          const hasQuestion = mappedChildren.some((child: any) => child.type === 'Question');
-          if (intentType === 'unclear' && !hasQuestion) {
-            mappedChildren.push({
-              type: 'Question',
-              props: {
-                text: aiResponse.clarifyQuestion || '请确认这是补充当前需求，还是新需求？',
-              },
-            });
-          }
-          return {
-            ...aiResponse.uiTree,
-            children: mappedChildren,
-          };
-        })()
-        : aiResponse.uiTree;
+      const sanitizedUiTree = sanitizeUiTree(
+        aiResponse.uiTree,
+        intentType,
+        aiResponse.clarifyQuestion
+      );
 
       // Add AI message
       const aiMessage: Message = {
@@ -301,7 +315,7 @@ function WaitlistInner({ waitlist }: WaitlistProps) {
       }
     } catch (error) {
       console.error('Error confirming requirement:', error);
-      alert('确认需求失败，请稍后再试。');
+      alert(prompts.confirmError);
     } finally {
       setIsLoading(false);
       if (nextRequirementSeed) {
@@ -313,13 +327,13 @@ function WaitlistInner({ waitlist }: WaitlistProps) {
   const handleComplete = () => {
     // If in conversation, prevent completion
     if (isInConversation) {
-      alert('请先确认当前需求');
+      alert(prompts.confirmRequired);
       return;
     }
 
     // If no confirmed requirements, prevent completion
     if (confirmedRequirements.length === 0) {
-      alert('请至少添加一个需求');
+      alert(prompts.requireAtLeastOne);
       return;
     }
 
@@ -388,6 +402,7 @@ function WaitlistInner({ waitlist }: WaitlistProps) {
                 isLoading={isLoading}
                 isInConversation={isInConversation}
                 hasConfirmedRequirements={confirmedRequirements.length > 0}
+                inputCopy={waitlist.input}
                 onSendMessage={handleSendMessage}
                 onConfirmRequirement={handleConfirmRequirement}
                 onComplete={handleComplete}
@@ -398,12 +413,13 @@ function WaitlistInner({ waitlist }: WaitlistProps) {
           {stage === 'SUMMARY' && (
             <SummaryView
               confirmedRequirements={confirmedRequirements}
+              copy={waitlist.summary}
               onSubmit={handleEmailSubmit}
               isLoading={isLoading}
             />
           )}
 
-          {stage === 'SUCCESS' && <SuccessView />}
+          {stage === 'SUCCESS' && <SuccessView copy={waitlist.success} />}
         </div>
       </section>
     </Reveal>

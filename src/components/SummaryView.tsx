@@ -5,12 +5,20 @@ import type { ConfirmedRequirement } from '@/types/waitlist';
 
 type SummaryViewProps = {
   confirmedRequirements: ConfirmedRequirement[];
+  copy: {
+    title: string;
+    emailLabel: string;
+    emailPlaceholder: string;
+    submit: string;
+    submitting: string;
+  };
   onSubmit: (email: string) => void;
   isLoading: boolean;
 };
 
 export default function SummaryView({
   confirmedRequirements,
+  copy,
   onSubmit,
   isLoading,
 }: SummaryViewProps) {
@@ -28,7 +36,7 @@ export default function SummaryView({
       {/* Summary Points */}
       <div className="flex flex-col gap-3">
         <h3 className="text-lg font-semibold text-foreground">
-          你的需求总结：
+          {copy.title}
         </h3>
         <ul className="flex flex-col gap-2">
           {confirmedRequirements.map((req, index) => (
@@ -46,14 +54,14 @@ export default function SummaryView({
       {/* Email Input */}
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label htmlFor="email" className="text-sm font-semibold text-foreground">
-          请留下你的邮箱，我们会尽快联系你：
+          {copy.emailLabel}
         </label>
         <input
           id="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="your@email.com"
+          placeholder={copy.emailPlaceholder}
           required
           disabled={isLoading}
           className="w-full rounded-full border border-border bg-background px-6 py-3 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus:ring-2 focus:ring-foreground/20 disabled:opacity-50"
@@ -63,7 +71,7 @@ export default function SummaryView({
           disabled={!email.trim() || isLoading}
           className="rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background transition hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isLoading ? '提交中...' : '提交'}
+          {isLoading ? copy.submitting : copy.submit}
         </button>
       </form>
     </div>

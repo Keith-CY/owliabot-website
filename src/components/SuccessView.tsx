@@ -2,7 +2,13 @@
 
 import { motion } from 'framer-motion';
 
-export default function SuccessView() {
+type SuccessCopy = {
+  title: string;
+  body: string;
+  note: string;
+};
+
+export default function SuccessView({ copy }: { copy: SuccessCopy }) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -12,13 +18,13 @@ export default function SuccessView() {
     >
       <div className="text-4xl">✓</div>
       <h3 className="text-xl font-semibold text-foreground">
-        提交成功！
+        {copy.title}
       </h3>
       <p className="text-sm text-foreground/70 max-w-md">
-        感谢你的反馈。我们已经收到你的需求，会尽快通过邮箱与你联系。
+        {copy.body}
       </p>
       <p className="text-xs text-foreground/60 mt-4">
-        我们永远不会索要你的私钥。
+        {copy.note}
       </p>
     </motion.div>
   );

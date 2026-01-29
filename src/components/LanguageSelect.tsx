@@ -32,7 +32,7 @@ export default function LanguageSelect() {
         className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
         aria-label="Select language"
       >
-        <option value="/en">EN</option>
+        <option value="/en">English</option>
         <option value="/zh">中文</option>
       </select>
     </div>
