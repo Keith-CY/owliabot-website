@@ -250,16 +250,8 @@ export async function submitToNotion(data: NotionSubmission): Promise<void> {
               text: {
                 content: data.confirmedRequirements
                   .map((req, i) => `${i + 1}. ${req.summary}`)
-                  .join('\n\n'),
-              },
-            },
-          ],
-        },
-        Conversation: {
-          rich_text: [
-            {
-              text: {
-                content: JSON.stringify(data.messages, null, 2),
+                  .join('\n\n')
+                  .slice(0, 2000),
               },
             },
           ],
@@ -273,6 +265,29 @@ export async function submitToNotion(data: NotionSubmission): Promise<void> {
           },
         },
       },
+      children: [
+        {
+          object: 'block',
+          type: 'heading_2',
+          heading_2: {
+            rich_text: [{ text: { content: 'Conversation History' } }],
+          },
+        },
+        {
+          object: 'block',
+          type: 'code',
+          code: {
+            rich_text: [
+              {
+                text: {
+                  content: JSON.stringify(data.messages, null, 2),
+                },
+              },
+            ],
+            language: 'json',
+          },
+        },
+      ],
     });
   } catch (error) {
     console.error('Error submitting to Notion:', error instanceof Error ? error.message : 'Unknown error');
