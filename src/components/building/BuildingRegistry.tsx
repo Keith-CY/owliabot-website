@@ -1,7 +1,7 @@
 'use client'
 
 import { ComponentType } from 'react';
-import { useWaitlist } from '@/contexts/WaitlistContext';
+import { useBuilding } from '@/contexts/BuildingContext';
 import type { ComponentRenderProps } from '@json-render/react';
 
 export const Text: ComponentType<ComponentRenderProps> = ({ element }) => {
@@ -14,7 +14,7 @@ export const Text: ComponentType<ComponentRenderProps> = ({ element }) => {
 
 export const CheckboxGroup: ComponentType<ComponentRenderProps> = ({ element }) => {
   const { label, options } = element.props as { label: string; options: { id: string; label: string }[] };
-  const { selectedOptions, toggleOption } = useWaitlist();
+  const { selectedOptions, toggleOption } = useBuilding();
 
   return (
     <div className="flex flex-col gap-3 my-4">
@@ -27,7 +27,7 @@ export const CheckboxGroup: ComponentType<ComponentRenderProps> = ({ element }) 
           >
             <input
               type="checkbox"
-              name="waitlist-options"
+              name="building-options"
               value={option.label}
               checked={selectedOptions.has(option.label)}
               onChange={() => toggleOption(option.label)}
@@ -51,7 +51,7 @@ export const Question: ComponentType<ComponentRenderProps> = ({ element }) => {
   );
 };
 
-export const waitlistRegistry = {
+export const buildingRegistry = {
   Text,
   CheckboxGroup,
   Question,

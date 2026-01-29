@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react';
-import type { ConfirmedRequirement } from '@/types/waitlist';
+import type { ConfirmedRequirement } from '@/types/building';
 
-type SummaryViewProps = {
+type BuildingSummaryProps = {
   confirmedRequirements: ConfirmedRequirement[];
   copy: {
     title: string;
@@ -16,12 +16,12 @@ type SummaryViewProps = {
   isLoading: boolean;
 };
 
-export default function SummaryView({
+export default function BuildingSummary({
   confirmedRequirements,
   copy,
   onSubmit,
   isLoading,
-}: SummaryViewProps) {
+}: BuildingSummaryProps) {
   const [email, setEmail] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {

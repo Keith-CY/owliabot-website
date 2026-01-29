@@ -2,7 +2,7 @@
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Client } from '@notionhq/client';
-import { Message, AIResponse, NotionSubmission } from '@/types/waitlist';
+import { Message, AIResponse, NotionSubmission } from '@/types/building';
 
 const SYSTEM_PROMPT = `你是 OwliaBot 的需求收集助手。你的目标是快速理解用户的真实需求。
 
