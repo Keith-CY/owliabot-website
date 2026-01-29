@@ -55,7 +55,7 @@ export default function Header({ nav, links }: HeaderProps) {
             <a
               href={links.x}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="flex size-9 items-center justify-center rounded-full border border-border bg-surface/70 text-foreground/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] transition hover:text-foreground hover:-translate-y-0.5 hover:shadow-[0_10px_22px_rgba(5,6,12,0.22),_inset_0_1px_0_rgba(255,255,255,0.6)]"
               aria-label="OwliaBot on X"
             >
@@ -82,7 +82,7 @@ export default function Header({ nav, links }: HeaderProps) {
           <a
             href={links.x}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="flex size-9 items-center justify-center rounded-full border border-border bg-surface/70 text-foreground/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] transition hover:text-foreground"
             aria-label="OwliaBot on X"
           >

@@ -16,7 +16,7 @@ export default function Footer({ note, signature, links }: FooterProps) {
           <a
             href={links.x}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="transition hover:text-foreground"
           >
             X
@@ -25,7 +25,7 @@ export default function Footer({ note, signature, links }: FooterProps) {
           <a
             href={links.github}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="transition hover:text-foreground"
           >
             GitHub
