@@ -1,7 +1,8 @@
 import { z } from 'zod';
+import type { UITreeNode } from './building';
 
 // UITreeNode schema (recursive definition)
-const UITreeNodeSchema: z.ZodType<any> = z.lazy(() =>
+export const UITreeNodeSchema: z.ZodType<UITreeNode> = z.lazy(() =>
   z.object({
     type: z.string(),
     props: z.record(z.string(), z.unknown()).optional(),
