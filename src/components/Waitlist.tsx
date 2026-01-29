@@ -201,7 +201,9 @@ function WaitlistInner({ waitlist, lang }: WaitlistProps) {
           };
           setCurrentConversation((prev) => [...prev, followupMessage]);
           setMessages((prev) => [...prev, followupMessage]);
-          setUiTrees((prev) => [...prev, followupUiTree]);
+          if (followupUiTree) {
+            setUiTrees((prev) => [...prev, followupUiTree]);
+          }
           setSummaryPoints(followupResponse.summaryPoints ?? []);
           return;
         }
@@ -248,7 +250,9 @@ function WaitlistInner({ waitlist, lang }: WaitlistProps) {
 
       setCurrentConversation((prev) => [...prev, aiMessage]);
       setMessages((prev) => [...prev, aiMessage]);
-      setUiTrees((prev) => [...prev, sanitizedUiTree]);
+      if (sanitizedUiTree) {
+        setUiTrees((prev) => [...prev, sanitizedUiTree]);
+      }
       setSummaryPoints(aiResponse.summaryPoints);
     } catch (error) {
       console.error('Error sending message:', error);

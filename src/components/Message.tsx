@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { JSONUIProvider } from '@json-render/react';
+import type { UIElement } from '@json-render/core';
 import type { Message as MessageType, UITreeNode } from '@/types/waitlist';
 import { waitlistRegistry } from './waitlist/WaitlistRegistry';
 
@@ -33,8 +34,12 @@ export default function Message({ message, uiTree }: MessageProps) {
             <JSONUIProvider registry={waitlistRegistry}>
               {uiTree.children && uiTree.children.map((child, index) => {
                 const Component = waitlistRegistry[child.type as keyof typeof waitlistRegistry];
+                const element = {
+                  ...child,
+                  key: child.key ?? index,
+                } as UIElement<string, Record<string, unknown>>;
                 return Component ? (
-                  <Component key={index} element={child} />
+                  <Component key={element.key} element={element} />
                 ) : (
                   <p key={index} style={{ color: 'orange' }}>
                     Unknown component: {child.type}

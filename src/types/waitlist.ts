@@ -25,6 +25,7 @@ export type UITreeNode = {
   type: string;
   props?: Record<string, unknown>;
   children?: UITreeNode[];
+  key?: string | number;
 };
 
 export type AIResponse = {
