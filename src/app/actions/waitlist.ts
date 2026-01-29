@@ -3,6 +3,8 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Client } from '@notionhq/client';
 import { Message, AIResponse, NotionSubmission } from '@/types/building';
+import { z } from 'zod';
+import { AIResponseSchema, SummarizationResponseSchema } from '@/types/schemas';
 
 const SYSTEM_PROMPT = `你是 OwliaBot 的需求收集助手。你的目标是快速理解用户的真实需求。
 
@@ -134,10 +136,18 @@ export async function submitUserMessage(
 
     const responseText = result.response.text();
     try {
-      const aiResponse: AIResponse = JSON.parse(responseText);
+      const parsed = JSON.parse(responseText);
+      const aiResponse = AIResponseSchema.parse(parsed);
       return aiResponse;
-    } catch (parseError) {
-      console.error('Failed to parse AI response as JSON:', responseText, parseError);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        console.error('AI response validation failed:', error.issues);
+        throw new Error(`Invalid AI response format: ${error.issues[0].message}`);
+      }
+      console.error('Failed to parse AI response:', {
+        error,
+        responseLength: responseText?.length ?? 0,
+      });
       throw new Error('AI response is not valid JSON');
     }
   } catch (error) {
@@ -189,9 +199,14 @@ export async function summarizeRequirement(
     const responseText = result.response.text();
     try {
       const parsed = JSON.parse(responseText);
-      return parsed.summary;
-    } catch (parseError) {
-      console.error('Failed to parse summary JSON:', responseText, parseError);
+      const validated = SummarizationResponseSchema.parse(parsed);
+      return validated.summary;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        console.error('Summary validation failed:', error.issues);
+      }
+      console.error('Error in summarizeRequirement:', error);
+      // Fallback: use first user message
       const firstUserMessage = messages.find(m => m.role === 'user');
       return firstUserMessage?.content || '需求总结失败';
     }
@@ -203,15 +218,15 @@ export async function summarizeRequirement(
   }
 }
 
+function chunkString(str: string, size: number): string[] {
+  const chunks: string[] = [];
+  for (let i = 0; i < str.length; i += size) {
+    chunks.push(str.slice(i, i + size));
+  }
+  return chunks;
+}
 
 export async function submitToNotion(data: NotionSubmission): Promise<void> {
-  console.log('=== submitToNotion called ===');
-  console.log('Email:', data.email);
-  console.log('Confirmed requirements:', data.confirmedRequirements.length);
-  console.log('Messages count:', data.messages.length);
-  console.log('NOTION_API_KEY exists:', !!process.env.NOTION_API_KEY);
-  console.log('NOTION_DATABASE_ID:', process.env.NOTION_DATABASE_ID);
-
   try {
     if (!process.env.NOTION_API_KEY) {
       throw new Error('NOTION_API_KEY is not configured');
@@ -221,9 +236,18 @@ export async function submitToNotion(data: NotionSubmission): Promise<void> {
     }
 
     const notion = new Client({ auth: process.env.NOTION_API_KEY });
-    console.log('Notion client created');
 
-    console.log('Creating page in database...');
+    const conversationJson = JSON.stringify(data.messages, null, 2);
+    let richTextChunks = chunkString(conversationJson, 2000).map((chunk) => ({
+      text: { content: chunk },
+    }));
+
+    const MAX_CHUNKS = 100;
+    if (richTextChunks.length > MAX_CHUNKS) {
+      richTextChunks = richTextChunks.slice(0, MAX_CHUNKS - 1);
+      richTextChunks.push({ text: { content: '\n\n...[Conversation truncated due to length]' } });
+    }
+
     await notion.pages.create({
       parent: { database_id: process.env.NOTION_DATABASE_ID! },
       properties: {
@@ -247,16 +271,8 @@ export async function submitToNotion(data: NotionSubmission): Promise<void> {
               text: {
                 content: data.confirmedRequirements
                   .map((req, i) => `${i + 1}. ${req.summary}`)
-                  .join('\n\n'),
-              },
-            },
-          ],
-        },
-        Conversation: {
-          rich_text: [
-            {
-              text: {
-                content: JSON.stringify(data.messages, null, 2),
+                  .join('\n\n')
+                  .slice(0, 2000),
               },
             },
           ],
@@ -270,17 +286,26 @@ export async function submitToNotion(data: NotionSubmission): Promise<void> {
           },
         },
       },
+      children: [
+        {
+          object: 'block',
+          type: 'heading_2',
+          heading_2: {
+            rich_text: [{ text: { content: 'Conversation History' } }],
+          },
+        },
+        {
+          object: 'block',
+          type: 'code',
+          code: {
+            rich_text: richTextChunks,
+            language: 'json',
+          },
+        },
+      ],
     });
-    console.log('Page created successfully in Notion');
   } catch (error) {
-    console.error('Error submitting to Notion:', error);
-    if (error instanceof Error) {
-      console.error('Error name:', error.name);
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
-    }
-    // Log the full error object for Notion API errors
-    console.error('Full error object:', JSON.stringify(error, null, 2));
+    console.error('Error submitting to Notion:', error instanceof Error ? error.message : 'Unknown error');
     throw new Error(`Failed to submit to Notion: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }

@@ -7,11 +7,13 @@ type BuildingSummaryProps = {
   confirmedRequirements: ConfirmedRequirement[];
   copy: {
     title: string;
+    back: string;
     emailLabel: string;
     emailPlaceholder: string;
     submit: string;
     submitting: string;
   };
+  onBack: () => void;
   onSubmit: (email: string) => void;
   isLoading: boolean;
 };
@@ -19,6 +21,7 @@ type BuildingSummaryProps = {
 export default function BuildingSummary({
   confirmedRequirements,
   copy,
+  onBack,
   onSubmit,
   isLoading,
 }: BuildingSummaryProps) {
@@ -35,17 +38,35 @@ export default function BuildingSummary({
     <div className="flex flex-col gap-6">
       {/* Summary Points */}
       <div className="flex flex-col gap-3">
-        <h3 className="text-lg font-semibold text-foreground">
-          {copy.title}
-        </h3>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={onBack}
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1.5 text-xs font-semibold text-foreground transition hover:bg-foreground/5"
+          >
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 20 20"
+              fill="none"
+              className="h-3.5 w-3.5 stroke-current"
+              strokeWidth="2"
+            >
+              <path d="M12.5 4.5L7.5 10l5 5.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span>{copy.back}</span>
+          </button>
+          <h3 className="text-lg font-semibold text-foreground">
+            {copy.title}
+          </h3>
+        </div>
         <ul className="flex flex-col gap-2">
           {confirmedRequirements.map((req, index) => (
             <li
               key={req.id}
-              className="flex gap-3 text-sm text-foreground/80"
+              className="flex items-start gap-3 text-sm text-foreground/80"
             >
               <span className="font-semibold text-foreground">{index + 1}.</span>
-              <span>{req.summary}</span>
+              <span className="flex-1">{req.summary}</span>
             </li>
           ))}
         </ul>

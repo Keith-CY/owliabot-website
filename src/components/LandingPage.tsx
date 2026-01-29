@@ -110,6 +110,7 @@ export type LandingPageContent = {
     };
     summary: {
       title: string;
+      back: string;
       emailLabel: string;
       emailPlaceholder: string;
       submit: string;

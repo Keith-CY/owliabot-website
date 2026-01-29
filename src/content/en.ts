@@ -151,6 +151,7 @@ export const content = {
     },
     summary: {
       title: "Your requirements summary:",
+      back: "Back",
       emailLabel: "Leave your email and we will reach out soon:",
       emailPlaceholder: "your@email.com",
       submit: "Submit",
