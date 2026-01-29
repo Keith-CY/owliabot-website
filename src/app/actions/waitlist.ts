@@ -3,6 +3,8 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Client } from '@notionhq/client';
 import { Message, AIResponse, NotionSubmission } from '@/types/building';
+import { z } from 'zod';
+import { AIResponseSchema, SummarizationResponseSchema } from '@/types/schemas';
 
 const SYSTEM_PROMPT = `你是 OwliaBot 的需求收集助手。你的目标是快速理解用户的真实需求。
 
@@ -134,10 +136,15 @@ export async function submitUserMessage(
 
     const responseText = result.response.text();
     try {
-      const aiResponse: AIResponse = JSON.parse(responseText);
+      const parsed = JSON.parse(responseText);
+      const aiResponse = AIResponseSchema.parse(parsed);
       return aiResponse;
-    } catch (parseError) {
-      console.error('Failed to parse AI response as JSON:', responseText, parseError);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        console.error('AI response validation failed:', error.issues);
+        throw new Error(`Invalid AI response format: ${error.issues[0].message}`);
+      }
+      console.error('Failed to parse AI response:', responseText, error);
       throw new Error('AI response is not valid JSON');
     }
   } catch (error) {
@@ -189,9 +196,14 @@ export async function summarizeRequirement(
     const responseText = result.response.text();
     try {
       const parsed = JSON.parse(responseText);
-      return parsed.summary;
-    } catch (parseError) {
-      console.error('Failed to parse summary JSON:', responseText, parseError);
+      const validated = SummarizationResponseSchema.parse(parsed);
+      return validated.summary;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        console.error('Summary validation failed:', error.issues);
+      }
+      console.error('Error in summarizeRequirement:', error);
+      // Fallback: use first user message
       const firstUserMessage = messages.find(m => m.role === 'user');
       return firstUserMessage?.content || '需求总结失败';
     }
