@@ -3,10 +3,7 @@ import Hero from "./Hero";
 import Pillars from "./Pillars";
 import ArchitectureOverview from "./ArchitectureOverview";
 import SkillsSection from "./SkillsSection";
-import SigningModel from "./SigningModel";
-import ExecutionFlow from "./ExecutionFlow";
-import LocalFirst from "./LocalFirst";
-import Devices from "./Devices";
+import SecurityModel from "./SecurityModel";
 import Waitlist from "./Waitlist";
 import Footer from "./Footer";
 
@@ -16,9 +13,7 @@ export type LandingPageContent = {
     why: string;
     architecture: string;
     skills: string;
-    signing: string;
-    execution: string;
-    local: string;
+    security: string;
     waitlist: string;
   };
   hero: {
@@ -30,6 +25,18 @@ export type LandingPageContent = {
     badge?: string;
     status?: string;
   };
+  hero_illustration: {
+    scenarios: ReadonlyArray<{
+      id: string;
+      label: string;
+      messages: ReadonlyArray<{
+        role: "user" | "assistant";
+        content: string;
+        type?: "alert" | "info" | "success";
+        actions?: ReadonlyArray<string>;
+      }>;
+    }>;
+  };
   why: {
     eyebrow: string;
     title: string;
@@ -40,17 +47,23 @@ export type LandingPageContent = {
       mechanism: string;
     }>;
   };
-  signing: {
+  security: {
+    eyebrow: string;
     title: string;
     subtitle: string;
     description: string;
-    status?: string;
+    status: string;
     tiers: ReadonlyArray<{
       title: string;
       body: string;
       keyword: string;
     }>;
     footer: string;
+    local: {
+      title: string;
+      body: string;
+      bullets: ReadonlyArray<string>;
+    };
   };
   architecture: {
     title: string;
@@ -72,30 +85,41 @@ export type LandingPageContent = {
     }>;
     footer?: string;
   };
-  execution: {
-    eyebrow: string;
-    title: string;
-    steps: ReadonlyArray<string>;
-    caption: string;
-    note?: string;
-  };
-  local: {
-    eyebrow: string;
-    title: string;
-    body: string;
-    bullets: ReadonlyArray<string>;
-  };
-  devices: {
-    eyebrow: string;
-    title: string;
-    body: string;
-  };
   waitlist: {
     eyebrow: string;
     title: string;
     body: string;
     privacy: string;
     note: string;
+    prompts: {
+      noticeMultiple: string;
+      noticeQueued: string;
+      refineHint: string;
+      unclearFallback: string;
+      confirmError: string;
+      confirmRequired: string;
+      requireAtLeastOne: string;
+    };
+    input: {
+      placeholderInitial: string;
+      placeholderFollowup: string;
+      placeholderAdditional: string;
+      send: string;
+      confirmCurrent: string;
+      complete: string;
+    };
+    summary: {
+      title: string;
+      emailLabel: string;
+      emailPlaceholder: string;
+      submit: string;
+      submitting: string;
+    };
+    success: {
+      title: string;
+      body: string;
+      note: string;
+    };
   };
   footer: {
     note: string;
@@ -111,18 +135,24 @@ type LandingPageProps = {
 
 export default function LandingPage({ content }: LandingPageProps) {
   return (
-    <div className="min-h-dvh bg-background text-foreground">
+    <div className="min-h-dvh overflow-hidden bg-background text-foreground">
       <Header nav={content.nav} />
-      <Hero hero={content.hero} />
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-16 px-6 pb-24 pt-12 sm:px-8 lg:px-12">
+      <Hero hero={content.hero} illustration={content.hero_illustration} />
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-32 px-6 pb-24 pt-24 sm:px-8 lg:px-12">
         <Pillars eyebrow={content.why.eyebrow} title={content.why.title} subtitle={content.why.subtitle} pillars={content.why.items} />
-        <ArchitectureOverview architecture={content.architecture} />
+
+        <div className="relative isolate">
+          <div className="absolute -left-1/4 -top-1/4 -z-10 h-[150%] w-[150%] bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.08),transparent_70%)] opacity-0 dark:opacity-100 pointer-events-none mix-blend-screen" />
+          <ArchitectureOverview architecture={content.architecture} />
+        </div>
+
+        <div className="relative isolate">
+          <div className="absolute -right-1/4 -top-1/4 -z-10 h-[150%] w-[150%] bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,0.08),transparent_70%)] opacity-0 dark:opacity-100 pointer-events-none mix-blend-screen" />
+          <SecurityModel security={content.security} />
+        </div>
+
         <SkillsSection skills={content.skills} />
-        <SigningModel signing={content.signing} />
-        <ExecutionFlow execution={content.execution} />
-        <LocalFirst local={content.local} />
-        <Devices devices={content.devices} />
-        <Waitlist waitlist={content.waitlist} />
+        <Waitlist waitlist={content.waitlist} lang={content.lang} />
       </main>
       <Footer note={content.footer.note} />
     </div>

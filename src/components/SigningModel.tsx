@@ -39,7 +39,7 @@ export default function SigningModel({ signing }: SigningModelProps) {
       <div className="grid items-stretch gap-6 lg:grid-cols-3">
         {signing.tiers.map((tier, index) => (
           <Reveal key={tier.title} delay={0.06 * index}>
-            <div className="h-full rounded-[28px] border border-border bg-surface/70 px-6 py-7 shadow-[0_10px_24px_rgba(4,6,10,0.14),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur dark:shadow-[0_10px_24px_rgba(4,6,10,0.22),_inset_0_1px_0_rgba(255,255,255,0.14)]">
+            <div className="h-full rounded-[28px] border border-border bg-surface/70 px-6 py-7 shadow-[0_6px_16px_rgba(4,6,10,0.04),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur dark:shadow-[0_6px_16px_rgba(4,6,10,0.12),_inset_0_1px_0_rgba(255,255,255,0.14)]">
               <p className="text-xs font-semibold uppercase text-foreground/60">
                 {tier.keyword}
               </p>

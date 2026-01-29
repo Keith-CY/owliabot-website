@@ -1,13 +1,11 @@
 export const content = {
   lang: "en",
   nav: {
-    why: "Why",
+    why: "Why OwliaBot",
     architecture: "Architecture",
     skills: "Skills",
-    signing: "Signing Model",
-    execution: "Execution Flow",
-    local: "Local-first",
-    waitlist: "Waitlist",
+    security: "Secure Accounts",
+    waitlist: "Co-build OwliaBot",
   },
   hero: {
     title: "An autonomous crypto agent that never crosses your signing boundary.",
@@ -23,7 +21,7 @@ export const content = {
     eyebrow: "Principles",
     title: "Why OwliaBot",
     subtitle:
-      "Autonomy is useful only when boundaries are explicit — otherwise it is just blind execution.",
+      "Autonomy is useful only when boundaries are explicit. Otherwise, it is just blind execution.",
     items: [
       {
         title: "Crypto-native",
@@ -38,15 +36,15 @@ export const content = {
         mechanism: "Local-first by default. Remote optional by choice.",
       },
       {
-        title: "Minimal surface",
+        title: "Secure Accounts",
         body:
-          "Fewer dependencies, fewer channels, fewer attack paths. Designed for Telegram + Discord first, with the core kept intentionally small.",
-        mechanism: "<30 deps. No native modules. No browser automation.",
+          "Separates user intent, automated execution, and on-chain authority into three distinct signing layers. Each layer has a clear purpose, scope, and failure boundary.",
+        mechanism: "Each layer holds only the minimum authority needed for its role.",
       },
       {
         title: "Extensible",
         body:
-          "Capabilities scale through Skills: JavaScript modules loaded from your workspace, hot-reloaded without touching core code.",
+          "Capabilities scale through Skills. Some Skills are purpose-built for crypto and on-chain scenarios, supporting transactions, assets, contracts, and on-chain data.",
         mechanism: "Skills define tools, permissions, and security levels.",
       },
     ],
@@ -92,12 +90,13 @@ export const content = {
     ],
     footer: "Install more skills or write your own without expanding the core surface.",
   },
-  signing: {
-    title: "A 3-tier signing model",
+  security: {
+    eyebrow: "Secure Accounts",
+    title: "Three-tier Signing Model",
     subtitle: "Autonomy without blind trust.",
     description:
       "OwliaBot separates user intent, automated execution, and on-chain authority into three distinct signing layers. Each tier has a clear purpose, scope, and failure boundary.",
-    status: "Planned. Designed but not yet implemented.",
+    status: "Planned: Designed and documented. Implementation in progress.",
     tiers: [
       {
         title: "Tier 1: Companion App",
@@ -111,47 +110,97 @@ export const content = {
       },
       {
         title: "Tier 3: Smart Wallet",
-        body: "On-chain policy enforcement for advanced strategies. The wallet defines what is possible - not the agent.",
+        body: "On-chain policy enforcement for advanced strategies. The wallet defines what is possible - not the AI agent.",
         keyword: "Enforced authority",
       },
     ],
     footer:
-      "The agent never gains more authority than you explicitly grant.",
-  },
-  execution: {
-    eyebrow: "Execution",
-    title: "Execution Flow",
-    steps: ["Intent", "Permission", "Execution", "Audit"],
-    caption: "Every action follows an explicit signing path.",
-    note: "Current release focuses on non-signing operations.",
-  },
-  local: {
-    eyebrow: "Local-first",
-    title: "Local-first by design",
-    body: "Most agents require key custody. OwliaBot does not.",
-    bullets: [
-      "Keys live on your device",
-      "Sensitive operations run locally",
-      "Remote execution is optional and explicit",
-    ],
-  },
-  devices: {
-    eyebrow: "Channels",
-    title: "Everywhere you work",
-    body:
-      "Operate securely from desktop, mobile, or web - Telegram and Discord first, more channels planned.",
+      "The AI agent never gains more authority than you explicitly grant.",
+    local: {
+      title: "Private keys remain under your control",
+      body: "Most AI agents require private key custody. OwliaBot does not.",
+      bullets: [
+        "Private keys belong to you, never delegated to the agent",
+        "Low-risk automation runs locally with strict bounds",
+        "On-chain strategies fully constrained by contracts",
+      ],
+    },
   },
   waitlist: {
-    eyebrow: "Early access",
-    title: "Join the waitlist",
-    body: "Be first in line for early access and private beta updates.",
-    privacy: "We will never ask for your private keys.",
-    note: "No wallet connection required.",
+    eyebrow: "You are not a user, you are a co-builder",
+    title: "What do you want OwliaBot to do?",
+    body: "Describe the features you want most, and we will prioritize them.",
+    privacy: "We will never ask for your private keys. No wallet connection required.",
+    note: "",
+    prompts: {
+      noticeMultiple: "Multiple requirements detected. We'll confirm the first one.",
+      noticeQueued: "New requirement detected and queued. We'll continue after confirming the current one.",
+      refineHint: "Add more details for the current requirement if needed.",
+      unclearFallback: "Is this a refinement of the current requirement or a new one?",
+      confirmError: "Failed to confirm requirement. Please try again later.",
+      confirmRequired: "Please confirm the current requirement first.",
+      requireAtLeastOne: "Please add at least one requirement.",
+    },
+    input: {
+      placeholderInitial: "Tell OwliaBot what you need...",
+      placeholderFollowup: "Add more requirement details...",
+      placeholderAdditional: "Describe another requirement...",
+      send: "Send",
+      confirmCurrent: "Confirm current requirement",
+      complete: "I want OwliaBot to build these",
+    },
+    summary: {
+      title: "Your requirements summary:",
+      emailLabel: "Leave your email and we will reach out soon:",
+      emailPlaceholder: "your@email.com",
+      submit: "Submit",
+      submitting: "Submitting...",
+    },
+    success: {
+      title: "Submitted!",
+      body: "Thanks for your feedback. We received your requirements and will contact you by email.",
+      note: "We will never ask for your private keys.",
+    },
   },
   footer: {
     note: "Private keys never leave your device. No exceptions.",
   },
   links: {
     github: "https://github.com/owliabot/owliabot",
+  },
+  hero_illustration: {
+    scenarios: [
+      {
+        id: "security",
+        label: "Address Security",
+        messages: [
+          { role: "user", content: "Monitor security status of 0x123...xyz" },
+          { role: "assistant", content: "OK, I will monitor on-chain risks for this address.\nI will alert you immediately if any anomalies occur." },
+          { role: "assistant", content: "⚠️ Risk Detected\nWBTC / USDC health factor below 1.05\nApproaching liquidation threshold", type: "alert" },
+          { role: "assistant", content: "Suggested Actions:", actions: ["Add Collateral", "Repay Debt", "👉 Handle Immediately"] },
+        ],
+      },
+      {
+        id: "social",
+        label: "X Monitor",
+        messages: [
+          { role: "user", content: "Monitor this X account: @example_xyz" },
+          { role: "assistant", content: "Monitoring started.\nI will summarize and alert you on important updates." },
+          { role: "assistant", content: "📢 New Update Alert\nThe account just posted a tweet regarding:", type: "info" },
+          { role: "assistant", content: "New DeFi Partnership\nLiquidity Plan Adjustment\nExpected launch next week" },
+          { role: "assistant", content: "Do you need further analysis?" },
+        ],
+      },
+      {
+        id: "yield",
+        label: "Yield Discovery",
+        messages: [
+          { role: "user", content: "Find stable high-yield opportunities" },
+          { role: "assistant", content: "Understood. Screening for viable yield strategies based on on-chain data." },
+          { role: "assistant", content: "💡 Opportunity Found\nProtocol: Aave\nAsset: USDC\nCurrent APY: ~6.8%\nRisk Level: Low-Mid", type: "success" },
+          { role: "assistant", content: "Should I track this or alert you on changes?" },
+        ],
+      },
+    ],
   },
 } as const;

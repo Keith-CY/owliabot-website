@@ -1,0 +1,49 @@
+export type Message = {
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: number;
+  selectedOptions?: string[]; // For user messages with checkbox selections
+};
+
+export type ConfirmedRequirement = {
+  id: string;
+  summary: string; // AI-generated concise description
+  timestamp: number;
+};
+
+export type ConversationStage = 'EXPLORING' | 'SUMMARY' | 'EMAIL_INPUT' | 'SUCCESS';
+
+export type ConversationState = {
+  stage: ConversationStage;
+  messages: Message[];
+  summaryPoints: string[];
+  isLoading: boolean;
+  email: string;
+};
+
+export type UITreeNode = {
+  type: string;
+  props?: Record<string, unknown>;
+  children?: UITreeNode[];
+  key?: string | number;
+};
+
+export type AIResponse = {
+  uiTree: UITreeNode; // json-render tree structure
+  summaryPoints: string[];
+  shouldContinue: boolean;
+  selectedOptions?: string[]; // For tracking user selections
+  summary?: string; // For summarization mode
+  intentType?: 'refine' | 'new' | 'unclear';
+  clarifyQuestion?: string;
+  requirements?: Array<{
+    title: string;
+    summary: string;
+  }>;
+};
+
+export type NotionSubmission = {
+  email: string;
+  messages: Message[];
+  confirmedRequirements: ConfirmedRequirement[];
+};

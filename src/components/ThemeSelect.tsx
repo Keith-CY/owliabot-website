@@ -3,14 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 export default function ThemeSelect() {
-  const initialTheme = useMemo(() => {
-    if (typeof document === "undefined") return "system";
-    const cookie = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("theme="));
-    return cookie ? decodeURIComponent(cookie.split("=")[1]) : "system";
-  }, []);
-  const [theme, setTheme] = useState(initialTheme);
+  // Always initialize with "system" to match server rendering
+  const [theme, setTheme] = useState("system");
   const mediaRef = useRef<MediaQueryList | null>(null);
 
   const applyTheme = (value: string, query: MediaQueryList | null) => {
@@ -27,10 +21,27 @@ export default function ThemeSelect() {
   };
 
   useEffect(() => {
-    if (typeof document === "undefined") return;
+    const cookie = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('theme='));
+    const storedTheme = cookie ? decodeURIComponent(cookie.split('=')[1]) : 'system';
+
+    if (storedTheme !== "system") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setTheme(storedTheme);
+    }
+
+    const query = window.matchMedia("(prefers-color-scheme: dark)");
+    mediaRef.current = query;
+    applyTheme(storedTheme, query);
+  }, []);
+
+  // Separate effect for handling theme changes and system preference listeners
+  useEffect(() => {
     const query = window.matchMedia("(prefers-color-scheme: dark)");
     mediaRef.current = query;
     applyTheme(theme, query);
+
     const handler = () => {
       if (theme === "system") applyTheme("system", query);
     };
