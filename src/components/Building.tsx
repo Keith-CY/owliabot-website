@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Reveal from "./Reveal";
 import SectionHeader from "./SectionHeader";
 import ConversationArea from './ConversationArea';
@@ -38,6 +38,7 @@ type BuildingProps = {
     };
     summary: {
       title: string;
+      back: string;
       emailLabel: string;
       emailPlaceholder: string;
       submit: string;
@@ -66,8 +67,80 @@ function BuildingInner({ building, lang }: BuildingProps) {
   const [isInConversation, setIsInConversation] = useState(false);
   const [baseIntent, setBaseIntent] = useState<string | null>(null);
   const [pendingRequirements, setPendingRequirements] = useState<PendingRequirement[]>([]);
+  const [isHydrated, setIsHydrated] = useState(false);
   const { clearSelections, selectedOptions } = useBuilding();
   const prompts = building.prompts;
+  const storageKey = 'owliabot:building-cache';
+  const removeLabel = lang === 'zh' ? '删除需求' : 'Remove requirement';
+
+  useEffect(() => {
+    try {
+      const cached = localStorage.getItem(storageKey);
+      if (!cached) return;
+      const parsed = JSON.parse(cached);
+      if (!parsed || typeof parsed !== 'object') return;
+      if (Array.isArray(parsed.confirmedRequirements)) {
+        setConfirmedRequirements(parsed.confirmedRequirements as ConfirmedRequirement[]);
+      }
+      if (Array.isArray(parsed.messages)) {
+        setMessages(parsed.messages as Message[]);
+      }
+      if (Array.isArray(parsed.currentConversation)) {
+        setCurrentConversation(parsed.currentConversation as Message[]);
+      }
+      if (Array.isArray(parsed.uiTrees)) {
+        setUiTrees(parsed.uiTrees as UITreeNode[]);
+      }
+      if (Array.isArray(parsed.pendingRequirements)) {
+        setPendingRequirements(parsed.pendingRequirements as PendingRequirement[]);
+      }
+      if (typeof parsed.baseIntent === 'string' || parsed.baseIntent === null) {
+        setBaseIntent(parsed.baseIntent as string | null);
+      }
+      if (typeof parsed.isInConversation === 'boolean') {
+        setIsInConversation(parsed.isInConversation);
+      }
+      if (parsed.stage === 'EXPLORING' || parsed.stage === 'SUMMARY' || parsed.stage === 'EMAIL_INPUT') {
+        setStage(parsed.stage as ConversationStage);
+      }
+    } catch (error) {
+      console.warn('Failed to load cached building state:', error);
+    }
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isHydrated) return;
+    try {
+      if (stage === 'SUCCESS') {
+        localStorage.removeItem(storageKey);
+        return;
+      }
+      const payload = {
+        stage,
+        messages,
+        uiTrees,
+        confirmedRequirements,
+        currentConversation,
+        isInConversation,
+        baseIntent,
+        pendingRequirements,
+      };
+      localStorage.setItem(storageKey, JSON.stringify(payload));
+    } catch (error) {
+      console.warn('Failed to cache building state:', error);
+    }
+  }, [
+    stage,
+    messages,
+    uiTrees,
+    confirmedRequirements,
+    currentConversation,
+    isInConversation,
+    baseIntent,
+    pendingRequirements,
+    isHydrated,
+  ]);
 
   const sanitizeUiTree = (
     uiTree: UITreeNode | undefined,
@@ -329,6 +402,18 @@ function BuildingInner({ building, lang }: BuildingProps) {
         messages,
         confirmedRequirements,
       });
+      try {
+        localStorage.removeItem(storageKey);
+      } catch (error) {
+        console.warn('Failed to clear cached building state:', error);
+      }
+      setConfirmedRequirements([]);
+      setMessages([]);
+      setCurrentConversation([]);
+      setUiTrees([]);
+      setPendingRequirements([]);
+      setBaseIntent(null);
+      setIsInConversation(false);
       setStage('SUCCESS');
     } catch (error) {
       console.error('Error submitting to Notion:', error);
@@ -336,6 +421,14 @@ function BuildingInner({ building, lang }: BuildingProps) {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleBackToConversation = () => {
+    setStage('EXPLORING');
+  };
+
+  const handleRemoveRequirement = (id: string) => {
+    setConfirmedRequirements((prev) => prev.filter((req) => req.id !== id));
   };
 
   return (
@@ -372,6 +465,8 @@ function BuildingInner({ building, lang }: BuildingProps) {
                       key={req.id}
                       requirement={req}
                       index={index}
+                      onRemove={handleRemoveRequirement}
+                      removeLabel={removeLabel}
                     />
                   ))}
                 </div>
@@ -395,6 +490,7 @@ function BuildingInner({ building, lang }: BuildingProps) {
             <BuildingSummary
               confirmedRequirements={confirmedRequirements}
               copy={building.summary}
+              onBack={handleBackToConversation}
               onSubmit={handleEmailSubmit}
               isLoading={isLoading}
             />

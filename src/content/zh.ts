@@ -146,6 +146,7 @@ export const content = {
     },
     summary: {
       title: "你的需求总结：",
+      back: "返回补充",
       emailLabel: "请留下你的邮箱，我们会尽快联系你：",
       emailPlaceholder: "your@email.com",
       submit: "提交",

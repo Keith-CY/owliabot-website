@@ -144,7 +144,10 @@ export async function submitUserMessage(
         console.error('AI response validation failed:', error.issues);
         throw new Error(`Invalid AI response format: ${error.issues[0].message}`);
       }
-      console.error('Failed to parse AI response:', responseText, error);
+      console.error('Failed to parse AI response:', {
+        error,
+        responseLength: responseText?.length ?? 0,
+      });
       throw new Error('AI response is not valid JSON');
     }
   } catch (error) {
