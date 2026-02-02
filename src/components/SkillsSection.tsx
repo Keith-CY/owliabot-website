@@ -17,7 +17,7 @@ type SkillsSectionProps = {
 
 export default function SkillsSection({ skills }: SkillsSectionProps) {
   return (
-    <section id="skills" className="flex flex-col gap-10">
+    <section id="skills" className="scroll-mt-24 flex flex-col gap-10 sm:scroll-mt-28">
       <Reveal>
         <SectionHeader
           eyebrow={skills.subtitle}

@@ -41,11 +41,11 @@ export default function Header({ nav, links }: HeaderProps) {
             <a className="whitespace-nowrap leading-none text-foreground/55 transition hover:text-foreground/85 visited:text-foreground/55" href="#architecture">
               {nav.architecture}
             </a>
-            <a className="whitespace-nowrap leading-none text-foreground/55 transition hover:text-foreground/85 visited:text-foreground/55" href="#skills">
-              {nav.skills}
-            </a>
             <a className="whitespace-nowrap leading-none text-foreground/55 transition hover:text-foreground/85 visited:text-foreground/55" href="#security">
               {nav.security}
+            </a>
+            <a className="whitespace-nowrap leading-none text-foreground/55 transition hover:text-foreground/85 visited:text-foreground/55" href="#skills">
+              {nav.skills}
             </a>
           </nav>
           <div className="mx-2 h-4 w-px bg-foreground/10" />

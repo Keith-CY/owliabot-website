@@ -24,7 +24,7 @@ type SecurityModelProps = {
 
 export default function SecurityModel({ security }: SecurityModelProps) {
   return (
-    <section id="security" className="flex flex-col gap-8">
+    <section id="security" className="scroll-mt-24 flex flex-col gap-8 sm:scroll-mt-28">
       {/* Header */}
       <Reveal>
         <SectionHeader

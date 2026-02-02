@@ -17,7 +17,7 @@ export default function ArchitectureOverview({
   architecture,
 }: ArchitectureOverviewProps) {
   return (
-    <section id="architecture" className="flex flex-col gap-8">
+    <section id="architecture" className="scroll-mt-24 flex flex-col gap-8 sm:scroll-mt-28">
       <Reveal>
         <SectionHeader
           eyebrow={architecture.subtitle}
