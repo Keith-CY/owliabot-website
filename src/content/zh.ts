@@ -22,7 +22,7 @@ export const content = {
     subtitle: "简洁清晰的安全边界。", 
     items: [
       {
-        title: "内置 Agentic 钱包方案",
+        title: "内置 Agent 专用钱包",
         body:
           "安全的 Crypto 钱包，开箱即用。支持转账、Swap、DeFi 等操作，私钥由你掌控。",
         mechanism: "你的密钥，你的控制。",
