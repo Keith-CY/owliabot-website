@@ -15,7 +15,7 @@ export const content = {
     ctaSecondary: "阅读架构说明",
   },
   why: {
-    eyebrow: "原则",
+    eyebrow: "设计原则",
     title: "为什么选择 OwliaBot",
     subtitle: "只有边界清晰的自治才有意义。否则，只是盲目执行。",
     items: [
