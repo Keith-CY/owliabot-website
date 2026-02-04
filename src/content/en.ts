@@ -4,14 +4,14 @@ export const content = {
     why: "Why OwliaBot",
     architecture: "Architecture",
     skills: "Skills",
-    security: "Secure Accounts",
+    security: "Owlia Vault",
     building: "Co-build OwliaBot",
   },
   hero: {
     title: "An autonomous crypto agent that never crosses your signing boundary.",
     subtitle:
       "OwliaBot is a self-hosted, crypto-native agent for on-chain operations,\nwith minimal dependencies, extensible skills, and local-first security.",
-    badge: "Three-tier signing model",
+    badge: "Owlia Vault",
     status: "Designed and documented. Implementation in progress.",
     emphasis: "Secure. Private. Controllable by design.",
     ctaPrimary: "Co-build OwliaBot",
@@ -36,10 +36,10 @@ export const content = {
         mechanism: "Local-first by default. Remote optional by choice.",
       },
       {
-        title: "Secure Accounts",
+        title: "Owlia Vault",
         body:
-          "Separates user intent, automated execution, and on-chain authority into three distinct signing layers. Each layer has a clear purpose, scope, and failure boundary.",
-        mechanism: "Each layer holds only the minimum authority needed for its role.",
+          "All sensitive credentials are stored in an isolated system process, inaccessible to the Agent. Private keys and API keys are called through controlled interfaces.",
+        mechanism: "The Agent can use them, but never see the raw credentials.",
       },
       {
         title: "Extensible",
@@ -91,38 +91,33 @@ export const content = {
     footer: "Install more skills or write your own without expanding the core surface.",
   },
   security: {
-    eyebrow: "Secure Accounts",
-    title: "Three-tier Signing Model",
-    subtitle: "Autonomy without blind trust.",
+    eyebrow: "Security Architecture",
+    title: "Owlia Vault",
+    subtitle: "Your credentials, isolated from the Agent.",
     description:
-      "OwliaBot separates user intent, automated execution, and on-chain authority into three distinct signing layers. Each tier has a clear purpose, scope, and failure boundary.",
-    status: "Planned: Designed and documented. Implementation in progress.",
+      "Owlia Vault stores private keys, API keys, and other sensitive credentials in an isolated system process. The Agent never has direct access — all operations go through a controlled local interface.",
+    status: "Implemented. Continuously hardening.",
     tiers: [
       {
-        title: "Tier 1: Companion App",
-        body: "User-confirmed signing for any high-value or sensitive action. This is where intent is explicitly approved.",
-        keyword: "Explicit consent",
+        title: "Crypto Wallet",
+        body: "Encrypted private keys live in an isolated environment. The Agent initiates transfers and balance queries through the Vault — without ever touching the raw keys.",
+        keyword: "On-chain",
       },
       {
-        title: "Tier 2: Session Keys",
-        body: "Scoped, time-limited keys for low-risk automation. Permissions are tightly bounded and automatically rotated.",
-        keyword: "Scoped execution",
-      },
-      {
-        title: "Tier 3: Smart Wallet",
-        body: "On-chain policy enforcement for advanced strategies. The wallet defines what is possible - not the AI agent.",
-        keyword: "Enforced authority",
+        title: "API Key Safe",
+        body: "Store your exchange and platform API keys in the Vault. The Agent calls them through a controlled interface — it can never export or read the raw credentials.",
+        keyword: "Platform Access",
       },
     ],
     footer:
-      "The AI agent never gains more authority than you explicitly grant.",
+      "The Agent can use them, but never see them. Your credentials stay under your control.",
     local: {
-      title: "Private keys remain under your control",
-      body: "Most AI agents require private key custody. OwliaBot does not.",
+      title: "Your Credentials, Your Control",
+      body: "Owlia Vault ensures AI never directly touches your sensitive information.",
       bullets: [
-        "Private keys belong to you, never delegated to the agent",
-        "Low-risk automation runs locally with strict bounds",
-        "On-chain strategies fully constrained by contracts",
+        "Private keys & API keys encrypted in an isolated process",
+        "Agent can only operate through controlled interfaces",
+        "Even if the Agent is compromised, your credentials remain safe",
       ],
     },
   },
