@@ -21,6 +21,7 @@ export default function SkillsHubPage() {
         categories={skillsHub.categories}
         skills={skillsHub.skills}
         lang={skillsHub.lang}
+        createSkillCTA={skillsHub.createSkillCTA}
       />
       <div className="mx-auto w-full max-w-5xl px-5 pb-16 sm:px-8">
         <Building building={content.building} lang="en" />

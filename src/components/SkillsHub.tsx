@@ -17,6 +17,7 @@ type SkillsHubProps = {
   skills: readonly Skill[];
   lang: string;
   allLabel?: string;
+  createSkillCTA?: string;
 };
 
 const categoryColors: Record<string, { card: string }> = {
@@ -38,6 +39,7 @@ export default function SkillsHub({
   categories,
   skills,
   lang,
+  createSkillCTA,
 }: SkillsHubProps) {
   return (
     <div className="mx-auto flex min-h-screen max-w-5xl flex-col gap-10 px-5 pb-16 pt-28 sm:px-8 sm:pt-32">
@@ -50,6 +52,31 @@ export default function SkillsHub({
         <p className="max-w-2xl text-sm text-foreground/60">{description}</p>
       </header>
 
+      {/* Create Skill CTA */}
+      {createSkillCTA && (
+        <div className="flex justify-center">
+          <a
+            href="#building"
+            className="group inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background transition-all hover:shadow-lg hover:scale-105"
+          >
+            <span>{createSkillCTA}</span>
+            <svg
+              className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              />
+            </svg>
+          </a>
+        </div>
+      )}
+
       {/* Skills Masonry Grid */}
       <div className="columns-1 gap-6 sm:columns-2 space-y-6">
         {skills.map((skill) => {
@@ -57,8 +84,13 @@ export default function SkillsHub({
           return (
             <article
               key={skill.id}
-              className="break-inside-avoid flex flex-col gap-4 rounded-[28px] border border-border bg-surface/70 p-6 shadow-[0_6px_16px_rgba(4,6,10,0.04),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur transition-shadow hover:shadow-md dark:shadow-[0_6px_16px_rgba(4,6,10,0.12),_inset_0_1px_0_rgba(255,255,255,0.14)]"
+              className="break-inside-avoid flex flex-col gap-4 rounded-[28px] border border-border bg-surface/70 p-6 shadow-[0_6px_16px_rgba(4,6,10,0.04),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur transition-shadow hover:shadow-md dark:shadow-[0_6px_16px_rgba(4,6,10,0.12),_inset_0_1px_0_rgba(255,255,255,0.14)] relative"
             >
+              {/* Building badge - top right */}
+              <span className="absolute top-6 right-6 rounded-full bg-amber-100 px-2.5 py-0.5 text-[11px] font-semibold text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+                Building
+              </span>
+
               {/* Category badge */}
               <div className="flex items-center">
                 <span

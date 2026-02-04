@@ -3,7 +3,8 @@ export const skillsHub = {
   title: "Skills Hub",
   subtitle: "Explore what OwliaBot can do",
   description:
-    "Each Skill is a modular capability that OwliaBot can run for you. Browse real-world scenarios, from portfolio tracking to automated DeFi strategies.",
+    "Each Skill is a modular capability that OwliaBot can run for you. Browse real-world scenarios — from portfolio tracking to automated DeFi strategies. You can also create your own Skills tailored to your needs.",
+  createSkillCTA: "Have a Skill idea?",
   categories: {
     monitoring: "Monitoring & Insights",
     defi: "DeFi Strategies",
