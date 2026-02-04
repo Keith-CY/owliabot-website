@@ -40,7 +40,7 @@ export const content = {
       {
         title: "可扩展",
         body:
-          "能力通过 Skills 扩展，模块化插件覆盖加密与链上场景。",
+          "社区共建模块化插件，覆盖加密世界所有链上链下场景。",
         mechanism: "Skills 定义工具、权限与安全等级。",
       },
     ],
