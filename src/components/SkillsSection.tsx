@@ -31,13 +31,35 @@ export default function SkillsSection({ skills, lang }: SkillsSectionProps) {
         />
       </Reveal>
       <Reveal delay={0.04}>
-        <div className="relative">
-          <div className="absolute inset-0 rounded-[28px] bg-gradient-to-r from-sky-400/15 via-transparent to-emerald-400/15 blur-2xl" />
-          <img
-            src="/owlia-skills.png"
-            alt="OwliaBot Skills overview"
-            className="relative z-10 w-full rounded-[20px] drop-shadow-[0_8px_32px_rgba(56,189,248,0.12)] dark:drop-shadow-[0_8px_32px_rgba(56,189,248,0.2)]"
+        <div className="relative overflow-visible">
+          {/* Organic blob glow */}
+          <div
+            className="absolute -inset-8 opacity-60 blur-3xl dark:opacity-40"
+            style={{
+              background: "radial-gradient(ellipse 65% 55% at 50% 50%, rgba(56,189,248,0.22), transparent 70%), radial-gradient(ellipse 55% 65% at 75% 60%, rgba(52,211,153,0.18), transparent 65%)",
+            }}
           />
+          {/* Organic clip path — fluid blob shape */}
+          <div
+            className="relative z-10 w-full"
+            style={{
+              clipPath: "url(#skills-blob)",
+            }}
+          >
+            <img
+              src="/owlia-skills.png"
+              alt="OwliaBot Skills overview"
+              className="w-full"
+            />
+          </div>
+          {/* SVG clip definition — organic blob */}
+          <svg className="absolute h-0 w-0" aria-hidden="true">
+            <defs>
+              <clipPath id="skills-blob" clipPathUnits="objectBoundingBox">
+                <path d="M0.03,0.15 C0.1,0.02,0.35,-0.02,0.6,0.03 C0.85,0.08,0.98,0.2,0.97,0.45 C0.96,0.7,1.02,0.88,0.8,0.96 C0.58,1.04,0.3,1.01,0.12,0.9 C-0.06,0.79,-0.02,0.55,0.02,0.35 C0.04,0.25,0.0,0.2,0.03,0.15 Z" />
+              </clipPath>
+            </defs>
+          </svg>
         </div>
       </Reveal>
       <div className="grid items-stretch gap-6 md:grid-cols-3">
