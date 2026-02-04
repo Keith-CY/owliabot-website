@@ -119,7 +119,7 @@ export default function SkillsHub({
               </div>
 
               {/* Description */}
-              <p className="text-sm leading-relaxed text-foreground/70">
+              <p className="text-sm leading-relaxed text-foreground/70 [text-wrap:wrap]">
                 {skill.description}
               </p>
 
@@ -128,7 +128,7 @@ export default function SkillsHub({
                 <p className="text-xs font-semibold text-foreground/50 uppercase tracking-wider mb-1.5">
                   {lang === "zh" ? "典型场景" : "Example"}
                 </p>
-                <p className="text-sm italic text-foreground/60">
+                <p className="text-sm italic text-foreground/60 [text-wrap:wrap]">
                   {skill.scenario}
                 </p>
               </div>
