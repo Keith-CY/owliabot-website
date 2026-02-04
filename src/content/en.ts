@@ -199,13 +199,13 @@ export const content = {
     cards: [
       {
         title: "Individual Crypto Users",
-        icon: "👤",
+        icon: "User",
         body: "Manage multi-chain assets, monitor DeFi position health in real-time, automate on-chain strategies. OwliaBot is your personal crypto assistant, helping you seize market opportunities and mitigate risks.",
       },
       {
-        title: "Community Operations (B2B)",
-        icon: "👥",
-        body: "Provide unified on-chain services for community members: batch airdrops, whitelist management, NFT sales, DAO governance voting. Reduce operational costs and boost community engagement.",
+        title: "Intelligent Operations",
+        icon: "Sparkles",
+        body: "Automate Twitter and community platform operations with smart monitoring of key accounts, auto-replies to interactions, and scheduled content publishing. Leverage AI to analyze user feedback, optimize operational strategies, and boost community engagement and brand influence.",
       },
     ],
   },

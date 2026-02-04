@@ -199,13 +199,13 @@ export const content = {
     cards: [
       {
         title: "Crypto 个人用户",
-        icon: "👤",
+        icon: "User",
         body: "管理多链资产、实时监控 DeFi 仓位健康度、自动化执行链上策略。OwliaBot 是你的个人加密助手，帮你把握市场机会、规避风险。",
       },
       {
-        title: "社群运营（toB）",
-        icon: "👥",
-        body: "为社群成员提供统一的链上服务：批量空投、白名单管理、NFT 发售、DAO 治理投票。降低运营成本，提升社群活跃度。",
+        title: "智能运营",
+        icon: "Sparkles",
+        body: "自动化运营 Twitter 账号和社群平台，智能监控关键账户动态、自动回复互动、定时发布内容。通过 AI 分析用户反馈，优化运营策略，提升社群活跃度和品牌影响力。",
       },
     ],
   },
