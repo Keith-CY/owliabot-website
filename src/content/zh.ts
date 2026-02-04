@@ -7,11 +7,12 @@ export const content = {
   hero: {
     title: "🦉 OwliaBot，专为 Crypto 用户设计的 OpenClaw 🦞",
     subtitle:
-      "一键部署你的加密原生 AI Agent，链上操作、Skills 可扩展、资产安全由你掌控。",
+      "一键部署你的加密原生 AI Agent，Skills 自由扩展，资产始终由你掌握。",
     badge: "OwliaBot",
     status: "已完成设计与文档，正在实现。",
     emphasis: "安全、隐私、可控，皆为设计的一部分。",
     ctaPrimary: "共建 OwliaBot",
+    ctaPrimaryHref: "/zh/skills-hub",
     ctaSecondary: "阅读架构说明",
     ctaSecondaryHref: "http://docs.owlia.bot/zh",
   },
@@ -117,7 +118,7 @@ export const content = {
       {
         title: "策略执行引擎",
         body:
-          "从 MACD 信号到 Delta 对冲杠杆 — 定义你的策略、回测验证、让 OwliaBot 带着风控和审计记录自动执行交易。",
+          "从 MACD 信号到 Delta 对冲杠杆。定义你的策略、回测验证、让 OwliaBot 带着风控和审计记录自动执行交易。",
         meta: "信号 → 执行 → 报告",
       },
     ],
@@ -190,6 +191,28 @@ export const content = {
       body: "感谢你的反馈。我们已经收到你的需求，会尽快通过邮箱与你联系。",
       note: "我们永远不会索要你的私钥。",
     },
+  },
+  userScenarios: {
+    eyebrow: "应用场景",
+    title: "用户场景",
+    subtitle: "OwliaBot 为不同用户群体提供专属解决方案",
+    cards: [
+      {
+        title: "Crypto 个人用户",
+        icon: "👤",
+        body: "管理多链资产、实时监控 DeFi 仓位健康度、自动化执行链上策略。OwliaBot 是你的个人加密助手，帮你把握市场机会、规避风险。",
+      },
+      {
+        title: "社群运营（toB）",
+        icon: "👥",
+        body: "为社群成员提供统一的链上服务：批量空投、白名单管理、NFT 发售、DAO 治理投票。降低运营成本，提升社群活跃度。",
+      },
+    ],
+  },
+  partners: {
+    eyebrow: "生态合作",
+    title: "合作伙伴",
+    subtitle: "与行业领先者共建 Web3 未来",
   },
   footer: {
     note: "私钥永不离开你的设备。没有例外。",

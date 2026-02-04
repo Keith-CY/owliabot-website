@@ -5,44 +5,45 @@ export const content = {
     skillsHub: "Skills Hub",
   },
   hero: {
-    title: "An autonomous crypto agent that never crosses your signing boundary.",
+    title: "🦉 OwliaBot, an OpenClaw 🦞 designed for Crypto users",
     subtitle:
-      "A self-hosted, crypto-native AI agent — minimal dependencies, extensible skills, local-first.",
+      "One-click deployment of your crypto-native AI Agent. Skills freely extensible, assets always under your control.",
     badge: "OwliaBot",
     status: "Designed and documented. Implementation in progress.",
     emphasis: "Secure. Private. Controllable by design.",
     ctaPrimary: "Co-build OwliaBot",
+    ctaPrimaryHref: "/skills-hub",
     ctaSecondary: "Read the Architecture",
     ctaSecondaryHref: "http://docs.owlia.bot/",
   },
   why: {
     eyebrow: "Design Principles",
     title: "Why OwliaBot",
-    subtitle: "Autonomy works only with explicit boundaries.",
+    subtitle: "Simpler, clearer security boundaries.",
     items: [
       {
-        title: "Crypto-native",
+        title: "Built-in Crypto Wallet",
         body:
-          "Natively understands on-chain transactions and signing flows — no middleware translation needed.",
-        mechanism: "No abstraction over keys. No off-chain shadow execution.",
+          "Secure wallet built-in and ready to use. Supports transfers, signing, balance queries, and other on-chain operations. Your private keys always stay under your control.",
+        mechanism: "Your keys, your control.",
       },
       {
-        title: "Self-hosted",
+        title: "Modular Skills",
         body:
-          "Runs fully on your own machine or server. No hosted agents, no remote custody, no hidden dependencies.",
-        mechanism: "Local-first by default. Remote optional by choice.",
+          "Community-built plugin ecosystem covering most on-chain and off-chain scenarios. Install as needed, plug and play.",
+        mechanism: "One Skill solves one scenario.",
       },
       {
         title: "Owlia Vault",
         body:
-          "Credentials stored in an isolated process. The Agent calls them through controlled interfaces — never sees the raw keys.",
+          "Private keys and sensitive credentials are stored in an isolated process. The Agent can never directly read them.",
         mechanism: "Can use, but never see.",
       },
       {
-        title: "Extensible",
+        title: "One-Click Deployment",
         body:
-          "Capabilities grow through Skills — modular plugins covering crypto and on-chain scenarios.",
-        mechanism: "Skills define tools, permissions, and security levels.",
+          "Quick installation, supports server, local, and mobile environments. Issue commands anytime via Telegram, Discord, and more.",
+        mechanism: "Anytime, anywhere, at your fingertips.",
       },
     ],
   },
@@ -117,7 +118,7 @@ export const content = {
       {
         title: "Strategy execution",
         body:
-          "From MACD signals to delta-hedged leverage — define your strategy, backtest it, and let OwliaBot execute trades with built-in risk controls and audit trails.",
+          "From MACD signals to delta-hedged leverage. Define your strategy, backtest it, and let OwliaBot execute trades with built-in risk controls and audit trails.",
         meta: "Signal → Execution → Report",
       },
     ],
@@ -134,12 +135,12 @@ export const content = {
     tiers: [
       {
         title: "Crypto Wallet",
-        body: "Initiate transfers and balance queries through the Vault — without ever touching the raw keys.",
+        body: "Initiate transfers and balance queries through the Vault without ever touching the raw keys.",
         keyword: "On-chain",
       },
       {
         title: "API Key Safe",
-        body: "Exchange and platform credentials securely managed. The Agent calls on demand — can never export.",
+        body: "Exchange and platform credentials securely managed. The Agent calls on demand but can never export.",
         keyword: "Platform Access",
       },
     ],
@@ -179,7 +180,7 @@ export const content = {
     },
     summary: {
       title: "Your requirements summary:",
-      back: "Back",
+      back: "Back to add more",
       emailLabel: "Leave your email and we will reach out soon:",
       emailPlaceholder: "your@email.com",
       submit: "Submit",
@@ -190,6 +191,28 @@ export const content = {
       body: "Thanks for your feedback. We received your requirements and will contact you by email.",
       note: "We will never ask for your private keys.",
     },
+  },
+  userScenarios: {
+    eyebrow: "Use Cases",
+    title: "User Scenarios",
+    subtitle: "OwliaBot provides tailored solutions for different user groups",
+    cards: [
+      {
+        title: "Individual Crypto Users",
+        icon: "👤",
+        body: "Manage multi-chain assets, monitor DeFi position health in real-time, automate on-chain strategies. OwliaBot is your personal crypto assistant, helping you seize market opportunities and mitigate risks.",
+      },
+      {
+        title: "Community Operations (B2B)",
+        icon: "👥",
+        body: "Provide unified on-chain services for community members: batch airdrops, whitelist management, NFT sales, DAO governance voting. Reduce operational costs and boost community engagement.",
+      },
+    ],
+  },
+  partners: {
+    eyebrow: "Ecosystem",
+    title: "Partners",
+    subtitle: "Building the Web3 future with industry leaders",
   },
   footer: {
     note: "Private keys never leave your device. No exceptions.",

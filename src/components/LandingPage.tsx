@@ -3,6 +3,8 @@ import Hero from "./Hero";
 import Pillars from "./Pillars";
 import ArchitectureOverview from "./ArchitectureOverview";
 import SecurityModel from "./SecurityModel";
+import UserScenarios from "./UserScenarios";
+import Partners from "./Partners";
 import Footer from "./Footer";
 
 export type LandingPageContent = {
@@ -16,6 +18,7 @@ export type LandingPageContent = {
     subtitle: string;
     emphasis: string;
     ctaPrimary: string;
+    ctaPrimaryHref?: string;
     ctaSecondary: string;
     ctaSecondaryHref?: string;
     badge?: string;
@@ -130,6 +133,26 @@ export type LandingPageContent = {
       note: string;
     };
   };
+  userScenarios: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    cards: ReadonlyArray<{
+      title: string;
+      body: string;
+      icon?: string;
+    }>;
+  };
+  partners: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    logos?: ReadonlyArray<{
+      name: string;
+      url?: string;
+      image?: string;
+    }>;
+  };
   footer: {
     note: string;
     signature: string;
@@ -156,6 +179,10 @@ export default function LandingPage({ content }: LandingPageProps) {
           <div className="absolute -left-1/4 -top-1/4 -z-10 h-[150%] w-[150%] bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.08),transparent_70%)] opacity-0 dark:opacity-100 pointer-events-none mix-blend-screen" />
           <ArchitectureOverview architecture={content.architecture} />
         </div>
+
+        <UserScenarios scenarios={content.userScenarios} />
+
+        <Partners partners={content.partners} />
 
         <div className="relative isolate">
           <div className="absolute -right-1/4 -top-1/4 -z-10 h-[150%] w-[150%] bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,0.08),transparent_70%)] opacity-0 dark:opacity-100 pointer-events-none mix-blend-screen" />
