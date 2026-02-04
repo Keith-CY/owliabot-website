@@ -1,6 +1,5 @@
 import ShaderBackdrop from "./ShaderBackdrop";
 import Reveal from "./Reveal";
-import HeroIllustration from "./HeroIllustration";
 
 type HeroProps = {
   hero: {
@@ -12,21 +11,9 @@ type HeroProps = {
     badge?: string;
     status?: string;
   };
-  illustration: {
-    scenarios: ReadonlyArray<{
-      id: string;
-      label: string;
-      messages: ReadonlyArray<{
-        role: "user" | "assistant";
-        content: string;
-        type?: "alert" | "info" | "success";
-        actions?: ReadonlyArray<string>;
-      }>;
-    }>;
-  };
 };
 
-export default function Hero({ hero, illustration }: HeroProps) {
+export default function Hero({ hero }: HeroProps) {
   const subtitleLines = hero.subtitle.split("\n");
 
   return (
@@ -39,11 +26,11 @@ export default function Hero({ hero, illustration }: HeroProps) {
       </div>
 
       {/* Content Container */}
-      <div className="relative mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-6xl flex-col items-center justify-center gap-12 px-6 py-24 sm:px-8 lg:min-h-screen lg:flex-row lg:gap-6 lg:px-12 lg:pt-32">
+      <div className="relative mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-6xl flex-col items-center justify-center gap-12 px-6 py-24 sm:px-8 lg:min-h-screen lg:px-12 lg:pt-32">
 
-        {/* Left Column: Text (60%) */}
-        <div className="flex w-full flex-col items-start gap-8 text-left lg:w-[60%] lg:pr-8">
-          <div className="flex flex-col gap-6">
+        {/* Center Column: Text */}
+        <div className="flex w-full flex-col items-center gap-8 text-center">
+          <div className="flex flex-col items-center gap-6">
             <Reveal>
               {hero.badge ? (
                 <span className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-surface/60 px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/55 backdrop-blur">
@@ -70,7 +57,7 @@ export default function Hero({ hero, illustration }: HeroProps) {
           </div>
 
           <Reveal delay={0.14}>
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center justify-center gap-4">
               <a
                 className="rounded-full bg-foreground px-8 py-4 text-sm font-semibold text-background shadow-[0_12px_30px_rgba(5,6,12,0.22),_inset_0_1px_0_rgba(255,255,255,0.6)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(5,6,12,0.28),_inset_0_1px_0_rgba(255,255,255,0.7)]"
                 href="#building"
@@ -91,11 +78,6 @@ export default function Hero({ hero, illustration }: HeroProps) {
               {hero.emphasis}
             </p>
           </Reveal>
-        </div>
-
-        {/* Right Column: Illustration (40%) */}
-        <div className="flex w-full items-center justify-center lg:w-[40%]">
-          <HeroIllustration data={illustration} />
         </div>
       </div>
     </section>
