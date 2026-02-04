@@ -166,26 +166,21 @@ function BuildingInner({ building, lang }: BuildingProps) {
     return uiTree;
   };
 
-  const buildStructuredInput = (base: string, selections: string[], newInput: string, locale: "en" | "zh") => {
-    const emptySelection = locale === "zh" ? "无" : "none";
-    const selectedText = selections.length > 0 ? selections.join(', ') : emptySelection;
-    return `[Locale] ${locale}\n[BaseIntent] ${base}\n[SelectedOptions] ${selectedText}\n[NewInput] ${newInput}`;
+  const buildStructuredInput = (base: string, newInput: string, locale: "en" | "zh", round: number) => {
+    return `[Locale] ${locale}\n[BaseIntent] ${base}\n[SelectedOptions] 忽略\n[NewInput] ${newInput}\n[Round] ${round}`;
   };
 
   const handleSendMessage = async (
     userInput: string,
-    selections: string[] = [],
     baseIntentOverride?: string,
     forceNewConversation = false,
     allowSplit = true
   ) => {
     const activeBaseIntent = baseIntentOverride ?? baseIntent ?? userInput;
-    // Add user message with selections
     const userMessage: Message = {
       role: 'user',
       content: userInput,
       timestamp: Date.now(),
-      selectedOptions: selections && selections.length > 0 ? selections : undefined,
     };
 
     const isNewConversation = forceNewConversation || currentConversation.length === 0;
@@ -201,7 +196,9 @@ function BuildingInner({ building, lang }: BuildingProps) {
     }
 
     try {
-      const structuredInput = buildStructuredInput(activeBaseIntent, selections, userInput, lang);
+      // Calculate round number (count of user messages in this conversation)
+      const round = newConversation.filter(m => m.role === 'user').length;
+      const structuredInput = buildStructuredInput(activeBaseIntent, userInput, lang, round);
       const aiResponse = await submitUserMessage(newConversation, structuredInput);
 
       const intentType = aiResponse.intentType ?? 'refine';
@@ -225,7 +222,7 @@ function BuildingInner({ building, lang }: BuildingProps) {
           setCurrentConversation((prev) => [...prev, noticeMessage]);
           setMessages((prev) => [...prev, noticeMessage]);
           setUiTrees((prev) => [...prev, noticeUiTree]);
-          const followupInput = buildStructuredInput(firstText, selections, firstText, lang);
+          const followupInput = buildStructuredInput(firstText, firstText, lang, 1);
           const followupResponse = await submitUserMessage(newConversation, followupInput);
           const followupIntent = followupResponse.intentType ?? 'refine';
           const followupUiTree = sanitizeUiTree(
@@ -342,7 +339,7 @@ function BuildingInner({ building, lang }: BuildingProps) {
     } finally {
       setIsLoading(false);
       if (nextRequirementSeed) {
-        handleSendMessage(nextRequirementSeed, [], nextRequirementSeed, true, false);
+        handleSendMessage(nextRequirementSeed, nextRequirementSeed, true, false);
       }
     }
   };

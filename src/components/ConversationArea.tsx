@@ -4,8 +4,6 @@ import { useState, useRef, useEffect } from 'react';
 import type { Message as MessageType, UITreeNode } from '@/types/building';
 import Message from './Message';
 import TypingIndicator from './TypingIndicator';
-import { useBuilding } from '@/contexts/BuildingContext';
-
 type ConversationAreaProps = {
   messages: MessageType[];
   uiTrees: UITreeNode[];
@@ -20,7 +18,7 @@ type ConversationAreaProps = {
     confirmCurrent: string;
     complete: string;
   };
-  onSendMessage: (message: string, selections?: string[]) => void;
+  onSendMessage: (message: string) => void;
   onConfirmRequirement: () => void;
   onComplete: () => void;
 };
@@ -39,8 +37,6 @@ export default function ConversationArea({
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { selectedOptions } = useBuilding();
-
   // Auto-scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -49,9 +45,7 @@ export default function ConversationArea({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim() && !isLoading) {
-      // Include selected options with the message
-      const selections = Array.from(selectedOptions);
-      onSendMessage(input.trim(), selections);
+      onSendMessage(input.trim());
       setInput('');
     }
   };
