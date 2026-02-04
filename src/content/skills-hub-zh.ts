@@ -16,7 +16,7 @@ export const skillsHub = {
       category: "monitoring",
       tagline: "所有资产，一目了然",
       description:
-        "连接多条链上的钱包地址和交易所只读 API，OwliaBot 自动汇总你的持仓，按需或定时给你统一的资产视图。",
+        "连接多链钱包地址和交易所只读 API，OwliaBot 自动汇总你的持仓，按需或定时提供统一的资产视图。",
       scenario:
         "\"看看我的资产\" → OwliaBot 返回所有钱包和交易所的仓位明细，附带总资产和配置比例。",
     },
@@ -24,7 +24,7 @@ export const skillsHub = {
       id: "002",
       title: "趋势发射",
       category: "trading",
-      tagline: "发现热点，一键发币",
+      tagline: "捕捉热点，一键发币",
       description:
         "OwliaBot 监控 X/Twitter 的热门叙事，帮你在 Solana 上通过 trends.fun 一键发币。从生成素材到链上部署，全程对话完成。",
       scenario:
@@ -86,7 +86,7 @@ export const skillsHub = {
       category: "defi",
       tagline: "自动化集中流动性管理",
       description:
-        "OwliaBot 管理你的 Uniswap V3 LP 仓位：监控价格区间、收取手续费、复投收益、价格偏离时自动再平衡。可选 Delta 对冲降低方向性风险。",
+        "OwliaBot 管理你的 Uniswap V3 LP 仓位：监控价格区间、自动收取手续费、复投收益、价格偏离时再平衡。可选 Delta 对冲降低方向性风险。",
       scenario:
         "\"管理我的 ETH/USDC LP，±5% 区间\" → OwliaBot 每12小时收取手续费并复投 → 价格偏离区间 → 撤出、设新区间、通知你。",
     },

@@ -24,7 +24,7 @@ export const content = {
       {
         title: "Built-in Crypto Wallet",
         body:
-          "Secure crypto wallet built-in and ready to use. Supports transfers, signing, balance queries, and other on-chain operations. Your private keys always stay under your control.",
+          "Secure crypto wallet built-in and ready to use right away. Supports transfers, signing, balance queries, and other on-chain operations. Your private keys never leave your control.",
         mechanism: "Your keys, your control.",
       },
       {
@@ -43,7 +43,7 @@ export const content = {
         title: "One-Click Deployment",
         body:
           "Quick installation, supports server, local, and mobile environments. Issue commands anytime via Telegram, Discord, and more.",
-        mechanism: "Anytime, anywhere, at your fingertips.",
+        mechanism: "Anytime, anywhere, always ready.",
       },
     ],
   },
@@ -51,7 +51,7 @@ export const content = {
     title: "Architecture overview",
     subtitle: "Built to stay small",
     body:
-      "Commands from you, through OwliaBot to Skills for execution. Keys stay isolated in the Vault.",
+      "Commands from you through OwliaBot to Skills for execution. Keys remain isolated in the Vault.",
     flowLabel: "Core flow",
     flow: ["Channels", "Gateway", "Agent Runtime", "Skills", "Owlia Vault"],
     footer: "",
@@ -73,7 +73,7 @@ export const content = {
     title: "Skills system",
     subtitle: "What can OwliaBot do for you?",
     body:
-      "Modular plugins covering real crypto scenarios.",
+      "Modular plugins for real-world crypto scenarios.",
     cards: [
       {
         title: "Portfolio at a glance",
@@ -118,7 +118,7 @@ export const content = {
     ],
     footer: "",
     local: {
-      title: "Even if the Agent is compromised, your credentials remain safe",
+      title: "Even if the Agent is compromised, your credentials stay safe",
       body: "Your credentials stay under your control.",
       bullets: [
         "Encrypted in an isolated process",

@@ -19,7 +19,7 @@ export const content = {
   why: {
     eyebrow: "设计原则",
     title: "为什么选择 OwliaBot",
-    subtitle: "更简洁、更清晰的安全边界。", 
+    subtitle: "简洁清晰的安全边界。", 
     items: [
       {
         title: "内置加密钱包",
@@ -30,7 +30,7 @@ export const content = {
       {
         title: "模块化 Skills",
         body:
-          "社区共建插件生态，覆盖大部分链上链下场景。按需安装，即插即用。",
+          "社区共建插件生态，覆盖链上链下主流场景。按需安装，即插即用。",
         mechanism: "一个 Skill 解决一个场景。",
       },
       {
@@ -51,7 +51,7 @@ export const content = {
     title: "架构总览",
     subtitle: "保持极简",
     body:
-      "指令由你发出，经 OwliaBot 到 Skills 执行，密钥始终隔离在 Vault 中。",
+      "指令由你发出，经 OwliaBot 路由至 Skills 执行，密钥始终隔离在 Vault。",
     flowLabel: "核心流程",
     flow: ["Channels", "Gateway", "Agent Runtime", "Skills", "Owlia Vault"],
     diagram: {
@@ -73,7 +73,7 @@ export const content = {
     title: "Skills 系统",
     subtitle: "OwliaBot 能为你做什么？",
     body:
-      "模块化插件，覆盖真实加密场景。",
+      "模块化插件，覆盖真实 Crypto 场景。",
     cards: [
       {
         title: "资产一目了然",
@@ -118,7 +118,7 @@ export const content = {
     ],
     footer: "",
     local: {
-      title: "即使 Agent 被攻破，凭证依然安全",
+      title: "即使 Agent 被攻破，凭证仍然安全",
       body: "凭证始终在你掌控之中。",
       bullets: [
         "隔离进程加密存储",

@@ -24,7 +24,7 @@ export const skillsHub = {
       id: "002",
       title: "Launch Trends",
       category: "trading",
-      tagline: "Spot trends, launch tokens in one click",
+      tagline: "Catch trends, launch tokens instantly",
       description:
         "OwliaBot monitors X/Twitter for trending narratives and helps you launch tokens on Solana via trends.fun. From generating metadata to executing the on-chain deployment, all through a conversation.",
       scenario:
@@ -86,7 +86,7 @@ export const skillsHub = {
       category: "defi",
       tagline: "Automated concentrated liquidity management",
       description:
-        "OwliaBot manages your Uniswap V3 LP positions: monitors price ranges, collects fees, compounds earnings, and rebalances when price moves out of range. Optional delta hedge to reduce directional risk.",
+        "OwliaBot manages your Uniswap V3 LP positions: monitors price ranges, auto-collects fees, compounds earnings, and rebalances when price moves out of range. Optional delta hedge to reduce directional risk.",
       scenario:
         "\"Manage my ETH/USDC LP, ±5% range\" → OwliaBot collects fees every 12h, auto-compounds → Price drifts out of range → Withdraws, sets new range, and notifies you.",
     },
