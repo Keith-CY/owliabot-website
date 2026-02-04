@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import LanguageSelect from "./LanguageSelect";
 import ThemeSelect from "./ThemeSelect";
 
@@ -13,12 +16,46 @@ type HeaderProps = {
 };
 
 export default function Header({ nav, links, lang }: HeaderProps) {
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const scrollThreshold = 10; // 防抖阈值
+
+      if (Math.abs(currentScrollY - lastScrollY) < scrollThreshold) {
+        return;
+      }
+
+      // 页面顶部时始终显示
+      if (currentScrollY < 50) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY) {
+        // 向下滚动 → 隐藏
+        setIsVisible(false);
+      } else {
+        // 向上滚动 → 显示
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
   const prefix = lang === "zh" ? "/zh" : "";
   const homeHref = prefix || "/";
   const skillsHubHref = `${prefix}/skills-hub`;
 
   return (
-    <header className="fixed top-0 w-full z-40 bg-transparent transition-all duration-300">
+    <header 
+      className={`fixed top-0 w-full z-40 bg-transparent transition-transform duration-300 ${
+        isVisible ? 'translate-y-0' : '-translate-y-full'
+      }`}
+    >
       <div className="relative mx-auto flex w-full max-w-6xl items-center justify-center px-6 py-5 sm:px-8 lg:px-12">
         {/* Desktop: single unified pill */}
         <div className="hidden items-center gap-4 rounded-full border border-border bg-surface/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/55 shadow-[0_14px_36px_rgba(5,6,12,0.2),_inset_0_1px_0_rgba(255,255,255,0.5)] backdrop-blur dark:shadow-[0_14px_36px_rgba(5,6,12,0.2),_inset_0_1px_0_rgba(255,255,255,0.14)] sm:inline-flex">
