@@ -22,14 +22,11 @@ type SecurityModelProps = {
   };
 };
 
-/* Icons per tier — simple inline SVGs for visual weight */
 const tierIcons = [
-  /* Shield / wallet icon */
   <svg key="wallet" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-violet-400">
     <path d="M12 2L3 7v6c0 5.25 3.75 10.13 9 11.25C17.25 23.13 21 18.25 21 13V7l-9-5z" />
     <path d="M9 12l2 2 4-4" />
   </svg>,
-  /* Key icon */
   <svg key="key" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-sky-400">
     <circle cx="8" cy="15" r="5" />
     <path d="M11.7 11.3L15 8l2 2" />
@@ -40,7 +37,6 @@ const tierIcons = [
 export default function SecurityModel({ security }: SecurityModelProps) {
   return (
     <section id="security" className="scroll-mt-24 flex flex-col gap-10 sm:scroll-mt-28">
-      {/* Header */}
       <Reveal>
         <SectionHeader
           eyebrow={security.eyebrow}
@@ -55,7 +51,7 @@ export default function SecurityModel({ security }: SecurityModelProps) {
         </div>
       </Reveal>
 
-      {/* Tier cards — side by side */}
+      {/* Tier cards — side by side, visual focus */}
       <div className="grid items-stretch gap-6 md:grid-cols-2">
         {security.tiers.map((tier, index) => (
           <Reveal key={tier.title} delay={0.06 + index * 0.06}>
@@ -85,45 +81,22 @@ export default function SecurityModel({ security }: SecurityModelProps) {
         </Reveal>
       ) : null}
 
-      {/* Local-first highlight — visually distinct with gradient border */}
+      {/* Local-first — lightweight, secondary to tier cards */}
       <Reveal delay={0.22}>
-        <div className="relative rounded-[32px] p-px overflow-hidden">
-          {/* Gradient border effect */}
-          <div className="absolute inset-0 rounded-[32px] bg-gradient-to-br from-violet-500/25 via-sky-500/15 to-emerald-500/20" />
-          <div className="relative rounded-[32px] bg-surface/95 px-8 py-10 backdrop-blur dark:bg-surface/90">
-            <div className="flex flex-col gap-8">
-              {/* Title area with decorative lock icon */}
-              <div className="flex items-start gap-5">
-                <div className="mt-1 shrink-0 rounded-2xl border border-violet-400/20 bg-violet-400/5 p-3">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-violet-400">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                    <path d="M7 11V7a5 5 0 0110 0v4" />
-                  </svg>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <h3 className="text-balance text-2xl font-semibold text-foreground sm:text-3xl">
-                    {security.local.title}
-                  </h3>
-                  <p className="text-pretty text-base leading-relaxed text-foreground/65">
-                    {security.local.body}
-                  </p>
-                </div>
-              </div>
-              {/* Bullets as distinct items */}
-              <div className="grid items-stretch gap-4 sm:grid-cols-3">
-                {security.local.bullets.map((bullet, index) => (
-                  <Reveal key={bullet} delay={0.26 + index * 0.04}>
-                    <div className="flex h-full items-start gap-3 rounded-2xl border border-border/60 bg-surface/50 px-5 py-4">
-                      <span className="mt-0.5 inline-block h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
-                      <span className="text-sm leading-relaxed text-foreground/65">
-                        {bullet}
-                      </span>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
-            </div>
-          </div>
+        <div className="rounded-2xl border border-border/40 bg-surface/40 px-7 py-7 backdrop-blur">
+          <h3 className="text-lg font-semibold text-foreground/80">
+            {security.local.title}
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-foreground/55">
+            {security.local.body}
+          </p>
+          <ul className="mt-5 flex flex-col gap-2 sm:flex-row sm:gap-6">
+            {security.local.bullets.map((bullet) => (
+              <li key={bullet} className="text-xs leading-relaxed text-foreground/45">
+                {bullet}
+              </li>
+            ))}
+          </ul>
         </div>
       </Reveal>
     </section>
