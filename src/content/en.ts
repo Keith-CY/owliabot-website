@@ -18,8 +18,7 @@ export const content = {
   why: {
     eyebrow: "Design Principles",
     title: "Why OwliaBot",
-    subtitle:
-      "Autonomy is useful only when boundaries are explicit. Otherwise, it is just blind execution.",
+    subtitle: "Autonomy works only with explicit boundaries.",
     items: [
       {
         title: "Crypto-native",
@@ -51,7 +50,7 @@ export const content = {
     title: "Architecture overview",
     subtitle: "Built to stay small",
     body:
-      "Five layers, each with a single responsibility. Keys isolated throughout.",
+      "Messages flow from you, through OwliaBot to Skills. Keys stay isolated in the Vault.",
     flowLabel: "Core flow",
     flow: ["Channels", "Gateway", "Agent Runtime", "Skills", "Owlia Vault"],
     layers: [
@@ -81,9 +80,9 @@ export const content = {
         description: "Isolated credential storage",
       },
     ],
-    footer: "Core stays minimal. Capabilities grow through Skills.",
+    footer: "",
     diagram: {
-      user: "User",
+      user: "You",
       bot: "OwliaBot",
       skillsLabel: "Skills",
       vaultLabel: "Owlia Vault",

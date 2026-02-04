@@ -18,7 +18,7 @@ export const content = {
   why: {
     eyebrow: "设计原则",
     title: "为什么选择 OwliaBot",
-    subtitle: "一个更简洁的，安全边界清晰的 OpenClaw。",
+    subtitle: "更简洁、更清晰的安全边界。", 
     items: [
       {
         title: "内置加密钱包",
@@ -50,9 +50,23 @@ export const content = {
     title: "架构总览",
     subtitle: "保持极简",
     body:
-      "五层流水线，每层职责单一。密钥全程隔离。",
+      "消息从你出发，经 OwliaBot 路由到 Skills 执行，密钥始终隔离在 Vault 中。",
     flowLabel: "核心流程",
     flow: ["Channels", "Gateway", "Agent Runtime", "Skills", "Owlia Vault"],
+    diagram: {
+      user: "你",
+      bot: "OwliaBot",
+      skillsLabel: "Skills",
+      vaultLabel: "Owlia Vault",
+      skills: [
+        "Health Factor 守护",
+        "资产概览",
+        "执行引擎",
+        "Uniswap V3 LP 管理",
+        "再融资路由",
+      ],
+      vault: ["加密钱包", "API Key"],
+    },
     layers: [
       {
         label: "Channels",
@@ -80,21 +94,7 @@ export const content = {
         description: "隔离的凭证存储",
       },
     ],
-    footer: "核心保持极简，能力通过 Skills 扩展。",
-    diagram: {
-      user: "用户",
-      bot: "OwliaBot",
-      skillsLabel: "Skills",
-      vaultLabel: "Owlia Vault",
-      skills: [
-        "Health Factor Guardian",
-        "Portfolio Overview",
-        "Execution Engine",
-        "Uniswap V3 LP Manager",
-        "Refinance Router",
-      ],
-      vault: ["Crypto Wallet", "API Key"],
-    },
+    footer: "",
   },
   skills: {
     title: "Skills 系统",
