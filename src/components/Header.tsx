@@ -46,12 +46,12 @@ export default function Header({ nav, links, lang }: HeaderProps) {
               href={links.x}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex size-8 items-center justify-center rounded-full text-foreground/70 transition hover:text-foreground"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-border/70 bg-surface/70 text-foreground/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] backdrop-blur transition hover:text-foreground dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]"
               aria-label="OwliaBot on X"
             >
               <svg
                 aria-hidden="true"
-                className="h-3.5 w-3.5"
+                className="h-4 w-4"
                 viewBox="0 0 24 24"
                 fill="currentColor"
               >
@@ -86,12 +86,12 @@ export default function Header({ nav, links, lang }: HeaderProps) {
               href={links.x}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex size-7 items-center justify-center rounded-full text-foreground/70 transition hover:text-foreground"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-border/70 bg-surface/70 text-foreground/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] backdrop-blur transition hover:text-foreground dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]"
               aria-label="OwliaBot on X"
             >
               <svg
                 aria-hidden="true"
-                className="h-3.5 w-3.5"
+                className="h-4 w-4"
                 viewBox="0 0 24 24"
                 fill="currentColor"
               >
