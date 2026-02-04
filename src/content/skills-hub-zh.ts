@@ -4,7 +4,6 @@ export const skillsHub = {
   subtitle: "探索 OwliaBot 的全部能力",
   description:
     "每个 Skill 都是 OwliaBot 可以为你运行的模块化能力。浏览真实场景 — 从资产总览到自动化 DeFi 策略。",
-  backLabel: "← 返回首页",
   categories: {
     monitoring: "监控与洞察",
     defi: "DeFi 策略",

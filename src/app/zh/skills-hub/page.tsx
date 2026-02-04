@@ -1,4 +1,7 @@
+import { content } from "@/content/zh";
 import { skillsHub } from "@/content/skills-hub-zh";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import SkillsHub from "@/components/SkillsHub";
 
 export const metadata = {
@@ -8,14 +11,17 @@ export const metadata = {
 
 export default function SkillsHubZhPage() {
   return (
-    <SkillsHub
-      title={skillsHub.title}
-      subtitle={skillsHub.subtitle}
-      description={skillsHub.description}
-      backLabel={skillsHub.backLabel}
-      categories={skillsHub.categories}
-      skills={skillsHub.skills}
-      lang={skillsHub.lang}
-    />
+    <div id="top" className="min-h-dvh overflow-hidden bg-background text-foreground">
+      <Header nav={content.nav} links={{ x: content.links.x }} />
+      <SkillsHub
+        title={skillsHub.title}
+        subtitle={skillsHub.subtitle}
+        description={skillsHub.description}
+        categories={skillsHub.categories}
+        skills={skillsHub.skills}
+        lang={skillsHub.lang}
+      />
+      <Footer note={content.footer.note} signature={content.footer.signature} links={content.links} />
+    </div>
   );
 }

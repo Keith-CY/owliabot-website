@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 type Skill = {
   id: string;
   title: string;
@@ -13,7 +11,6 @@ type SkillsHubProps = {
   title: string;
   subtitle: string;
   description: string;
-  backLabel: string;
   categories: Record<string, string>;
   skills: readonly Skill[];
   lang: string;
@@ -31,30 +28,19 @@ export default function SkillsHub({
   title,
   subtitle,
   description,
-  backLabel,
   categories,
   skills,
   lang,
 }: SkillsHubProps) {
-  const homeHref = lang === "zh" ? "/zh" : "/";
-
   return (
-    <div className="mx-auto flex min-h-screen max-w-5xl flex-col gap-12 px-5 py-16 sm:px-8">
-      {/* Header */}
-      <header className="flex flex-col gap-6">
-        <Link
-          href={homeHref}
-          className="inline-flex w-fit items-center gap-1 text-sm font-medium text-foreground/60 transition-colors hover:text-foreground"
-        >
-          {backLabel}
-        </Link>
-        <div className="flex flex-col gap-3">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            {title}
-          </h1>
-          <p className="text-lg font-medium text-foreground/70">{subtitle}</p>
-          <p className="max-w-2xl text-sm text-foreground/60">{description}</p>
-        </div>
+    <div className="mx-auto flex min-h-screen max-w-5xl flex-col gap-12 px-5 pb-16 pt-28 sm:px-8 sm:pt-32">
+      {/* Page title */}
+      <header className="flex flex-col gap-3">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          {title}
+        </h1>
+        <p className="text-lg font-medium text-foreground/70">{subtitle}</p>
+        <p className="max-w-2xl text-sm text-foreground/60">{description}</p>
       </header>
 
       {/* Skills Grid */}
