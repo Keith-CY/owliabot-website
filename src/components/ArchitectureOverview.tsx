@@ -31,7 +31,7 @@ const layerAccents = [
 function ArrowDown() {
   return (
     <div className="flex justify-center py-1">
-      <svg width="20" height="24" viewBox="0 0 20 24" fill="none" className="text-foreground/25">
+      <svg width="20" height="24" viewBox="0 0 20 24" fill="none" className="text-foreground/40">
         <path d="M10 0v20m0 0l-6-6m6 6l6-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </div>
@@ -54,7 +54,7 @@ function LayerRow({ layer, accent, index }: { layer: Layer; accent: typeof layer
           {/* Label */}
           <div className="flex items-center gap-2.5 sm:w-40 shrink-0">
             <span className={`inline-block h-2.5 w-2.5 rounded-full ${accent.dot}`} />
-            <span className="text-sm font-semibold text-foreground/90 tracking-tight">
+            <span className="text-sm font-semibold text-foreground tracking-tight">
               {layer.label}
             </span>
           </div>
@@ -64,7 +64,7 @@ function LayerRow({ layer, accent, index }: { layer: Layer; accent: typeof layer
             {layer.items.map((item) => (
               <span
                 key={item}
-                className="rounded-full border border-border/60 bg-surface/60 px-3 py-1 text-xs font-mono tracking-wide text-foreground/60"
+                className="rounded-full border border-border/60 bg-surface/60 px-3 py-1 text-xs font-mono tracking-wide text-foreground/80"
               >
                 {item}
               </span>
@@ -72,7 +72,7 @@ function LayerRow({ layer, accent, index }: { layer: Layer; accent: typeof layer
           </div>
 
           {/* Description */}
-          <p className="text-xs text-foreground/45 sm:w-52 shrink-0 sm:text-right">
+          <p className="text-xs text-foreground/65 sm:w-52 shrink-0 sm:text-right">
             {layer.description}
           </p>
         </div>
@@ -110,7 +110,7 @@ export default function ArchitectureOverview({
       {/* Footer */}
       {architecture.footer && (
         <Reveal delay={0.36}>
-          <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-foreground/45">
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-foreground/65">
             {architecture.footer}
           </p>
         </Reveal>
