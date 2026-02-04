@@ -153,22 +153,36 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
   const [routeIdx, setRouteIdx] = useState(0);
   const [phase, setPhase] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const route = routes[routeIdx];
+
+  // Mount delay for smooth initial load
+  useEffect(() => {
+    const timer = setTimeout(() => setMounted(true), 300);
+    return () => clearTimeout(timer);
+  }, []);
 
   const advancePhase = useCallback(() => {
     setPhase((p) => {
       if (p < TOTAL_PHASES - 1) return p + 1;
-      setRouteIdx((r) => (r + 1) % routes.length);
+      // Random next route (avoid repeating current)
+      setRouteIdx((current) => {
+        const availableRoutes = routes
+          .map((_, idx) => idx)
+          .filter((idx) => idx !== current);
+        const randomIdx = Math.floor(Math.random() * availableRoutes.length);
+        return availableRoutes[randomIdx];
+      });
       return 0;
     });
   }, []);
 
   useEffect(() => {
-    if (paused) return;
+    if (!mounted || paused) return;
     const t = setTimeout(advancePhase, PHASE_DUR[phase]);
     return () => clearTimeout(t);
-  }, [phase, paused, advancePhase]);
+  }, [phase, paused, mounted, advancePhase]);
 
   const selectRoute = (i: number) => { setRouteIdx(i); setPhase(0); setPaused(false); };
 
