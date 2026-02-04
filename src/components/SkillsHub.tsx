@@ -87,7 +87,7 @@ export default function SkillsHub({
           return (
             <article
               key={skill.id}
-              className="break-inside-avoid flex flex-col gap-4 rounded-[28px] border border-border bg-surface/70 p-6 shadow-[0_6px_16px_rgba(4,6,10,0.04),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur transition-shadow hover:shadow-md dark:shadow-[0_6px_16px_rgba(4,6,10,0.12),_inset_0_1px_0_rgba(255,255,255,0.14)] relative"
+              className="break-inside-avoid flex flex-col gap-4 rounded-[28px] border border-border bg-surface/70 p-6 shadow-[0_6px_16px_rgba(4,6,10,0.04)] backdrop-blur transition-shadow hover:shadow-md dark:shadow-[0_6px_16px_rgba(4,6,10,0.12)] relative"
             >
               {/* Building badge - top right */}
               <span className="absolute top-5 right-5 flex items-center gap-1 rounded-md border border-foreground/10 bg-foreground/5 px-2 py-0.5 text-[10px] font-medium text-foreground/50 dark:border-foreground/20 dark:bg-foreground/10">
