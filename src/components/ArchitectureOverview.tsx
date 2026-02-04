@@ -101,8 +101,10 @@ function animReducer(state: AnimState, action: AnimAction): AnimState {
       return { ...state, phase: state.phase + 1 };
     }
     // Move to next route
+    const nextRoute = (state.routeIdx + 1) % routes.length;
+    console.log(`🎬 Animation: Route ${state.routeIdx} → ${nextRoute}`);
     return {
-      routeIdx: (state.routeIdx + 1) % routes.length,
+      routeIdx: nextRoute,
       phase: 0,
     };
   }
