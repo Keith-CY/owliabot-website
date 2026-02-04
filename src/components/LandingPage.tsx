@@ -117,8 +117,8 @@ export type LandingPageContent = {
     summary: {
       title: string;
       back: string;
-      emailLabel: string;
-      emailPlaceholder: string;
+      telegramLabel: string;
+      telegramPlaceholder: string;
       submit: string;
       submitting: string;
     };

@@ -153,14 +153,14 @@ export const content = {
     summary: {
       title: "你的需求总结：",
       back: "返回补充",
-      emailLabel: "请留下你的邮箱，我们会尽快联系你：",
-      emailPlaceholder: "your@email.com",
+      telegramLabel: "你的 Telegram ID（必填）：",
+      telegramPlaceholder: "@your_telegram_id",
       submit: "提交",
       submitting: "提交中...",
     },
     success: {
       title: "提交成功！",
-      body: "感谢你的反馈。我们已经收到你的需求，会尽快通过邮箱与你联系。",
+      body: "感谢你的反馈。我们已经收到你的需求，会尽快通过 Telegram 与你联系。",
       note: "我们永远不会索要你的私钥。",
     },
   },

@@ -39,8 +39,8 @@ type BuildingProps = {
     summary: {
       title: string;
       back: string;
-      emailLabel: string;
-      emailPlaceholder: string;
+      telegramLabel: string;
+      telegramPlaceholder: string;
       submit: string;
       submitting: string;
     };
@@ -360,11 +360,11 @@ function BuildingInner({ building, lang }: BuildingProps) {
     setStage('SUMMARY');
   };
 
-  const handleEmailSubmit = async (email: string) => {
+  const handleTelegramSubmit = async (telegramId: string) => {
     setIsLoading(true);
     try {
       await submitToNotion({
-        email,
+        telegramId,
         messages,
         confirmedRequirements,
       });
@@ -457,7 +457,7 @@ function BuildingInner({ building, lang }: BuildingProps) {
               confirmedRequirements={confirmedRequirements}
               copy={building.summary}
               onBack={handleBackToConversation}
-              onSubmit={handleEmailSubmit}
+              onSubmit={handleTelegramSubmit}
               isLoading={isLoading}
             />
           )}

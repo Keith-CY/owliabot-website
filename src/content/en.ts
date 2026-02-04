@@ -130,7 +130,7 @@ export const content = {
   building: {
     eyebrow: "Co-build",
     title: "What do you want OwliaBot to do?",
-    body: "Describe the features you want most, and we will prioritize them.",
+    body: "Describe the skills you want most, and we will prioritize them.",
     privacy: "We will never ask for your private keys. No wallet connection required.",
     note: "",
     prompts: {
@@ -153,14 +153,14 @@ export const content = {
     summary: {
       title: "Your requirements summary:",
       back: "Back to add more",
-      emailLabel: "Leave your email and we will reach out soon:",
-      emailPlaceholder: "your@email.com",
+      telegramLabel: "Your Telegram ID (required):",
+      telegramPlaceholder: "@your_telegram_id",
       submit: "Submit",
       submitting: "Submitting...",
     },
     success: {
       title: "Submitted!",
-      body: "Thanks for your feedback. We received your requirements and will contact you by email.",
+      body: "Thanks for your feedback. We received your requirements and will contact you via Telegram.",
       note: "We will never ask for your private keys.",
     },
   },

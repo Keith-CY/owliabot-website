@@ -8,13 +8,13 @@ type BuildingSummaryProps = {
   copy: {
     title: string;
     back: string;
-    emailLabel: string;
-    emailPlaceholder: string;
+    telegramLabel: string;
+    telegramPlaceholder: string;
     submit: string;
     submitting: string;
   };
   onBack: () => void;
-  onSubmit: (email: string) => void;
+  onSubmit: (telegramId: string) => void;
   isLoading: boolean;
 };
 
@@ -25,12 +25,12 @@ export default function BuildingSummary({
   onSubmit,
   isLoading,
 }: BuildingSummaryProps) {
-  const [email, setEmail] = useState('');
+  const [telegramId, setTelegramId] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim() && !isLoading) {
-      onSubmit(email.trim());
+    if (telegramId.trim() && !isLoading) {
+      onSubmit(telegramId.trim());
     }
   };
 
@@ -72,24 +72,24 @@ export default function BuildingSummary({
         </ul>
       </div>
 
-      {/* Email Input */}
+      {/* Telegram ID Input */}
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <label htmlFor="email" className="text-sm font-semibold text-foreground">
-          {copy.emailLabel}
+        <label htmlFor="telegramId" className="text-sm font-semibold text-foreground">
+          {copy.telegramLabel}
         </label>
         <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder={copy.emailPlaceholder}
+          id="telegramId"
+          type="text"
+          value={telegramId}
+          onChange={(e) => setTelegramId(e.target.value)}
+          placeholder={copy.telegramPlaceholder}
           required
           disabled={isLoading}
           className="w-full rounded-full border border-border bg-background px-6 py-3 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus:ring-2 focus:ring-foreground/20 disabled:opacity-50"
         />
         <button
           type="submit"
-          disabled={!email.trim() || isLoading}
+          disabled={!telegramId.trim() || isLoading}
           className="rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background transition hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? copy.submitting : copy.submit}

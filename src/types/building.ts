@@ -43,7 +43,7 @@ export type AIResponse = {
 };
 
 export type NotionSubmission = {
-  email: string;
+  telegramId: string;
   messages: Message[];
   confirmedRequirements: ConfirmedRequirement[];
 };
