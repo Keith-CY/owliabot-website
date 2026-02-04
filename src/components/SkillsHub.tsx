@@ -22,13 +22,13 @@ type SkillsHubProps = {
 
 const categoryColors: Record<string, { card: string }> = {
   monitoring: {
-    card: "bg-blue-500 text-white dark:bg-blue-900/40 dark:text-blue-300",
+    card: "bg-blue-600 text-white dark:bg-blue-900/40 dark:text-blue-300",
   },
   defi: {
-    card: "bg-emerald-500 text-white dark:bg-emerald-900/40 dark:text-emerald-300",
+    card: "bg-emerald-600 text-white dark:bg-emerald-900/40 dark:text-emerald-300",
   },
   trading: {
-    card: "bg-amber-500 text-white dark:bg-amber-900/40 dark:text-amber-300",
+    card: "bg-amber-600 text-white dark:bg-amber-900/40 dark:text-amber-300",
   },
 };
 
@@ -100,9 +100,13 @@ export default function SkillsHub({
               {/* Category badge */}
               <div className="flex items-center relative z-10 isolate">
                 <span
-                  className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
-                    colors?.card ?? "bg-gray-200 text-gray-800"
+                  className={`rounded-full px-3 py-1 text-xs font-bold ${
+                    colors?.card ?? "bg-gray-600 text-white"
                   }`}
+                  style={{
+                    WebkitFontSmoothing: 'antialiased',
+                    MozOsxFontSmoothing: 'grayscale',
+                  }}
                 >
                   {categories[skill.category] ?? skill.category}
                 </span>
