@@ -19,6 +19,7 @@ export type LandingPageContent = {
     emphasis: string;
     ctaPrimary: string;
     ctaSecondary: string;
+    ctaSecondaryHref?: string;
     badge?: string;
     status?: string;
   };

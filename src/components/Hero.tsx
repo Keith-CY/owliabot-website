@@ -8,6 +8,7 @@ type HeroProps = {
     emphasis: string;
     ctaPrimary: string;
     ctaSecondary: string;
+    ctaSecondaryHref?: string;
     badge?: string;
     status?: string;
   };
@@ -66,7 +67,9 @@ export default function Hero({ hero }: HeroProps) {
               </a>
               <a
                 className="rounded-full border border-foreground/12 bg-surface/50 px-8 py-4 text-sm font-semibold text-foreground/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.22)] transition hover:-translate-y-[1px] hover:border-foreground/20 hover:text-foreground/90 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
-                href="#architecture"
+                href={hero.ctaSecondaryHref ?? "#architecture"}
+                target={hero.ctaSecondaryHref ? "_blank" : undefined}
+                rel={hero.ctaSecondaryHref ? "noopener noreferrer" : undefined}
               >
                 {hero.ctaSecondary}
               </a>

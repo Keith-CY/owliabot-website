@@ -13,6 +13,7 @@ export const content = {
     emphasis: "Secure. Private. Controllable by design.",
     ctaPrimary: "Co-build OwliaBot",
     ctaSecondary: "Read the Architecture",
+    ctaSecondaryHref: "http://docs.owlia.bot/",
   },
   why: {
     eyebrow: "Design Principles",

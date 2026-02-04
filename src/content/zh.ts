@@ -13,6 +13,7 @@ export const content = {
     emphasis: "安全、隐私、可控，皆为设计的一部分。",
     ctaPrimary: "共建 OwliaBot",
     ctaSecondary: "阅读架构说明",
+    ctaSecondaryHref: "http://docs.owlia.bot/zh",
   },
   why: {
     eyebrow: "设计原则",
