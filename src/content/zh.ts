@@ -110,7 +110,7 @@ export const content = {
     exploreMore: "探索全部 Skills",
   },
   security: {
-    eyebrow: "安全架构",
+    eyebrow: "安全存储",
     title: "Owlia Vault",
     subtitle: "敏感凭证与 Agent 完全隔离。",
     description:

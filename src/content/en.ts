@@ -111,7 +111,7 @@ export const content = {
     exploreMore: "Explore all Skills",
   },
   security: {
-    eyebrow: "Security Architecture",
+    eyebrow: "Secure Storage",
     title: "Owlia Vault",
     subtitle: "Your credentials, isolated from the Agent.",
     description:
