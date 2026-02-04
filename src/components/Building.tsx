@@ -68,7 +68,7 @@ function BuildingInner({ building, lang }: BuildingProps) {
   const [baseIntent, setBaseIntent] = useState<string | null>(null);
   const [pendingRequirements, setPendingRequirements] = useState<PendingRequirement[]>([]);
   const [isHydrated, setIsHydrated] = useState(false);
-  const { clearSelections, selectedOptions } = useBuilding();
+  const { clearSelections } = useBuilding();
   const prompts = building.prompts;
   const storageKey = 'owliabot:building-cache';
   const removeLabel = lang === 'zh' ? '删除需求' : 'Remove requirement';
@@ -148,42 +148,22 @@ function BuildingInner({ building, lang }: BuildingProps) {
     clarifyQuestion?: string
   ) => {
     if (!uiTree?.children) return uiTree;
-    const mappedChildren = uiTree.children.map((child) => {
-      if (child.type !== 'Question') return child;
-      const childProps =
-        child.props && typeof child.props === 'object'
-          ? (child.props as Record<string, unknown>)
-          : {};
-      if (intentType === 'unclear') {
-        return {
-          ...child,
-          props: {
-            ...childProps,
-            text: clarifyQuestion || childProps.text,
-          },
-        };
-      }
+    // Keep AI-generated questions as-is (no longer overriding with refineHint)
+    // Only add clarifyQuestion if unclear and no questions exist
+    const hasQuestion = uiTree.children.some((child) => child.type === 'Question');
+    if (intentType === 'unclear' && !hasQuestion && clarifyQuestion) {
       return {
-        ...child,
-        props: {
-          ...childProps,
-          text: prompts.refineHint,
-        },
+        ...uiTree,
+        children: [
+          ...uiTree.children,
+          {
+            type: 'Question',
+            props: { text: clarifyQuestion },
+          },
+        ],
       };
-    });
-    const hasQuestion = mappedChildren.some((child) => child.type === 'Question');
-    if (intentType === 'unclear' && !hasQuestion) {
-      mappedChildren.push({
-        type: 'Question',
-        props: {
-          text: clarifyQuestion || prompts.unclearFallback,
-        },
-      });
     }
-    return {
-      ...uiTree,
-      children: mappedChildren,
-    };
+    return uiTree;
   };
 
   const buildStructuredInput = (base: string, selections: string[], newInput: string, locale: "en" | "zh") => {
@@ -330,19 +310,8 @@ function BuildingInner({ building, lang }: BuildingProps) {
     setIsLoading(true);
     let nextRequirementSeed: string | null = null;
     try {
-      const selectedLabels = Array.from(
-        new Set(
-          [
-            ...Array.from(selectedOptions),
-            ...currentConversation
-              .filter((message) => message.role === 'user')
-              .flatMap((message) => message.selectedOptions ?? []),
-          ].filter(Boolean)
-        )
-      );
-      const summary = selectedLabels.length > 0
-        ? selectedLabels.join('、')
-        : await summarizeRequirement(currentConversation);
+      // Always use AI summarization (no more checkbox selections)
+      const summary = await summarizeRequirement(currentConversation);
 
       // Create confirmed requirement
       const newRequirement: ConfirmedRequirement = {
