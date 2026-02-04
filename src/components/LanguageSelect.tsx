@@ -2,11 +2,43 @@
 
 import { usePathname, useRouter } from "next/navigation";
 
+/**
+ * Strip the language prefix (/en or /zh) from a pathname and return
+ * the remaining sub-path. Examples:
+ *   /zh/skills-hub → /skills-hub
+ *   /en            → /
+ *   /skills-hub    → /skills-hub   (no prefix = English default)
+ */
+function subPath(pathname: string): string {
+  if (pathname.startsWith("/zh")) {
+    const rest = pathname.slice(3); // remove "/zh"
+    return rest || "/";
+  }
+  if (pathname.startsWith("/en")) {
+    const rest = pathname.slice(3);
+    return rest || "/";
+  }
+  return pathname;
+}
+
 export default function LanguageSelect() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const current = pathname?.startsWith("/zh") ? "/zh" : "/en";
+  const isZh = pathname?.startsWith("/zh");
+  const current = isZh ? "/zh" : "/en";
+  const sub = subPath(pathname ?? "/");
+
+  function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    const lang = event.target.value; // "/en" or "/zh"
+    // Build target: for English, sub-paths live at root (e.g. /skills-hub)
+    // For Chinese, sub-paths live under /zh (e.g. /zh/skills-hub)
+    const target =
+      lang === "/en"
+        ? sub === "/" ? "/en" : sub
+        : sub === "/" ? "/zh" : `/zh${sub}`;
+    router.push(target);
+  }
 
   return (
     <div className="group relative h-9 w-9">
@@ -28,7 +60,7 @@ export default function LanguageSelect() {
       </div>
       <select
         value={current}
-        onChange={(event) => router.push(event.target.value)}
+        onChange={handleChange}
         className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
         aria-label="Select language"
       >

@@ -141,7 +141,7 @@ type LandingPageProps = {
 export default function LandingPage({ content }: LandingPageProps) {
   return (
     <div id="top" className="min-h-dvh overflow-hidden bg-background text-foreground">
-      <Header nav={content.nav} links={{ x: content.links.x }} />
+      <Header nav={content.nav} links={{ x: content.links.x }} lang={content.lang} />
       <Hero hero={content.hero} />
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-32 px-6 pb-24 pt-24 sm:px-8 lg:px-12">
         <Pillars eyebrow={content.why.eyebrow} title={content.why.title} subtitle={content.why.subtitle} pillars={content.why.items} />

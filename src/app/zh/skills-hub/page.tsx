@@ -12,7 +12,7 @@ export const metadata = {
 export default function SkillsHubZhPage() {
   return (
     <div id="top" className="min-h-dvh overflow-hidden bg-background text-foreground">
-      <Header nav={content.nav} links={{ x: content.links.x }} />
+      <Header nav={content.nav} links={{ x: content.links.x }} lang="zh" />
       <SkillsHub
         title={skillsHub.title}
         subtitle={skillsHub.subtitle}
