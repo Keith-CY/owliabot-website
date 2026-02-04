@@ -53,7 +53,6 @@ function LayerRow({ layer, accent, index }: { layer: Layer; accent: typeof layer
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
           {/* Label */}
           <div className="flex items-center gap-2.5 sm:w-40 shrink-0">
-            <span className={`inline-block h-2.5 w-2.5 rounded-full ${accent.dot}`} />
             <span className="text-sm font-semibold text-foreground tracking-tight">
               {layer.label}
             </span>

@@ -7,15 +7,15 @@ export const content = {
   hero: {
     title: "An autonomous crypto agent that never crosses your signing boundary.",
     subtitle:
-      "OwliaBot is a self-hosted, crypto-native agent for on-chain operations,\nwith minimal dependencies, extensible skills, and local-first security.",
-    badge: "Owlia Vault",
+      "A self-hosted, crypto-native AI agent — minimal dependencies, extensible skills, local-first.",
+    badge: "OwliaBot",
     status: "Designed and documented. Implementation in progress.",
     emphasis: "Secure. Private. Controllable by design.",
     ctaPrimary: "Co-build OwliaBot",
     ctaSecondary: "Read the Architecture",
   },
   why: {
-    eyebrow: "Principles",
+    eyebrow: "Design Principles",
     title: "Why OwliaBot",
     subtitle:
       "Autonomy is useful only when boundaries are explicit. Otherwise, it is just blind execution.",
@@ -23,25 +23,25 @@ export const content = {
       {
         title: "Crypto-native",
         body:
-          "Built for on-chain workflows, wallets, and DeFi-native operations. OwliaBot understands transactions, signatures, and execution contexts as first-class primitives.",
+          "Natively understands on-chain transactions and signing flows — no middleware translation needed.",
         mechanism: "No abstraction over keys. No off-chain shadow execution.",
       },
       {
         title: "Self-hosted",
         body:
-          "Runs fully on your own machine or server. No hosted agents, no remote custody, and no hidden infrastructure dependencies.",
+          "Runs fully on your own machine or server. No hosted agents, no remote custody, no hidden dependencies.",
         mechanism: "Local-first by default. Remote optional by choice.",
       },
       {
         title: "Owlia Vault",
         body:
-          "All sensitive credentials are stored in an isolated system process, inaccessible to the Agent. Private keys and API keys are called through controlled interfaces.",
-        mechanism: "The Agent can use them, but never see the raw credentials.",
+          "Credentials stored in an isolated process. The Agent calls them through controlled interfaces — never sees the raw keys.",
+        mechanism: "Can use, but never see.",
       },
       {
         title: "Extensible",
         body:
-          "Capabilities scale through Skills. Some Skills are purpose-built for crypto and on-chain scenarios, supporting transactions, assets, contracts, and on-chain data.",
+          "Capabilities grow through Skills — modular plugins covering crypto and on-chain scenarios.",
         mechanism: "Skills define tools, permissions, and security levels.",
       },
     ],
@@ -50,7 +50,7 @@ export const content = {
     title: "Architecture overview",
     subtitle: "Built to stay small",
     body:
-      "Messages flow in through Channels, get routed by the Gateway, processed by the Agent, and executed through Skills. Owlia Vault keeps your keys isolated throughout.",
+      "Five layers, each with a single responsibility. Keys isolated throughout.",
     flowLabel: "Core flow",
     flow: ["Channels", "Gateway", "Agent Runtime", "Skills", "Owlia Vault"],
     layers: [
@@ -86,7 +86,7 @@ export const content = {
     title: "Skills system",
     subtitle: "What can OwliaBot do for you?",
     body:
-      "OwliaBot extends its capabilities through Skills — modular plugins that cover real crypto scenarios. From portfolio tracking to automated DeFi strategies, each skill is designed for practical, everyday use.",
+      "Modular plugins covering real crypto scenarios.",
     cards: [
       {
         title: "Portfolio at a glance",
@@ -115,33 +115,33 @@ export const content = {
     title: "Owlia Vault",
     subtitle: "Your credentials, isolated from the Agent.",
     description:
-      "Owlia Vault stores private keys, API keys, and other sensitive credentials in an isolated system process. The Agent never has direct access — all operations go through a controlled local interface.",
-    status: "Continuously hardening...",
+      "Private keys and API keys stored in an isolated process. The Agent can only operate through controlled interfaces.",
+    status: "",
     tiers: [
       {
         title: "Crypto Wallet",
-        body: "Encrypted private keys live in an isolated environment. The Agent initiates transfers and balance queries through the Vault — without ever touching the raw keys.",
+        body: "Initiate transfers and balance queries through the Vault — without ever touching the raw keys.",
         keyword: "On-chain",
       },
       {
         title: "API Key Safe",
-        body: "Store your exchange and platform API keys in the Vault. The Agent calls them through a controlled interface — it can never export or read the raw credentials.",
+        body: "Exchange and platform credentials securely managed. The Agent calls on demand — can never export.",
         keyword: "Platform Access",
       },
     ],
     footer: "",
     local: {
-      title: "The Agent can use them, but never see them",
-      body: "Your credentials stay under your control. Owlia Vault ensures AI never directly touches your sensitive information.",
+      title: "Even if the Agent is compromised, your credentials remain safe",
+      body: "Your credentials stay under your control.",
       bullets: [
-        "Private keys & API keys encrypted in an isolated process",
-        "Agent can only operate through controlled interfaces",
-        "Even if the Agent is compromised, your credentials remain safe",
+        "Encrypted in an isolated process",
+        "One-way controlled interface",
+        "Compromised Agent ≠ leaked keys",
       ],
     },
   },
   building: {
-    eyebrow: "You are not a user, you are a co-builder",
+    eyebrow: "Co-build",
     title: "What do you want OwliaBot to do?",
     body: "Describe the features you want most, and we will prioritize them.",
     privacy: "We will never ask for your private keys. No wallet connection required.",

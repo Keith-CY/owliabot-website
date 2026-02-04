@@ -7,8 +7,8 @@ export const content = {
   hero: {
     title: "一个永远不会越过签名边界的加密自治 AI Agent。",
     subtitle:
-      "OwliaBot 是一个自托管的加密原生 AI Agent，面向链上操作，\n依赖极简、Skills 可扩展、本地优先安全。",
-    badge: "Owlia Vault",
+      "自托管的加密原生 AI Agent — 极简依赖、Skills 可扩展、本地优先。",
+    badge: "OwliaBot",
     status: "已完成设计与文档，正在实现。",
     emphasis: "安全、隐私、可控，皆为设计的一部分。",
     ctaPrimary: "共建 OwliaBot",
@@ -22,25 +22,25 @@ export const content = {
       {
         title: "加密原生",
         body:
-          "为链上工作流、钱包与 DeFi 操作而生。OwliaBot 将交易、签名与执行上下文视为一等原语。",
+          "原生理解链上交易与签名流程，无需中间层转换。",
         mechanism: "不对密钥做抽象，不做链下影子执行。",
       },
       {
         title: "自托管",
         body:
-          "完全运行在你自己的机器或服务器上。无托管 AI Agent 无远程密钥 无隐藏依赖。",
+          "完全运行在你自己的机器或服务器上。无托管、无远程密钥、无隐藏依赖。",
         mechanism: "本地优先，远程可选。",
       },
       {
         title: "Owlia Vault",
         body:
-          "所有敏感凭证存储在隔离的系统进程中，Agent 无法直接读取。私钥、API Key 等信息通过受控接口安全调用。",
-        mechanism: "Agent 能用，但看不到原始凭证。",
+          "敏感凭证存储在隔离进程中，Agent 通过受控接口调用，永远看不到原始密钥。",
+        mechanism: "能用，但看不到。",
       },
       {
         title: "可扩展",
         body:
-          "能力通过 Skills 扩展。部分 Skills 专为加密与链上场景设计，适配交易、资产、合约与链上数据。",
+          "能力通过 Skills 扩展，模块化插件覆盖加密与链上场景。",
         mechanism: "Skills 定义工具、权限与安全等级。",
       },
     ],
@@ -49,7 +49,7 @@ export const content = {
     title: "架构总览",
     subtitle: "保持极简",
     body:
-      "消息从 Channel 进入，经 Gateway 路由，由 Agent 处理，通过 Skills 执行。Owlia Vault 全程隔离密钥。",
+      "五层流水线，每层职责单一。密钥全程隔离。",
     flowLabel: "核心流程",
     flow: ["Channels", "Gateway", "Agent Runtime", "Skills", "Owlia Vault"],
     layers: [
@@ -85,7 +85,7 @@ export const content = {
     title: "Skills 系统",
     subtitle: "OwliaBot 能为你做什么？",
     body:
-      "OwliaBot 通过 Skills 扩展能力 — 模块化插件覆盖真实的加密场景。从资产总览到自动化 DeFi 策略，每个 Skill 都面向实际使用而设计。",
+      "模块化插件，覆盖真实加密场景。",
     cards: [
       {
         title: "资产一目了然",
@@ -114,33 +114,33 @@ export const content = {
     title: "Owlia Vault",
     subtitle: "敏感凭证与 Agent 完全隔离。",
     description:
-      "Owlia Vault 将私钥、API Key 等敏感信息存储在独立的系统进程中，Agent 无法直接读取。所有操作通过受控的本地接口完成。",
-    status: "持续加固中...",
+      "私钥与 API Key 存储在独立进程中，Agent 只能通过受控接口操作。",
+    status: "",
     tiers: [
       {
         title: "Crypto Wallet",
-        body: "加密私钥存储在隔离环境中，Agent 通过 Vault 发起转账、查询余额等链上操作，全程不接触原始密钥。",
+        body: "通过 Vault 发起转账、查余额等链上操作，全程不接触原始密钥。",
         keyword: "链上操作",
       },
       {
         title: "API Key 保险箱",
-        body: "将交易所、平台的 API Key 存入 Vault，Agent 通过受控接口调用，无法导出或直接读取原始凭证。",
+        body: "交易所与平台凭证安全托管，Agent 按需调用，无法导出。",
         keyword: "平台接入",
       },
     ],
     footer: "",
     local: {
-      title: "Agent 能用，但看不到",
-      body: "你的凭证始终在你掌控之中。Owlia Vault 确保 AI 永远不会直接接触你的敏感信息。",
+      title: "即使 Agent 被攻破，凭证依然安全",
+      body: "凭证始终在你掌控之中。",
       bullets: [
-        "私钥与 API Key 加密存储在隔离进程中",
-        "Agent 只能通过受控接口发起操作",
-        "即使 Agent 被攻破，凭证依然安全",
+        "隔离进程加密存储",
+        "受控接口单向调用",
+        "攻破 Agent ≠ 泄露密钥",
       ],
     },
   },
   building: {
-    eyebrow: "你不是用户，是共建者",
+    eyebrow: "一起共建",
     title: "你希望 OwliaBot 帮你做什么？",
     body: "描述你最希望 OwliaBot 实现的功能，我们会优先实现。",
     privacy: "我们永远不会索要你的私钥，无需连接钱包。",
