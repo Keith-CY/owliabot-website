@@ -30,6 +30,16 @@ export default function SkillsSection({ skills, lang }: SkillsSectionProps) {
           subtitle={skills.body}
         />
       </Reveal>
+      <Reveal delay={0.04}>
+        <div className="relative">
+          <div className="absolute inset-0 rounded-[28px] bg-gradient-to-r from-sky-400/15 via-transparent to-emerald-400/15 blur-2xl" />
+          <img
+            src="/owlia-skills.png"
+            alt="OwliaBot Skills overview"
+            className="relative z-10 w-full rounded-[20px] drop-shadow-[0_8px_32px_rgba(56,189,248,0.12)] dark:drop-shadow-[0_8px_32px_rgba(56,189,248,0.2)]"
+          />
+        </div>
+      </Reveal>
       <div className="grid items-stretch gap-6 md:grid-cols-3">
         {skills.cards.map((card, index) => (
           <Reveal key={card.title} delay={0.06 * index}>
