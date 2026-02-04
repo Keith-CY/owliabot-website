@@ -21,11 +21,6 @@ type ArchitectureOverviewProps = {
     body: string;
     flowLabel: string;
     flow: ReadonlyArray<string>;
-    layers: ReadonlyArray<{
-      label: string;
-      items: ReadonlyArray<string>;
-      description: string;
-    }>;
     footer: string;
     diagram?: DiagramData;
   };
@@ -209,11 +204,13 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
       </Reveal>
 
       <Reveal delay={0.08}>
-        <div
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-        >
-          <div className="relative mx-auto w-full" style={{ maxWidth: VB_W, aspectRatio: `${VB_W}/${VB_H}` }}>
+        {/* Outer container with horizontal scroll on mobile */}
+        <div className="overflow-x-auto pb-4 -mx-6 px-6 sm:mx-0 sm:px-0">
+          <div
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+          >
+            <div className="relative mx-auto" style={{ width: `${VB_W}px`, height: `${VB_H}px`, minWidth: `${VB_W}px` }}>
             {/* SVG lines */}
             <svg viewBox={`0 0 ${VB_W} ${VB_H}`} className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="xMidYMid meet">
               {/* Dim base paths (background guides) */}
@@ -291,7 +288,7 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
               ))}
             </div>
           </div>
-
+          </div>
         </div>
       </Reveal>
 
