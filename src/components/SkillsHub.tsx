@@ -81,16 +81,23 @@ export default function SkillsHub({
       </header>
 
       {/* Skills Masonry Grid */}
-      <div className="columns-1 gap-6 sm:columns-2 space-y-6">
+      <div className="columns-1 gap-6 sm:columns-2 space-y-6" style={{ WebkitPerspective: 1000 }}>
         {skills.map((skill) => {
           const colors = categoryColors[skill.category];
           return (
             <article
               key={skill.id}
               className="break-inside-avoid flex flex-col gap-4 rounded-[28px] border border-border bg-white dark:bg-surface p-6 shadow-[0_6px_16px_rgba(4,6,10,0.04)] transition-shadow hover:shadow-md dark:shadow-[0_6px_16px_rgba(4,6,10,0.12)] relative"
+              style={{ transform: 'translateZ(0)' }}
             >
               {/* Building badge - top right */}
-              <span className="absolute top-5 right-5 z-10 isolate flex items-center gap-1 rounded-md border border-foreground/10 bg-foreground/5 px-2 py-0.5 text-[10px] font-medium text-foreground/50 dark:border-foreground/20 dark:bg-foreground/10">
+              <span 
+                className="absolute top-5 right-5 z-10 flex items-center gap-1 rounded-md border border-foreground/10 bg-foreground/5 px-2 py-0.5 text-[10px] font-medium text-foreground/50 dark:border-foreground/20 dark:bg-foreground/10"
+                style={{
+                  transform: 'translateZ(0)',
+                  willChange: 'transform',
+                }}
+              >
                 <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
@@ -98,7 +105,7 @@ export default function SkillsHub({
               </span>
 
               {/* Category badge */}
-              <div className="flex items-center relative z-10 isolate">
+              <div className="flex items-center relative z-10">
                 <span
                   className={`rounded-full px-3 py-1 text-xs font-bold ${
                     colors?.card ?? "bg-gray-600 text-white"
@@ -106,6 +113,8 @@ export default function SkillsHub({
                   style={{
                     WebkitFontSmoothing: 'antialiased',
                     MozOsxFontSmoothing: 'grayscale',
+                    transform: 'translateZ(0)',
+                    willChange: 'transform',
                   }}
                 >
                   {categories[skill.category] ?? skill.category}
