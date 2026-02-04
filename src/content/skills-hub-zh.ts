@@ -46,7 +46,7 @@ export const skillsHub = {
       category: "defi",
       tagline: "杠杆收益 + 自动对冲",
       description:
-        "在 Euler (Base) 上运行 weETH 杠杆收益策略，同时通过 Binance ETH 永续空单保持 Delta 中性。根据收益、资金费和风险约束自动调整杠杆和对冲比例。",
+        "在 Euler (Base) 上运行 weETH 杠杆收益策略，同时通过 Binance ETH 永续空单保持 Delta 中性。根据收益、资金费率和风险约束自动调整杠杆和对冲比例。",
       scenario:
         "\"启动 Euler Delta 对冲策略，最高3倍杠杆\" → OwliaBot 开仓、监控健康度、每日再平衡对冲、资金费超过收益时自动停止。",
     },
@@ -62,7 +62,7 @@ export const skillsHub = {
     },
     {
       id: "006",
-      title: "利率搬家",
+      title: "利率迁移",
       category: "defi",
       tagline: "永远拿到最优借贷利率",
       description:

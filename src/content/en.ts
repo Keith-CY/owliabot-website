@@ -7,7 +7,7 @@ export const content = {
   hero: {
     title: "🦉 OwliaBot, an OpenClaw 🦞 designed for Crypto users",
     subtitle:
-      "One-click deployment of your crypto-native AI Agent. Skills freely extensible, assets always under your control.",
+      "Deploy your crypto-native AI Agent with one click. Skills freely extensible. Assets always under your control.",
     badge: "OwliaBot",
     status: "Designed and documented. Implementation in progress.",
     emphasis: "Secure. Private. Controllable by design.",

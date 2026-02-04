@@ -7,7 +7,7 @@ export const content = {
   hero: {
     title: "🦉 OwliaBot，专为 Crypto 用户设计的 OpenClaw 🦞",
     subtitle:
-      "一键部署你的加密原生 AI Agent，Skills 自由扩展，资产始终由你掌握。",
+      "一键部署加密原生 AI Agent，Skills 自由扩展，资产完全由你掌控。",
     badge: "OwliaBot",
     status: "已完成设计与文档，正在实现。",
     emphasis: "安全、隐私、可控，皆为设计的一部分。",
@@ -130,7 +130,7 @@ export const content = {
   building: {
     eyebrow: "一起共建",
     title: "你希望 OwliaBot 帮你做什么？",
-    body: "描述你最希望 OwliaBot 实现的功能，我们会优先实现。",
+    body: "告诉我们你最希望 OwliaBot 实现的功能，我们将优先开发。",
     privacy: "我们永远不会索要你的私钥，无需连接钱包。",
     note: "",
     prompts: {

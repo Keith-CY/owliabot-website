@@ -46,7 +46,7 @@ export const skillsHub = {
       category: "defi",
       tagline: "Leveraged yield with automatic hedging",
       description:
-        "Run a leveraged weETH yield strategy on Euler (Base) while OwliaBot maintains a delta-neutral position through Binance ETH perpetual shorts. Auto-adjusts leverage and hedge ratio based on yield, funding costs, and risk constraints.",
+        "Run a leveraged weETH yield strategy on Euler (Base) while OwliaBot maintains a delta-neutral position through Binance ETH perpetual shorts. Automatically adjusts leverage and hedge ratio based on yield, funding rates, and risk constraints.",
       scenario:
         "\"Start delta-hedged strategy on Euler, max 3x leverage\" → OwliaBot opens positions, monitors health factor, rebalances hedge daily, and stops if funding cost exceeds yield.",
     },
@@ -62,7 +62,7 @@ export const skillsHub = {
     },
     {
       id: "006",
-      title: "Refinance Router",
+      title: "Rate Migration",
       category: "defi",
       tagline: "Always get the best lending rate",
       description:
