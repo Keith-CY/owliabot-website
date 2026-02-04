@@ -60,11 +60,25 @@ export default function Header({ nav, links, lang }: HeaderProps) {
             </a>
           </div>
         </div>
-        {/* Mobile: compact bar */}
-        <div className="flex w-full items-center justify-between sm:hidden">
-          <a href={homeHref} aria-label="Back to home" className="flex size-9 items-center justify-center rounded-full border border-border bg-surface/70 backdrop-blur">
-            <img src="/owliabot.svg" alt="Owliabot logo" className="h-6 w-6 dark:brightness-110" />
+        {/* Mobile: unified pill (same as desktop) */}
+        <div className="flex items-center gap-3 rounded-full border border-border bg-surface/70 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/55 shadow-[0_14px_36px_rgba(5,6,12,0.2),_inset_0_1px_0_rgba(255,255,255,0.5)] backdrop-blur dark:shadow-[0_14px_36px_rgba(5,6,12,0.2),_inset_0_1px_0_rgba(255,255,255,0.14)] sm:hidden">
+          <a href={homeHref} aria-label="Back to home" className="flex size-7 items-center justify-center">
+            <img
+              src="/owliabot.svg"
+              alt="Owliabot logo"
+              className="h-5 w-5 dark:brightness-110"
+            />
           </a>
+          <div className="h-4 w-px bg-foreground/10" />
+          <nav className="flex flex-nowrap items-center gap-3 text-foreground/55">
+            <a className="whitespace-nowrap leading-none text-foreground/55 transition hover:text-foreground/85 visited:text-foreground/55" href={homeHref}>
+              {nav.about}
+            </a>
+            <a className="whitespace-nowrap leading-none text-foreground/55 transition hover:text-foreground/85 visited:text-foreground/55" href={skillsHubHref}>
+              {nav.skillsHub}
+            </a>
+          </nav>
+          <div className="h-4 w-px bg-foreground/10" />
           <div className="flex items-center gap-2">
             <LanguageSelect />
             <ThemeSelect />
@@ -72,7 +86,7 @@ export default function Header({ nav, links, lang }: HeaderProps) {
               href={links.x}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex size-9 items-center justify-center rounded-full border border-border bg-surface/70 text-foreground/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] transition hover:text-foreground"
+              className="flex size-7 items-center justify-center rounded-full text-foreground/70 transition hover:text-foreground"
               aria-label="OwliaBot on X"
             >
               <svg
