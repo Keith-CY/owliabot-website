@@ -1,3 +1,4 @@
+import { ShieldCheck, KeyRound } from "lucide-react";
 import Reveal from "./Reveal";
 import SectionHeader from "./SectionHeader";
 
@@ -23,15 +24,8 @@ type SecurityModelProps = {
 };
 
 const tierIcons = [
-  <svg key="wallet" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-violet-400">
-    <path d="M12 2L3 7v6c0 5.25 3.75 10.13 9 11.25C17.25 23.13 21 18.25 21 13V7l-9-5z" />
-    <path d="M9 12l2 2 4-4" />
-  </svg>,
-  <svg key="key" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-sky-400">
-    <circle cx="8" cy="15" r="5" />
-    <path d="M11.7 11.3L15 8l2 2" />
-    <path d="M15 8l4-4" />
-  </svg>,
+  <ShieldCheck key="wallet" size={24} className="text-violet-400" />,
+  <KeyRound key="key" size={24} className="text-sky-400" />,
 ];
 
 export default function SecurityModel({ security }: SecurityModelProps) {
