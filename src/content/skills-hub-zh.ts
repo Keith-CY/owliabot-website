@@ -1,10 +1,10 @@
 export const skillsHub = {
   lang: "zh",
   title: "Skills Hub",
-  subtitle: "探索 OwliaBot 的全部能力",
+  subtitle: "探索 OwliaBot 的能力",
   description:
-    "每个 Skill 都是 OwliaBot 可以为你运行的模块化能力。浏览真实场景 — 从资产总览到自动化 DeFi 策略。你也可以创建属于自己的 Skills，让 OwliaBot 为你量身定制。",
-  createSkillCTA: "有什么想创建的 Skill？",
+    "每个 Skill 都是 OwliaBot 的一个能力模块。\n选择并组合 Skills，让 OwliaBot 按你的方式工作。\n需要更多？通过自定义 Skills，构建你的专属 OwliaBot。",
+  createSkillCTA: "有什么想实现的 Skill？",
   categories: {
     monitoring: "监控与洞察",
     defi: "DeFi 策略",
