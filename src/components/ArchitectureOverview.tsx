@@ -160,18 +160,18 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
     if (paused) return;
     
     const timer = setTimeout(() => {
-      setPhase((p) => {
-        if (p < TOTAL_PHASES - 1) {
-          return p + 1;
-        }
-        // Phase complete, move to next route
+      if (phase < TOTAL_PHASES - 1) {
+        // Continue with next phase in current route
+        setPhase(phase + 1);
+      } else {
+        // Current route complete, switch to next route
         setRouteIdx((r) => (r + 1) % routes.length);
-        return 0;
-      });
+        setPhase(0);
+      }
     }, PHASE_DUR[phase]);
     
     return () => clearTimeout(timer);
-  }, [phase, paused]);
+  }, [phase, paused, routeIdx]);
 
   const selectRoute = (i: number) => { setRouteIdx(i); setPhase(0); setPaused(false); };
 
