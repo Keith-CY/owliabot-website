@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { motion } from "framer-motion";
 import Reveal from "./Reveal";
 import SectionHeader from "./SectionHeader";
@@ -85,13 +85,32 @@ function curveBetween(x1: number, y1: number, x2: number, y2: number) {
 }
 
 /* ── Animation ── */
-const PHASE_DUR = [0, 600, 600, 800, 1000]; // 5 phases: idle, User→Bot, Bot→Skill, Skill→Vault, hold
-// 0: idle
-// 1: User→Bot line
-// 2: Bot→Skill curve
-// 3: Skill→Vault curves
-// 4: hold before next route
-const TOTAL_PHASES = 5;
+const PHASE_DUR = [600, 600, 800, 1000]; // 4 phases
+// 0: User→Bot line
+// 1: Bot→Skill curve
+// 2: Skill→Vault curves
+// 3: hold before next route
+const TOTAL_PHASES = 4;
+
+type AnimState = { routeIdx: number; phase: number };
+type AnimAction = { type: 'ADVANCE' } | { type: 'SET_ROUTE'; routeIdx: number };
+
+function animReducer(state: AnimState, action: AnimAction): AnimState {
+  if (action.type === 'ADVANCE') {
+    if (state.phase < TOTAL_PHASES - 1) {
+      return { ...state, phase: state.phase + 1 };
+    }
+    // Move to next route
+    return {
+      routeIdx: (state.routeIdx + 1) % routes.length,
+      phase: 0,
+    };
+  }
+  if (action.type === 'SET_ROUTE') {
+    return { routeIdx: action.routeIdx, phase: 0 };
+  }
+  return state;
+}
 
 function AnimPath({ d, color, phase, target, dur }: {
   d: string; color: string; phase: number; target: number; dur: number;
@@ -150,8 +169,7 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
     vault: ["Crypto Wallet", "API Key"],
   };
 
-  const [routeIdx, setRouteIdx] = useState(0);
-  const [phase, setPhase] = useState(0);
+  const [{ routeIdx, phase }, dispatch] = useReducer(animReducer, { routeIdx: 0, phase: 0 });
   const [paused, setPaused] = useState(false);
 
   const route = routes[routeIdx];
@@ -160,20 +178,16 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
     if (paused) return;
     
     const timer = setTimeout(() => {
-      if (phase < TOTAL_PHASES - 1) {
-        // Continue with next phase in current route
-        setPhase(phase + 1);
-      } else {
-        // Current route complete, switch to next route
-        setRouteIdx((r) => (r + 1) % routes.length);
-        setPhase(0);
-      }
+      dispatch({ type: 'ADVANCE' });
     }, PHASE_DUR[phase]);
     
     return () => clearTimeout(timer);
-  }, [phase, paused, routeIdx]);
+  }, [phase, paused]);
 
-  const selectRoute = (i: number) => { setRouteIdx(i); setPhase(0); setPaused(false); };
+  const selectRoute = (i: number) => { 
+    dispatch({ type: 'SET_ROUTE', routeIdx: i }); 
+    setPaused(false); 
+  };
 
   // ── Build all paths for current route ──
 
@@ -189,11 +203,11 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
     line: curveBetween(COL_SKILL + COL_SKILL_W, skillCY(si), COL_VAULT, vaultCY(vi)),
   }));
 
-  // Active states
-  const userLit = phase >= 1;
-  const botLit = phase >= 2;
-  const skillLit = phase >= 3;
-  const vaultLit = phase >= 3;
+  // Active states (phase 0-3)
+  const userLit = phase >= 0;
+  const botLit = phase >= 1;
+  const skillLit = phase >= 2;
+  const vaultLit = phase >= 2;
 
   return (
     <section id="architecture" className="scroll-mt-24 flex flex-col gap-8 sm:scroll-mt-28">
@@ -221,15 +235,15 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
               ))}
 
               {/* Animated paths */}
-              {/* Phase 1: User → Bot */}
-              <AnimPath d={lineUserBot} color={route.color} phase={phase} target={1} dur={PHASE_DUR[1]} />
+              {/* Phase 0: User → Bot */}
+              <AnimPath d={lineUserBot} color={route.color} phase={phase} target={0} dur={PHASE_DUR[0]} />
 
-              {/* Phase 2: Bot → Skill */}
-              <AnimPath d={lineBotSkill} color={route.color} phase={phase} target={2} dur={PHASE_DUR[2]} />
+              {/* Phase 1: Bot → Skill */}
+              <AnimPath d={lineBotSkill} color={route.color} phase={phase} target={1} dur={PHASE_DUR[1]} />
 
-              {/* Phase 3: Skill → Vault */}
+              {/* Phase 2: Skill → Vault */}
               {vaultPaths.map((v, i) => (
-                <AnimPath key={i} d={v.line} color={route.color} phase={phase} target={3} dur={PHASE_DUR[3]} />
+                <AnimPath key={i} d={v.line} color={route.color} phase={phase} target={2} dur={PHASE_DUR[2]} />
               ))}
             </svg>
 
