@@ -63,14 +63,35 @@ export default function SecurityModel({ security }: SecurityModelProps) {
 
         {/* Right: Vault illustration */}
         <Reveal delay={0.12}>
-          <div className="hidden lg:flex h-full items-center justify-center relative">
-            {/* Glow effect behind image */}
-            <div className="absolute inset-0 rounded-[28px] bg-gradient-to-br from-violet-400/20 via-transparent to-sky-400/20 blur-2xl" />
-            <img
-              src="/owlia-vault.png"
-              alt="Owlia Vault"
-              className="relative z-10 w-full max-w-md rounded-[20px] drop-shadow-[0_8px_32px_rgba(124,58,237,0.15)] dark:drop-shadow-[0_8px_32px_rgba(124,58,237,0.25)]"
+          <div className="hidden lg:flex h-full items-center justify-center relative overflow-visible">
+            {/* Organic blob glow behind image */}
+            <div
+              className="absolute -inset-8 opacity-60 blur-3xl dark:opacity-40"
+              style={{
+                background: "radial-gradient(ellipse 70% 60% at 55% 45%, rgba(139,92,246,0.25), transparent 70%), radial-gradient(ellipse 50% 70% at 30% 70%, rgba(56,189,248,0.2), transparent 65%)",
+              }}
             />
+            {/* Organic clip path — fluid blob shape */}
+            <div
+              className="relative z-10 w-full max-w-md"
+              style={{
+                clipPath: "url(#vault-blob)",
+              }}
+            >
+              <img
+                src="/owlia-vault.png"
+                alt="Owlia Vault"
+                className="w-full"
+              />
+            </div>
+            {/* SVG clip definition — organic blob */}
+            <svg className="absolute h-0 w-0" aria-hidden="true">
+              <defs>
+                <clipPath id="vault-blob" clipPathUnits="objectBoundingBox">
+                  <path d="M0.5,0.02 C0.75,0,1,0.15,0.98,0.4 C0.96,0.65,1,0.85,0.82,0.95 C0.64,1.05,0.35,1.02,0.18,0.92 C0.01,0.82,0,0.6,0.03,0.38 C0.06,0.16,0.25,0.04,0.5,0.02 Z" />
+                </clipPath>
+              </defs>
+            </svg>
           </div>
         </Reveal>
       </div>
