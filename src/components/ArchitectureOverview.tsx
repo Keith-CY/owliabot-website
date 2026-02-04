@@ -241,9 +241,9 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
               {/* Skills label */}
               <div className="absolute" style={{
                 left: `${(COL_SKILL / VB_W) * 100}%`,
-                top: `${((SKILL_Y0 - 28) / VB_H) * 100}%`,
+                top: `${((SKILL_Y0 - 34) / VB_H) * 100}%`,
               }}>
-                <span className="text-[11px] font-semibold uppercase tracking-widest text-foreground/25">
+                <span className="text-[11px] font-semibold uppercase tracking-widest text-foreground/40">
                   {diagram.skillsLabel}
                 </span>
               </div>
@@ -267,9 +267,9 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
               {/* Vault label */}
               <div className="absolute" style={{
                 left: `${(COL_VAULT / VB_W) * 100}%`,
-                top: `${((VAULT_Y0 - 28) / VB_H) * 100}%`,
+                top: `${((VAULT_Y0 - 34) / VB_H) * 100}%`,
               }}>
-                <span className="text-[11px] font-semibold uppercase tracking-widest text-foreground/25">
+                <span className="text-[11px] font-semibold uppercase tracking-widest text-foreground/40">
                   {diagram.vaultLabel}
                 </span>
               </div>
