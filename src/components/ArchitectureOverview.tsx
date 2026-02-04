@@ -94,15 +94,16 @@ function curveBetween(x1: number, y1: number, x2: number, y2: number) {
 function cardWrapTop(x: number, y: number, w: number, h: number, r: number) {
   const cy = y + h / 2;
   const right = x + w;
-  const cpOffset = 20; // Control point offset for smoother curves
-  // Left center → curve up → top-left corner arc → top edge → top-right corner arc → curve down → right center
+  // Left center → top-left corner (quarter circle) → top edge → top-right corner (quarter circle) → right center
+  // Use smooth cubic bezier to approximate quarter circles at corners
+  const k = 0.5522847498; // Bezier constant for circle approximation (4/3 * (√2 - 1))
   return (
     `M${x},${cy}` +
-    ` C${x - cpOffset},${cy} ${x - cpOffset},${y + r} ${x},${y + r}` + // Smooth approach to top-left
-    ` C${x},${y} ${x},${y} ${x + r},${y}` + // Top-left corner arc
+    ` L${x},${y + r}` + // Vertical line to corner start
+    ` C${x},${y + r * (1 - k)} ${x + r * (1 - k)},${y} ${x + r},${y}` + // Top-left corner arc
     ` L${right - r},${y}` + // Top edge
-    ` C${right},${y} ${right},${y} ${right},${y + r}` + // Top-right corner arc
-    ` C${right + cpOffset},${y + r} ${right + cpOffset},${cy} ${right},${cy}` // Smooth descent to right center
+    ` C${right - r * (1 - k)},${y} ${right},${y + r * (1 - k)} ${right},${y + r}` + // Top-right corner arc
+    ` L${right},${cy}` // Vertical line to right center
   );
 }
 
@@ -110,15 +111,15 @@ function cardWrapBottom(x: number, y: number, w: number, h: number, r: number) {
   const cy = y + h / 2;
   const bottom = y + h;
   const right = x + w;
-  const cpOffset = 20; // Control point offset for smoother curves
-  // Left center → curve down → bottom-left corner arc → bottom edge → bottom-right corner arc → curve up → right center
+  // Left center → bottom-left corner (quarter circle) → bottom edge → bottom-right corner (quarter circle) → right center
+  const k = 0.5522847498; // Bezier constant for circle approximation
   return (
     `M${x},${cy}` +
-    ` C${x - cpOffset},${cy} ${x - cpOffset},${bottom - r} ${x},${bottom - r}` + // Smooth approach to bottom-left
-    ` C${x},${bottom} ${x},${bottom} ${x + r},${bottom}` + // Bottom-left corner arc
+    ` L${x},${bottom - r}` + // Vertical line to corner start
+    ` C${x},${bottom - r * (1 - k)} ${x + r * (1 - k)},${bottom} ${x + r},${bottom}` + // Bottom-left corner arc
     ` L${right - r},${bottom}` + // Bottom edge
-    ` C${right},${bottom} ${right},${bottom} ${right},${bottom - r}` + // Bottom-right corner arc
-    ` C${right + cpOffset},${bottom - r} ${right + cpOffset},${cy} ${right},${cy}` // Smooth ascent to right center
+    ` C${right - r * (1 - k)},${bottom} ${right},${bottom - r * (1 - k)} ${right},${bottom - r}` + // Bottom-right corner arc
+    ` L${right},${cy}` // Vertical line to right center
   );
 }
 
