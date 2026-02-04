@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import Reveal from "./Reveal";
 import SectionHeader from "./SectionHeader";
@@ -21,7 +21,7 @@ type ArchitectureOverviewProps = {
   };
 };
 
-/* ── Skills displayed in the diagram ── */
+/* ── Data ── */
 const skills = [
   "Health Factor Guardian",
   "Portfolio Overview",
@@ -30,67 +30,115 @@ const skills = [
   "Refinance Router",
 ];
 
-/* ── Vault targets ── */
 const vaultItems = ["Crypto Wallet", "API Key"];
 
-/* ── Routes: skill index → vault index(es) ── */
 type Route = {
   skillIdx: number;
-  vaultIdxs: number[]; // 0 = Crypto Wallet, 1 = API Key
-  color: string;       // CSS stroke color
+  vaultIdxs: number[];
+  color: string;
 };
 
 const routes: Route[] = [
-  { skillIdx: 0, vaultIdxs: [0],    color: "#38bdf8" },  // sky
-  { skillIdx: 1, vaultIdxs: [1],    color: "#a78bfa" },  // violet
-  { skillIdx: 2, vaultIdxs: [0, 1], color: "#fbbf24" },  // amber
-  { skillIdx: 3, vaultIdxs: [0],    color: "#34d399" },  // emerald
-  { skillIdx: 4, vaultIdxs: [0],    color: "#fb7185" },  // rose
+  { skillIdx: 0, vaultIdxs: [0],    color: "#38bdf8" },
+  { skillIdx: 1, vaultIdxs: [1],    color: "#a78bfa" },
+  { skillIdx: 2, vaultIdxs: [0, 1], color: "#fbbf24" },
+  { skillIdx: 3, vaultIdxs: [0],    color: "#34d399" },
+  { skillIdx: 4, vaultIdxs: [0],    color: "#fb7185" },
 ];
 
-/* ── SVG layout constants (viewBox 800×320) ── */
-const VB_W = 800;
-const VB_H = 320;
+/* ── Layout constants (SVG viewBox 900×340) ── */
+const VB_W = 900;
+const VB_H = 340;
 
-// Column X positions (center of each node)
-const X_USER = 50;
-const X_BOT = 190;
-const X_SKILL_LEFT = 370;   // left edge of skill card
-const X_SKILL = 460;        // center of skill labels
-const X_VAULT_LEFT = 610;   // left edge of vault card
-const X_VAULT = 700;        // center of vault labels
+// Card dimensions
+const CARD_W = 170;
+const CARD_H = 32;
+const CARD_R = 12; // border-radius
 
-// Y positions for skill items (5 items, evenly spaced)
-const SKILL_Y_START = 60;
-const SKILL_Y_GAP = 50;
-const skillY = (i: number) => SKILL_Y_START + i * SKILL_Y_GAP;
+// Column positions (left edge of cards)
+const COL_USER_X = 10;
+const COL_BOT_X = 140;
+const COL_SKILL_X = 380;
+const COL_VAULT_X = 700;
 
-// Y positions for vault items (2 items)
-const VAULT_Y_START = 120;
-const VAULT_Y_GAP = 70;
-const vaultY = (i: number) => VAULT_Y_START + i * VAULT_Y_GAP;
-
-// Center Y for User and OwliaBot
+// Y center for User and OwliaBot
 const CENTER_Y = 160;
 
-/* ── Build SVG paths ── */
+// Skill card Y positions (5 items)
+const SKILL_GAP = 48;
+const SKILL_Y_START = 65;
+const skillCenterY = (i: number) => SKILL_Y_START + i * SKILL_GAP + CARD_H / 2;
+
+// Vault card Y positions (2 items)
+const VAULT_GAP = 60;
+const VAULT_Y_START = 110;
+const vaultCenterY = (i: number) => VAULT_Y_START + i * VAULT_GAP + CARD_H / 2;
+
+// Label Y positions (above the cards)
+const SKILL_LABEL_Y = SKILL_Y_START - 22;
+const VAULT_LABEL_Y = VAULT_Y_START - 22;
+
+/* ── Path builders ── */
+
+// Straight horizontal line
 function straightPath(x1: number, y1: number, x2: number, y2: number) {
   return `M${x1},${y1} L${x2},${y2}`;
 }
 
-function curvePath(x1: number, y1: number, x2: number, y2: number) {
-  const cpx = (x1 + x2) / 2;
-  return `M${x1},${y1} C${cpx},${y1} ${cpx},${y2} ${x2},${y2}`;
+// Curve from right edge of source → left center of target card,
+// with a small arc wrapping around the card's left side for the "hug" effect
+function curveToCard(
+  srcX: number,
+  srcY: number,
+  cardX: number,
+  cardCenterY: number,
+) {
+  // Approach point: slightly left of card
+  const approachX = cardX - 14;
+  // Control points for the main bezier
+  const cpx = (srcX + approachX) / 2;
+
+  // Arc around the card left edge: come in from the left, curve around the rounded corner
+  const arcStartY = cardCenterY - CARD_R;
+  const arcEndY = cardCenterY;
+
+  return (
+    `M${srcX},${srcY} ` +
+    `C${cpx},${srcY} ${cpx},${arcStartY} ${approachX},${arcStartY} ` +
+    `Q${cardX - 2},${arcStartY} ${cardX - 2},${arcEndY}`
+  );
+}
+
+// Curve from right edge of card → onwards to next column left edge
+function curveFromCard(
+  cardRightX: number,
+  cardCenterY: number,
+  destCardX: number,
+  destCenterY: number,
+) {
+  // Start from right edge of source card, arc away
+  const departX = cardRightX + 2;
+  const departY = cardCenterY;
+  const arcEndY = cardCenterY + (destCenterY > cardCenterY ? CARD_R : -CARD_R);
+
+  // Approach destination card left side
+  const approachX = destCardX - 14;
+  const destArcStartY = destCenterY - CARD_R;
+  const destArcEndY = destCenterY;
+
+  const cpx = (departX + approachX) / 2;
+
+  return (
+    `M${departX},${departY} ` +
+    `Q${departX},${arcEndY} ${departX + 12},${arcEndY} ` +
+    `C${cpx},${arcEndY} ${cpx},${destArcStartY} ${approachX},${destArcStartY} ` +
+    `Q${destCardX - 2},${destArcStartY} ${destCardX - 2},${destArcEndY}`
+  );
 }
 
 /* ── Animation phases ── */
-// Phase 0: idle (nothing lit)
-// Phase 1: User → OwliaBot line draws
-// Phase 2: OwliaBot → Skill curve draws
-// Phase 3: Skill → Vault curve draws
-// Phase 4: hold
-const PHASE_DURATION = [0, 600, 700, 700, 1200]; // ms per phase
-const TOTAL_CYCLE = PHASE_DURATION.reduce((a, b) => a + b, 0);
+const PHASE_DURATION = [0, 500, 600, 600, 1400]; // ms
+const TOTAL_PHASES = 5;
 
 /* ── Animated SVG path ── */
 function AnimatedPath({
@@ -123,9 +171,49 @@ function AnimatedPath({
       }}
       transition={{
         pathLength: { duration: isAnimating ? duration / 1000 : 0, ease: "easeOut" },
-        opacity: { duration: 0.15 },
+        opacity: { duration: 0.1 },
       }}
     />
+  );
+}
+
+/* ── Card component (positioned absolutely in SVG-space via foreignObject or overlay) ── */
+function FlowCard({
+  label,
+  x,
+  y,
+  w,
+  active,
+  onClick,
+}: {
+  label: string;
+  x: number;
+  y: number;
+  w: number;
+  active: boolean;
+  onClick?: () => void;
+}) {
+  return (
+    <div
+      className={`
+        absolute flex items-center rounded-xl border px-3 text-xs font-semibold
+        transition-all duration-400
+        ${active
+          ? "border-foreground/20 bg-background text-foreground shadow-sm"
+          : "border-border/40 bg-surface/40 text-foreground/30"
+        }
+        ${onClick ? "cursor-pointer hover:text-foreground/50" : ""}
+      `}
+      style={{
+        left: `${(x / VB_W) * 100}%`,
+        top: `${(y / VB_H) * 100}%`,
+        width: `${(w / VB_W) * 100}%`,
+        height: `${(CARD_H / VB_H) * 100}%`,
+      }}
+      onClick={onClick}
+    >
+      {label}
+    </div>
   );
 }
 
@@ -138,11 +226,9 @@ export default function ArchitectureOverview({
 
   const route = routes[routeIdx];
 
-  // Phase state machine
   const advancePhase = useCallback(() => {
     setPhase((p) => {
-      if (p < 4) return p + 1;
-      // End of cycle → next route
+      if (p < TOTAL_PHASES - 1) return p + 1;
       setRouteIdx((r) => (r + 1) % routes.length);
       return 0;
     });
@@ -154,21 +240,23 @@ export default function ArchitectureOverview({
     return () => clearTimeout(timer);
   }, [phase, paused, advancePhase]);
 
-  // Reset phase when route changes manually
   const selectRoute = (i: number) => {
     setRouteIdx(i);
     setPhase(0);
     setPaused(false);
   };
 
-  // Build paths for current route
-  const pathUserToBot = straightPath(X_USER + 40, CENTER_Y, X_BOT - 40, CENTER_Y);
-  const pathBotToSkill = curvePath(X_BOT + 50, CENTER_Y, X_SKILL_LEFT, skillY(route.skillIdx));
+  // Build paths
+  const userRightX = COL_USER_X + 60;
+  const botLeftX = COL_BOT_X;
+  const botRightX = COL_BOT_X + 90;
+
+  const pathUserToBot = straightPath(userRightX, CENTER_Y, botLeftX, CENTER_Y);
+  const pathBotToSkill = curveToCard(botRightX, CENTER_Y, COL_SKILL_X, skillCenterY(route.skillIdx));
   const pathsSkillToVault = route.vaultIdxs.map((vi) =>
-    curvePath(X_SKILL + 80, skillY(route.skillIdx), X_VAULT_LEFT, vaultY(vi))
+    curveFromCard(COL_SKILL_X + CARD_W, skillCenterY(route.skillIdx), COL_VAULT_X, vaultCenterY(vi))
   );
 
-  // Which nodes are lit
   const userLit = phase >= 1;
   const botLit = phase >= 1;
   const skillLit = phase >= 2;
@@ -184,7 +272,7 @@ export default function ArchitectureOverview({
         />
       </Reveal>
 
-      {/* ── Desktop: animated flow diagram ── */}
+      {/* ── Desktop ── */}
       <Reveal delay={0.08}>
         <div
           className="hidden md:block"
@@ -192,17 +280,17 @@ export default function ArchitectureOverview({
           onMouseLeave={() => setPaused(false)}
         >
           <div className="relative mx-auto" style={{ maxWidth: VB_W, aspectRatio: `${VB_W}/${VB_H}` }}>
-            {/* SVG lines layer */}
+            {/* SVG lines */}
             <svg
               viewBox={`0 0 ${VB_W} ${VB_H}`}
-              className="absolute inset-0 w-full h-full"
+              className="absolute inset-0 w-full h-full pointer-events-none"
               preserveAspectRatio="xMidYMid meet"
             >
-              {/* Base lines (dim) */}
-              <path d={pathUserToBot} fill="none" stroke="currentColor" strokeWidth="1" className="text-foreground/8" />
-              <path d={pathBotToSkill} fill="none" stroke="currentColor" strokeWidth="1" className="text-foreground/8" />
+              {/* Dim base lines */}
+              <path d={pathUserToBot} fill="none" stroke="currentColor" strokeWidth="1" className="text-foreground/6" />
+              <path d={pathBotToSkill} fill="none" stroke="currentColor" strokeWidth="1" className="text-foreground/6" />
               {pathsSkillToVault.map((d, i) => (
-                <path key={i} d={d} fill="none" stroke="currentColor" strokeWidth="1" className="text-foreground/8" />
+                <path key={i} d={d} fill="none" stroke="currentColor" strokeWidth="1" className="text-foreground/6" />
               ))}
 
               {/* Animated lines */}
@@ -213,96 +301,83 @@ export default function ArchitectureOverview({
               ))}
             </svg>
 
-            {/* HTML nodes layer */}
-            <div className="absolute inset-0" style={{ fontSize: 0 }}>
-              {/* User node */}
+            {/* HTML overlay — nodes */}
+            <div className="absolute inset-0">
+              {/* User */}
               <div
-                className="absolute flex items-center justify-center"
-                style={{ left: X_USER - 30, top: CENTER_Y - 18, width: 70, height: 36 }}
+                className="absolute flex items-center"
+                style={{
+                  left: `${(COL_USER_X / VB_W) * 100}%`,
+                  top: `${((CENTER_Y - 16) / VB_H) * 100}%`,
+                }}
               >
-                <span className={`text-sm font-semibold transition-colors duration-300 ${userLit ? "text-foreground" : "text-foreground/35"}`}>
+                <span className={`text-sm font-semibold transition-colors duration-300 ${userLit ? "text-foreground" : "text-foreground/30"}`}>
                   User
                 </span>
               </div>
 
-              {/* OwliaBot node */}
+              {/* OwliaBot */}
+              <FlowCard
+                label="OwliaBot"
+                x={COL_BOT_X}
+                y={CENTER_Y - CARD_H / 2}
+                w={90}
+                active={botLit}
+              />
+
+              {/* Skills label */}
               <div
-                className="absolute flex items-center justify-center"
-                style={{ left: X_BOT - 45, top: CENTER_Y - 18, width: 100, height: 36 }}
+                className="absolute"
+                style={{
+                  left: `${(COL_SKILL_X / VB_W) * 100}%`,
+                  top: `${(SKILL_LABEL_Y / VB_H) * 100}%`,
+                }}
               >
-                <span className={`
-                  rounded-lg border px-3 py-1.5 text-sm font-semibold
-                  transition-all duration-300
-                  ${botLit
-                    ? "border-foreground/20 bg-background text-foreground"
-                    : "border-border/40 bg-surface/40 text-foreground/35"
-                  }
-                `}>
-                  OwliaBot
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-foreground/25">
+                  Skills
                 </span>
               </div>
 
-              {/* Skills card */}
+              {/* Skill cards */}
+              {skills.map((s, i) => (
+                <FlowCard
+                  key={s}
+                  label={s}
+                  x={COL_SKILL_X}
+                  y={SKILL_Y_START + i * SKILL_GAP}
+                  w={CARD_W}
+                  active={skillLit && route.skillIdx === i}
+                  onClick={() => {
+                    const ri = routes.findIndex((r) => r.skillIdx === i);
+                    if (ri >= 0) selectRoute(ri);
+                  }}
+                />
+              ))}
+
+              {/* Vault label */}
               <div
-                className="absolute rounded-2xl border border-border/50 bg-surface/30 backdrop-blur"
+                className="absolute"
                 style={{
-                  left: X_SKILL_LEFT - 10,
-                  top: SKILL_Y_START - 35,
-                  width: 200,
-                  height: skills.length * SKILL_Y_GAP + 20,
+                  left: `${(COL_VAULT_X / VB_W) * 100}%`,
+                  top: `${(VAULT_LABEL_Y / VB_H) * 100}%`,
                 }}
               >
-                <div className="px-4 pt-2 pb-1">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-foreground/30">Skills</span>
-                </div>
-                {skills.map((s, i) => (
-                  <button
-                    key={s}
-                    type="button"
-                    className={`
-                      w-full text-left px-4 py-1.5 text-xs font-medium
-                      transition-all duration-300 cursor-pointer
-                      ${skillLit && route.skillIdx === i
-                        ? "text-foreground"
-                        : "text-foreground/30 hover:text-foreground/50"
-                      }
-                    `}
-                    onClick={() => selectRoute(routes.findIndex((r) => r.skillIdx === i) ?? 0)}
-                  >
-                    {s}
-                  </button>
-                ))}
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-foreground/25">
+                  Owlia Vault
+                </span>
               </div>
 
-              {/* Owlia Vault card */}
-              <div
-                className="absolute rounded-2xl border border-border/50 bg-surface/30 backdrop-blur"
-                style={{
-                  left: X_VAULT_LEFT - 10,
-                  top: VAULT_Y_START - 35,
-                  width: 150,
-                  height: vaultItems.length * VAULT_Y_GAP + 30,
-                }}
-              >
-                <div className="px-4 pt-2 pb-1">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-foreground/30">Owlia Vault</span>
-                </div>
-                {vaultItems.map((v, i) => (
-                  <div
-                    key={v}
-                    className={`
-                      px-4 py-2 text-xs font-medium
-                      transition-all duration-300
-                      ${vaultLit && route.vaultIdxs.includes(i)
-                        ? "text-foreground"
-                        : "text-foreground/30"
-                      }
-                    `}
-                  >
-                    {v}
-                  </div>
-                ))}
-              </div>
+              {/* Vault cards */}
+              {vaultItems.map((v, i) => (
+                <FlowCard
+                  key={v}
+                  label={v}
+                  x={COL_VAULT_X}
+                  y={VAULT_Y_START + i * VAULT_GAP}
+                  w={140}
+                  active={vaultLit && route.vaultIdxs.includes(i)}
+                />
+              ))}
             </div>
           </div>
 
@@ -312,10 +387,7 @@ export default function ArchitectureOverview({
               <button
                 key={i}
                 type="button"
-                className={`
-                  h-1.5 rounded-full transition-all duration-300 cursor-pointer
-                  ${i === routeIdx ? "w-6 bg-foreground/30" : "w-1.5 bg-foreground/10 hover:bg-foreground/20"}
-                `}
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${i === routeIdx ? "w-6 bg-foreground/30" : "w-1.5 bg-foreground/10 hover:bg-foreground/20"}`}
                 onClick={() => selectRoute(i)}
               />
             ))}
@@ -323,50 +395,32 @@ export default function ArchitectureOverview({
         </div>
       </Reveal>
 
-      {/* ── Mobile: simplified vertical flow ── */}
+      {/* ── Mobile ── */}
       <div className="flex flex-col items-center gap-3 md:hidden">
-        <span className={`text-sm font-semibold transition-colors duration-300 ${userLit ? "text-foreground" : "text-foreground/35"}`}>User</span>
+        <span className={`text-sm font-semibold transition-colors duration-300 ${userLit ? "text-foreground" : "text-foreground/30"}`}>User</span>
         <div className="w-px h-5 bg-foreground/10" />
-        <span className={`rounded-lg border px-3 py-1.5 text-sm font-semibold transition-all duration-300 ${botLit ? "border-foreground/20 bg-background text-foreground" : "border-border/40 text-foreground/35"}`}>OwliaBot</span>
+        <span className={`rounded-xl border px-3 py-1.5 text-sm font-semibold transition-all duration-300 ${botLit ? "border-foreground/20 bg-background text-foreground" : "border-border/40 text-foreground/30"}`}>OwliaBot</span>
         <div className="w-px h-5 bg-foreground/10" />
-
-        {/* Active skill */}
-        <div className={`rounded-xl border px-4 py-2 text-sm font-semibold transition-all duration-300 ${skillLit ? "border-foreground/20 bg-background text-foreground" : "border-border/40 text-foreground/35"}`}>
+        <div className={`rounded-xl border px-4 py-2 text-sm font-semibold transition-all duration-300 ${skillLit ? "border-foreground/20 bg-background text-foreground" : "border-border/40 text-foreground/30"}`}>
           {skills[route.skillIdx]}
         </div>
         <div className="w-px h-5 bg-foreground/10" />
-
-        {/* Vault targets */}
         <div className="flex gap-2">
           {vaultItems.map((v, i) => (
-            <span
-              key={v}
-              className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-all duration-300 ${vaultLit && route.vaultIdxs.includes(i) ? "border-foreground/20 bg-background text-foreground" : "border-border/40 text-foreground/30"}`}
-            >
+            <span key={v} className={`rounded-xl border px-3 py-1.5 text-xs font-medium transition-all duration-300 ${vaultLit && route.vaultIdxs.includes(i) ? "border-foreground/20 bg-background text-foreground" : "border-border/40 text-foreground/30"}`}>
               {v}
             </span>
           ))}
         </div>
-
-        {/* Skill selector */}
         <div className="flex flex-wrap justify-center gap-1.5 mt-4">
           {routes.map((r, i) => (
-            <button
-              key={i}
-              type="button"
-              className={`
-                rounded-lg border px-2.5 py-1 text-[10px] font-semibold transition-all duration-300
-                ${i === routeIdx ? "border-foreground/20 bg-background text-foreground" : "border-border/40 text-foreground/30"}
-              `}
-              onClick={() => selectRoute(i)}
-            >
+            <button key={i} type="button" className={`rounded-lg border px-2.5 py-1 text-[10px] font-semibold transition-all duration-300 ${i === routeIdx ? "border-foreground/20 bg-background text-foreground" : "border-border/40 text-foreground/30"}`} onClick={() => selectRoute(i)}>
               {skills[r.skillIdx]}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Footer */}
       {architecture.footer && (
         <Reveal delay={0.36}>
           <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-foreground/65">
