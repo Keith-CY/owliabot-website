@@ -90,49 +90,13 @@ function curveBetween(x1: number, y1: number, x2: number, y2: number) {
   return `M${x1},${y1} C${cpx},${y1} ${cpx},${y2} ${x2},${y2}`;
 }
 
-// Card wrap path: line arrives at left-center, splits top & bottom around card edges, converges at right-center
-function cardWrapTop(x: number, y: number, w: number, h: number, r: number) {
-  const cy = y + h / 2;
-  const right = x + w;
-  // Left center → top-left corner (quarter circle) → top edge → top-right corner (quarter circle) → right center
-  // Use smooth cubic bezier to approximate quarter circles at corners
-  const k = 0.5522847498; // Bezier constant for circle approximation (4/3 * (√2 - 1))
-  return (
-    `M${x},${cy}` +
-    ` L${x},${y + r}` + // Vertical line to corner start
-    ` C${x},${y + r * (1 - k)} ${x + r * (1 - k)},${y} ${x + r},${y}` + // Top-left corner arc
-    ` L${right - r},${y}` + // Top edge
-    ` C${right - r * (1 - k)},${y} ${right},${y + r * (1 - k)} ${right},${y + r}` + // Top-right corner arc
-    ` L${right},${cy}` // Vertical line to right center
-  );
-}
-
-function cardWrapBottom(x: number, y: number, w: number, h: number, r: number) {
-  const cy = y + h / 2;
-  const bottom = y + h;
-  const right = x + w;
-  // Left center → bottom-left corner (quarter circle) → bottom edge → bottom-right corner (quarter circle) → right center
-  const k = 0.5522847498; // Bezier constant for circle approximation
-  return (
-    `M${x},${cy}` +
-    ` L${x},${bottom - r}` + // Vertical line to corner start
-    ` C${x},${bottom - r * (1 - k)} ${x + r * (1 - k)},${bottom} ${x + r},${bottom}` + // Bottom-left corner arc
-    ` L${right - r},${bottom}` + // Bottom edge
-    ` C${right - r * (1 - k)},${bottom} ${right},${bottom - r * (1 - k)} ${right},${bottom - r}` + // Bottom-right corner arc
-    ` L${right},${cy}` // Vertical line to right center
-  );
-}
-
 /* ── Animation ── */
-const PHASE_DUR = [0, 400, 350, 500, 350, 500, 1200]; // 7 phases
+const PHASE_DUR = [0, 600, 600, 800]; // 4 phases: idle, User→Bot, Bot→Skill, Skill→Vault
 // 0: idle
-// 1: User wrap
-// 2: User→Bot line
-// 3: Bot wrap
-// 4: Bot→Skill curve
-// 5: Skill wrap + Skill→Vault curve + Vault wrap
-// 6: hold
-const TOTAL_PHASES = 7;
+// 1: User→Bot line
+// 2: Bot→Skill curve
+// 3: Skill→Vault curves
+const TOTAL_PHASES = 4;
 
 function AnimPath({ d, color, phase, target, dur }: {
   d: string; color: string; phase: number; target: number; dur: number;
@@ -215,37 +179,23 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
 
   // ── Build all paths for current route ──
 
-  // User card wrap
-  const userWrapT = cardWrapTop(COL_USER, CENTER_Y - CARD_H / 2, COL_USER_W, CARD_H, CARD_R);
-  const userWrapB = cardWrapBottom(COL_USER, CENTER_Y - CARD_H / 2, COL_USER_W, CARD_H, CARD_R);
-
   // User → Bot line
   const lineUserBot = linePath(COL_USER + COL_USER_W, CENTER_Y, COL_BOT, CENTER_Y);
-
-  // Bot card wrap
-  const botWrapT = cardWrapTop(COL_BOT, CENTER_Y - CARD_H / 2, COL_BOT_W, CARD_H, CARD_R);
-  const botWrapB = cardWrapBottom(COL_BOT, CENTER_Y - CARD_H / 2, COL_BOT_W, CARD_H, CARD_R);
 
   // Bot → Skill curve
   const si = route.skillIdx;
   const lineBotSkill = curveBetween(COL_BOT + COL_BOT_W, CENTER_Y, COL_SKILL, skillCY(si));
 
-  // Skill card wrap
-  const skillWrapT = cardWrapTop(COL_SKILL, skillY(si), COL_SKILL_W, CARD_H, CARD_R);
-  const skillWrapB = cardWrapBottom(COL_SKILL, skillY(si), COL_SKILL_W, CARD_H, CARD_R);
-
-  // Skill → Vault curves + Vault wraps
+  // Skill → Vault curves
   const vaultPaths = route.vaultIdxs.map((vi) => ({
     line: curveBetween(COL_SKILL + COL_SKILL_W, skillCY(si), COL_VAULT, vaultCY(vi)),
-    wrapT: cardWrapTop(COL_VAULT, vaultY(vi), COL_VAULT_W, CARD_H, CARD_R),
-    wrapB: cardWrapBottom(COL_VAULT, vaultY(vi), COL_VAULT_W, CARD_H, CARD_R),
   }));
 
   // Active states
   const userLit = phase >= 1;
-  const botLit = phase >= 3;
-  const skillLit = phase >= 5;
-  const vaultLit = phase >= 5;
+  const botLit = phase >= 2;
+  const skillLit = phase >= 3;
+  const vaultLit = phase >= 3;
 
   return (
     <section id="architecture" className="scroll-mt-24 flex flex-col gap-8 sm:scroll-mt-28">
@@ -265,37 +215,21 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
           <div className="relative mx-auto w-full" style={{ maxWidth: VB_W, aspectRatio: `${VB_W}/${VB_H}` }}>
             {/* SVG lines */}
             <svg viewBox={`0 0 ${VB_W} ${VB_H}`} className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="xMidYMid meet">
-              {/* Dim base paths */}
-              {[userWrapT, userWrapB, lineUserBot, botWrapT, botWrapB, lineBotSkill, skillWrapT, skillWrapB,
-                ...vaultPaths.flatMap(v => [v.line, v.wrapT, v.wrapB])
-              ].map((d, i) => (
+              {/* Dim base paths (background guides) */}
+              {[lineUserBot, lineBotSkill, ...vaultPaths.map(v => v.line)].map((d, i) => (
                 <path key={i} d={d} fill="none" stroke="currentColor" strokeWidth="1" className="text-foreground/6" />
               ))}
 
               {/* Animated paths */}
-              {/* Phase 1: User wrap */}
-              <AnimPath d={userWrapT} color={route.color} phase={phase} target={1} dur={PHASE_DUR[1]} />
-              <AnimPath d={userWrapB} color={route.color} phase={phase} target={1} dur={PHASE_DUR[1]} />
+              {/* Phase 1: User → Bot */}
+              <AnimPath d={lineUserBot} color={route.color} phase={phase} target={1} dur={PHASE_DUR[1]} />
 
-              {/* Phase 2: User → Bot */}
-              <AnimPath d={lineUserBot} color={route.color} phase={phase} target={2} dur={PHASE_DUR[2]} />
+              {/* Phase 2: Bot → Skill */}
+              <AnimPath d={lineBotSkill} color={route.color} phase={phase} target={2} dur={PHASE_DUR[2]} />
 
-              {/* Phase 3: Bot wrap */}
-              <AnimPath d={botWrapT} color={route.color} phase={phase} target={3} dur={PHASE_DUR[3]} />
-              <AnimPath d={botWrapB} color={route.color} phase={phase} target={3} dur={PHASE_DUR[3]} />
-
-              {/* Phase 4: Bot → Skill */}
-              <AnimPath d={lineBotSkill} color={route.color} phase={phase} target={4} dur={PHASE_DUR[4]} />
-
-              {/* Phase 5: Skill wrap + Skill→Vault + Vault wrap */}
-              <AnimPath d={skillWrapT} color={route.color} phase={phase} target={5} dur={PHASE_DUR[5]} />
-              <AnimPath d={skillWrapB} color={route.color} phase={phase} target={5} dur={PHASE_DUR[5]} />
+              {/* Phase 3: Skill → Vault */}
               {vaultPaths.map((v, i) => (
-                <g key={i}>
-                  <AnimPath d={v.line} color={route.color} phase={phase} target={5} dur={PHASE_DUR[5]} />
-                  <AnimPath d={v.wrapT} color={route.color} phase={phase} target={5} dur={PHASE_DUR[5]} />
-                  <AnimPath d={v.wrapB} color={route.color} phase={phase} target={5} dur={PHASE_DUR[5]} />
-                </g>
+                <AnimPath key={i} d={v.line} color={route.color} phase={phase} target={3} dur={PHASE_DUR[3]} />
               ))}
             </svg>
 
