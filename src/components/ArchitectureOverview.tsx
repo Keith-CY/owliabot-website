@@ -1,6 +1,12 @@
 import Reveal from "./Reveal";
 import SectionHeader from "./SectionHeader";
 
+type Layer = {
+  label: string;
+  items: ReadonlyArray<string>;
+  description: string;
+};
+
 type ArchitectureOverviewProps = {
   architecture: {
     title: string;
@@ -8,10 +14,72 @@ type ArchitectureOverviewProps = {
     body: string;
     flowLabel: string;
     flow: ReadonlyArray<string>;
-    bullets: ReadonlyArray<string>;
-    note?: string;
+    layers: ReadonlyArray<Layer>;
+    footer: string;
   };
 };
+
+/* Accent colors per layer – keeps the diagram visually scannable */
+const layerAccents = [
+  { border: "border-sky-400/30", bg: "bg-sky-400/5", dot: "bg-sky-400" },
+  { border: "border-violet-400/30", bg: "bg-violet-400/5", dot: "bg-violet-400" },
+  { border: "border-amber-400/30", bg: "bg-amber-400/5", dot: "bg-amber-400" },
+  { border: "border-emerald-400/30", bg: "bg-emerald-400/5", dot: "bg-emerald-400" },
+  { border: "border-rose-400/30", bg: "bg-rose-400/5", dot: "bg-rose-400" },
+];
+
+function ArrowDown() {
+  return (
+    <div className="flex justify-center py-1">
+      <svg width="20" height="24" viewBox="0 0 20 24" fill="none" className="text-foreground/25">
+        <path d="M10 0v20m0 0l-6-6m6 6l6-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </div>
+  );
+}
+
+function LayerRow({ layer, accent, index }: { layer: Layer; accent: typeof layerAccents[number]; index: number }) {
+  return (
+    <Reveal delay={0.08 + index * 0.05}>
+      <div
+        className={`
+          relative rounded-2xl border ${accent.border} ${accent.bg}
+          px-5 py-4 backdrop-blur
+          shadow-[0_4px_12px_rgba(4,6,10,0.04),_inset_0_1px_0_rgba(255,255,255,0.3)]
+          dark:shadow-[0_4px_12px_rgba(4,6,10,0.16),_inset_0_1px_0_rgba(255,255,255,0.08)]
+          transition-colors
+        `}
+      >
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+          {/* Label */}
+          <div className="flex items-center gap-2.5 sm:w-40 shrink-0">
+            <span className={`inline-block h-2.5 w-2.5 rounded-full ${accent.dot}`} />
+            <span className="text-sm font-semibold text-foreground/90 tracking-tight">
+              {layer.label}
+            </span>
+          </div>
+
+          {/* Items (pills) */}
+          <div className="flex flex-wrap gap-2 flex-1">
+            {layer.items.map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-border/60 bg-surface/60 px-3 py-1 text-xs font-mono tracking-wide text-foreground/60"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+
+          {/* Description */}
+          <p className="text-xs text-foreground/45 sm:w-52 shrink-0 sm:text-right">
+            {layer.description}
+          </p>
+        </div>
+      </div>
+    </Reveal>
+  );
+}
 
 export default function ArchitectureOverview({
   architecture,
@@ -25,39 +93,28 @@ export default function ArchitectureOverview({
           subtitle={architecture.body}
         />
       </Reveal>
-      <Reveal delay={0.08}>
-        <div className="rounded-[28px] border border-border bg-surface/70 px-6 py-6 shadow-[0_6px_16px_rgba(4,6,10,0.04),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur dark:shadow-[0_6px_16px_rgba(4,6,10,0.12),_inset_0_1px_0_rgba(255,255,255,0.14)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/60">
-            {architecture.flowLabel}
-          </p>
-          <div className="mt-4 flex flex-wrap items-center gap-3 text-xs font-mono uppercase tracking-[0.2em] text-foreground/70">
-            {architecture.flow.map((step, index) => (
-              <span key={step} className="rounded-full border border-border bg-surface/70 px-4 py-2">
-                {step}
-                {index < architecture.flow.length - 1 && (
-                  <span className="ml-3 text-foreground/50">→</span>
-                )}
-              </span>
-            ))}
-          </div>
-        </div>
-      </Reveal>
-      <div className="grid items-stretch gap-4 md:grid-cols-3">
-        {architecture.bullets.map((item, index) => (
-          <Reveal key={item} delay={0.1 + index * 0.04}>
-            <div className="h-full rounded-[24px] border border-border bg-surface/70 px-5 py-5 text-sm text-foreground/70 shadow-[0_8px_18px_rgba(4,6,10,0.12),_inset_0_1px_0_rgba(255,255,255,0.4)] dark:shadow-[0_8px_18px_rgba(4,6,10,0.2),_inset_0_1px_0_rgba(255,255,255,0.12)]">
-              {item}
+
+      {/* Layered architecture diagram */}
+      <div className="flex flex-col">
+        {architecture.layers.map((layer, index) => {
+          const accent = layerAccents[index % layerAccents.length];
+          return (
+            <div key={layer.label}>
+              <LayerRow layer={layer} accent={accent} index={index} />
+              {index < architecture.layers.length - 1 && <ArrowDown />}
             </div>
-          </Reveal>
-        ))}
+          );
+        })}
       </div>
-      {architecture.note ? (
-        <Reveal delay={0.16}>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/50">
-            {architecture.note}
+
+      {/* Footer */}
+      {architecture.footer && (
+        <Reveal delay={0.36}>
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-foreground/45">
+            {architecture.footer}
           </p>
         </Reveal>
-      ) : null}
+      )}
     </section>
   );
 }

@@ -68,8 +68,12 @@ export type LandingPageContent = {
     body: string;
     flowLabel: string;
     flow: ReadonlyArray<string>;
-    bullets: ReadonlyArray<string>;
-    note?: string;
+    layers: ReadonlyArray<{
+      label: string;
+      items: ReadonlyArray<string>;
+      description: string;
+    }>;
+    footer: string;
   };
   skills: {
     title: string;

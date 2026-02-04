@@ -49,15 +49,37 @@ export const content = {
     title: "架构总览",
     subtitle: "保持极简",
     body:
-      "OwliaBot 核心保持极简与本地优先，再通过 Skills 向外扩展。通道可以扩展，但核心保持可审计。",
+      "消息从 Channel 进入，经 Gateway 路由，由 Agent 处理，通过 Skills 执行。Owlia Vault 全程隔离密钥。",
     flowLabel: "核心流程",
-    flow: ["Gateway", "Telegram / Discord", "Agent Runtime", "Skills", "Signer"],
-    bullets: [
-      "Telegram 与 Discord 是首要入口。",
-      "运行时构建上下文、调用工具并返回结果。",
-      "签名能力与 Bot 进程隔离。",
+    flow: ["Channels", "Gateway", "Agent Runtime", "Skills", "Owlia Vault"],
+    layers: [
+      {
+        label: "Channels",
+        items: ["Telegram", "Discord"],
+        description: "消息入口",
+      },
+      {
+        label: "Gateway",
+        items: ["路由", "会话", "策略"],
+        description: "消息路由与会话管理",
+      },
+      {
+        label: "Agent Runtime",
+        items: ["上下文", "LLM", "工具"],
+        description: "决策与工具编排",
+      },
+      {
+        label: "Skills",
+        items: ["DeFi", "资产", "监控"],
+        description: "可扩展能力模块",
+      },
+      {
+        label: "Owlia Vault",
+        items: ["密钥", "凭证", "审计"],
+        description: "隔离的凭证存储",
+      },
     ],
-    note: "更多通道规划中，但核心表面积保持最小。",
+    footer: "核心保持极简，能力通过 Skills 扩展。",
   },
   skills: {
     title: "Skills 系统",
