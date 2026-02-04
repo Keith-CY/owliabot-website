@@ -73,6 +73,14 @@ export type LandingPageContent = {
       description: string;
     }>;
     footer: string;
+    diagram?: {
+      user: string;
+      bot: string;
+      skillsLabel: string;
+      vaultLabel: string;
+      skills: ReadonlyArray<string>;
+      vault: ReadonlyArray<string>;
+    };
   };
   skills: {
     title: string;

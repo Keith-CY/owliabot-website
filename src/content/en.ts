@@ -82,6 +82,20 @@ export const content = {
       },
     ],
     footer: "Core stays minimal. Capabilities grow through Skills.",
+    diagram: {
+      user: "User",
+      bot: "OwliaBot",
+      skillsLabel: "Skills",
+      vaultLabel: "Owlia Vault",
+      skills: [
+        "Health Factor Guardian",
+        "Portfolio Overview",
+        "Execution Engine",
+        "Uniswap V3 LP Manager",
+        "Refinance Router",
+      ],
+      vault: ["Crypto Wallet", "API Key"],
+    },
   },
   skills: {
     title: "Skills system",

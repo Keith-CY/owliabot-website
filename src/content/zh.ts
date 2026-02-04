@@ -18,7 +18,7 @@ export const content = {
   why: {
     eyebrow: "设计原则",
     title: "为什么选择 OwliaBot",
-    subtitle: "只有边界清晰的自治才有意义。否则，只是盲目执行。",
+    subtitle: "一个更简洁的，安全边界清晰的 OpenClaw。",
     items: [
       {
         title: "内置加密钱包",
@@ -81,6 +81,20 @@ export const content = {
       },
     ],
     footer: "核心保持极简，能力通过 Skills 扩展。",
+    diagram: {
+      user: "用户",
+      bot: "OwliaBot",
+      skillsLabel: "Skills",
+      vaultLabel: "Owlia Vault",
+      skills: [
+        "Health Factor Guardian",
+        "Portfolio Overview",
+        "Execution Engine",
+        "Uniswap V3 LP Manager",
+        "Refinance Router",
+      ],
+      vault: ["Crypto Wallet", "API Key"],
+    },
   },
   skills: {
     title: "Skills 系统",
