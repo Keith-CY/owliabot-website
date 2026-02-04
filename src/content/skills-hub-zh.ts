@@ -22,7 +22,7 @@ export const skillsHub = {
     },
     {
       id: "002",
-      title: "代币发射",
+      title: "热点发射",
       category: "trading",
       tagline: "捕捉热点，一键发币",
       description:

@@ -22,7 +22,7 @@ export const skillsHub = {
     },
     {
       id: "002",
-      title: "Token Launch",
+      title: "Trend Launch",
       category: "trading",
       tagline: "Catch trends, launch tokens instantly",
       description:
