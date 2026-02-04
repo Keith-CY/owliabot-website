@@ -2,9 +2,7 @@ import Header from "./Header";
 import Hero from "./Hero";
 import Pillars from "./Pillars";
 import ArchitectureOverview from "./ArchitectureOverview";
-import SkillsSection from "./SkillsSection";
 import SecurityModel from "./SecurityModel";
-import Building from "./Building";
 import Footer from "./Footer";
 
 export type LandingPageContent = {
@@ -156,8 +154,6 @@ export default function LandingPage({ content }: LandingPageProps) {
           <SecurityModel security={content.security} />
         </div>
 
-        <SkillsSection skills={content.skills} lang={content.lang} />
-        <Building building={content.building} lang={content.lang} />
       </main>
       <Footer note={content.footer.note} signature={content.footer.signature} links={content.links} />
     </div>

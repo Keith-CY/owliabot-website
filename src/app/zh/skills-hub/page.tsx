@@ -1,6 +1,7 @@
 import { content } from "@/content/zh";
 import { skillsHub } from "@/content/skills-hub-zh";
 import Header from "@/components/Header";
+import Building from "@/components/Building";
 import Footer from "@/components/Footer";
 import SkillsHub from "@/components/SkillsHub";
 
@@ -21,6 +22,9 @@ export default function SkillsHubZhPage() {
         skills={skillsHub.skills}
         lang={skillsHub.lang}
       />
+      <div className="mx-auto w-full max-w-5xl px-5 pb-16 sm:px-8">
+        <Building building={content.building} lang="zh" />
+      </div>
       <Footer note={content.footer.note} signature={content.footer.signature} links={content.links} />
     </div>
   );
