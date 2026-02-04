@@ -22,7 +22,7 @@ export const content = {
     subtitle: "Simpler, clearer security boundaries.",
     items: [
       {
-        title: "Built-in Crypto Wallet",
+        title: "Shipped with Agentic Wallet Solution",
         body:
           "Secure crypto wallet ready to use. Supports transfers, swaps, DeFi, and more. Your private keys stay under your control.",
         mechanism: "Your keys, your control.",
