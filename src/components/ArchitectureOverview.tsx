@@ -166,14 +166,8 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
   const advancePhase = useCallback(() => {
     setPhase((p) => {
       if (p < TOTAL_PHASES - 1) return p + 1;
-      // Random next route (avoid repeating current)
-      setRouteIdx((current) => {
-        const availableRoutes = routes
-          .map((_, idx) => idx)
-          .filter((idx) => idx !== current);
-        const randomIdx = Math.floor(Math.random() * availableRoutes.length);
-        return availableRoutes[randomIdx];
-      });
+      // Sequential route switching: 0 → 1 → 2 → 3 → 0
+      setRouteIdx((r) => (r + 1) % routes.length);
       return 0;
     });
   }, []);
