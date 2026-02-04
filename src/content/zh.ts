@@ -1,11 +1,8 @@
 export const content = {
   lang: "zh",
   nav: {
-    why: "为什么 OwliaBot",
-    architecture: "架构总览",
-    skills: "Skills 系统",
-    security: "Owlia Vault",
-    building: "共建 OwliaBot",
+    about: "About OwliaBot",
+    skillsHub: "Skills Hub",
   },
   hero: {
     title: "一个永远不会越过签名边界的加密自治 AI Agent。",

@@ -3,11 +3,8 @@ import ThemeSelect from "./ThemeSelect";
 
 type HeaderProps = {
   nav: {
-    why: string;
-    architecture: string;
-    skills: string;
-    security: string;
-    building: string;
+    about: string;
+    skillsHub: string;
   };
   links: {
     x: string;
@@ -35,17 +32,11 @@ export default function Header({ nav, links }: HeaderProps) {
         </div>
         <div className="hidden items-center gap-5 rounded-full border border-border bg-surface/70 px-5 py-2.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/55 shadow-[0_14px_36px_rgba(5,6,12,0.2),_inset_0_1px_0_rgba(255,255,255,0.5)] backdrop-blur dark:shadow-[0_14px_36px_rgba(5,6,12,0.2),_inset_0_1px_0_rgba(255,255,255,0.14)] sm:absolute sm:left-1/2 sm:flex sm:-translate-x-1/2">
           <nav className="flex flex-nowrap items-center gap-5 text-foreground/55">
-            <a className="whitespace-nowrap leading-none text-foreground/55 transition hover:text-foreground/85 visited:text-foreground/55" href="#why">
-              {nav.why}
+            <a className="whitespace-nowrap leading-none text-foreground/55 transition hover:text-foreground/85 visited:text-foreground/55" href="#top">
+              {nav.about}
             </a>
-            <a className="whitespace-nowrap leading-none text-foreground/55 transition hover:text-foreground/85 visited:text-foreground/55" href="#architecture">
-              {nav.architecture}
-            </a>
-            <a className="whitespace-nowrap leading-none text-foreground/55 transition hover:text-foreground/85 visited:text-foreground/55" href="#security">
-              {nav.security}
-            </a>
-            <a className="whitespace-nowrap leading-none text-foreground/55 transition hover:text-foreground/85 visited:text-foreground/55" href="#skills">
-              {nav.skills}
+            <a className="whitespace-nowrap leading-none text-foreground/55 transition hover:text-foreground/85 visited:text-foreground/55" href="/skills-hub">
+              {nav.skillsHub}
             </a>
           </nav>
           <div className="mx-2 h-4 w-px bg-foreground/10" />
@@ -67,12 +58,6 @@ export default function Header({ nav, links }: HeaderProps) {
               >
                 <path d="M18.244 2H21.6l-7.32 8.37L22.4 22h-6.66l-5.214-6.81L4.4 22H1.04l7.83-8.95L1.6 2h6.82l4.71 6.2L18.244 2Zm-1.17 18h1.85L6.94 3.9H4.97l12.104 16.1Z" />
               </svg>
-            </a>
-            <a
-              className="whitespace-nowrap rounded-full bg-foreground px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-background shadow-[0_10px_22px_rgba(5,6,12,0.22),_inset_0_1px_0_rgba(255,255,255,0.6)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(5,6,12,0.28),_inset_0_1px_0_rgba(255,255,255,0.7)]"
-              href="#building"
-            >
-              {nav.building}
             </a>
           </div>
         </div>

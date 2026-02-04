@@ -10,11 +10,8 @@ import Footer from "./Footer";
 export type LandingPageContent = {
   lang: "en" | "zh";
   nav: {
-    why: string;
-    architecture: string;
-    skills: string;
-    security: string;
-    building: string;
+    about: string;
+    skillsHub: string;
   };
   hero: {
     title: string;

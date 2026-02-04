@@ -1,11 +1,8 @@
 export const content = {
   lang: "en",
   nav: {
-    why: "Why OwliaBot",
-    architecture: "Architecture",
-    skills: "Skills",
-    security: "Owlia Vault",
-    building: "Co-build OwliaBot",
+    about: "About OwliaBot",
+    skillsHub: "Skills Hub",
   },
   hero: {
     title: "An autonomous crypto agent that never crosses your signing boundary.",
@@ -53,15 +50,37 @@ export const content = {
     title: "Architecture overview",
     subtitle: "Built to stay small",
     body:
-      "OwliaBot keeps the core minimal and local-first, then extends outward through Skills. Channels can expand, but the core remains deliberate and auditable.",
+      "Messages flow in through Channels, get routed by the Gateway, processed by the Agent, and executed through Skills. Owlia Vault keeps your keys isolated throughout.",
     flowLabel: "Core flow",
-    flow: ["Gateway", "Telegram / Discord", "Agent Runtime", "Skills", "Signer"],
-    bullets: [
-      "Telegram + Discord are first-class entry points.",
-      "Agent runtime builds context, calls tools, and returns responses.",
-      "Signer remains isolated from the bot process.",
+    flow: ["Channels", "Gateway", "Agent Runtime", "Skills", "Owlia Vault"],
+    layers: [
+      {
+        label: "Channels",
+        items: ["Telegram", "Discord"],
+        description: "Entry points",
+      },
+      {
+        label: "Gateway",
+        items: ["Routing", "Sessions", "Policy"],
+        description: "Message routing & session management",
+      },
+      {
+        label: "Agent Runtime",
+        items: ["Context", "LLM", "Tools"],
+        description: "Decision-making & tool orchestration",
+      },
+      {
+        label: "Skills",
+        items: ["DeFi", "Portfolio", "Monitoring"],
+        description: "Extensible capability modules",
+      },
+      {
+        label: "Owlia Vault",
+        items: ["Keys", "Credentials", "Audit"],
+        description: "Isolated credential storage",
+      },
     ],
-    note: "Additional channels are planned without expanding the core surface.",
+    footer: "Core stays minimal. Capabilities grow through Skills.",
   },
   skills: {
     title: "Skills system",
