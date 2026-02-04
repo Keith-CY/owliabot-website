@@ -91,12 +91,13 @@ function curveBetween(x1: number, y1: number, x2: number, y2: number) {
 }
 
 /* ── Animation ── */
-const PHASE_DUR = [0, 600, 600, 800]; // 4 phases: idle, User→Bot, Bot→Skill, Skill→Vault
+const PHASE_DUR = [0, 600, 600, 800, 2000]; // 5 phases: idle, User→Bot, Bot→Skill, Skill→Vault, hold
 // 0: idle
 // 1: User→Bot line
 // 2: Bot→Skill curve
 // 3: Skill→Vault curves
-const TOTAL_PHASES = 4;
+// 4: hold before next route
+const TOTAL_PHASES = 5;
 
 function AnimPath({ d, color, phase, target, dur }: {
   d: string; color: string; phase: number; target: number; dur: number;
