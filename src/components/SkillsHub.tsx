@@ -49,38 +49,35 @@ export default function SkillsHub({
           {title}
         </h1>
         
-        {/* Subtitle + CTA Button */}
-        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
-          <p className="text-lg font-medium text-foreground/70">{subtitle}</p>
-          {createSkillCTA && (
-            <a
-              href="#building"
-              className="group inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2 text-sm font-semibold text-background transition-all hover:shadow-lg hover:scale-105"
-            >
-              <span>{createSkillCTA}</span>
-              <svg
-                className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                />
-              </svg>
-            </a>
-          )}
-        </div>
-        
-        {/* Description with line breaks */}
+        {/* Subtitle/Description with line breaks */}
         <div className="max-w-2xl space-y-2 text-sm text-foreground/60">
-          {description.split('\n').map((line, i) => (
+          {subtitle.split('\n').map((line, i) => (
             <p key={i}>{line}</p>
           ))}
         </div>
+        
+        {/* CTA Button */}
+        {createSkillCTA && (
+          <a
+            href="#building"
+            className="group inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background transition-all hover:shadow-lg hover:scale-105"
+          >
+            <span>{createSkillCTA}</span>
+            <svg
+              className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              />
+            </svg>
+          </a>
+        )}
       </header>
 
       {/* Skills Masonry Grid */}
