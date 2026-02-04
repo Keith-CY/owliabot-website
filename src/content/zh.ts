@@ -24,7 +24,7 @@ export const content = {
       {
         title: "内置 Crypto 钱包",
         body:
-          "内置安全的 Crypto 钱包，开箱即用。支持转账、签名、余额查询等链上操作，私钥始终由你掌控。",
+          "内置安全的 Crypto 钱包，开箱即用。支持转账、Swap、DeFi 等多种链上操作，私钥始终由你掌控。",
         mechanism: "你的密钥，你的控制。",
       },
       {
