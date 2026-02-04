@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Reveal from "./Reveal";
 import SectionHeader from "./SectionHeader";
 
@@ -19,70 +23,26 @@ type ArchitectureOverviewProps = {
   };
 };
 
-/* Accent colors per layer – keeps the diagram visually scannable */
+/* Accent colors per layer */
 const layerAccents = [
-  { border: "border-sky-400/30", bg: "bg-sky-400/5", dot: "bg-sky-400" },
-  { border: "border-violet-400/30", bg: "bg-violet-400/5", dot: "bg-violet-400" },
-  { border: "border-amber-400/30", bg: "bg-amber-400/5", dot: "bg-amber-400" },
-  { border: "border-emerald-400/30", bg: "bg-emerald-400/5", dot: "bg-emerald-400" },
-  { border: "border-rose-400/30", bg: "bg-rose-400/5", dot: "bg-rose-400" },
+  { border: "border-sky-400/30", bg: "bg-sky-400/8", activeBg: "bg-sky-400/15", text: "text-sky-300" },
+  { border: "border-violet-400/30", bg: "bg-violet-400/8", activeBg: "bg-violet-400/15", text: "text-violet-300" },
+  { border: "border-amber-400/30", bg: "bg-amber-400/8", activeBg: "bg-amber-400/15", text: "text-amber-300" },
+  { border: "border-emerald-400/30", bg: "bg-emerald-400/8", activeBg: "bg-emerald-400/15", text: "text-emerald-300" },
+  { border: "border-rose-400/30", bg: "bg-rose-400/8", activeBg: "bg-rose-400/15", text: "text-rose-300" },
 ];
 
-function ArrowDown() {
-  return (
-    <div className="flex justify-center py-1">
-      <svg width="20" height="24" viewBox="0 0 20 24" fill="none" className="text-foreground/40">
-        <path d="M10 0v20m0 0l-6-6m6 6l6-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </div>
-  );
-}
-
-function LayerRow({ layer, accent, index }: { layer: Layer; accent: typeof layerAccents[number]; index: number }) {
-  return (
-    <Reveal delay={0.08 + index * 0.05}>
-      <div
-        className={`
-          relative rounded-2xl border ${accent.border} ${accent.bg}
-          px-5 py-4 backdrop-blur
-          shadow-[0_4px_12px_rgba(4,6,10,0.04),_inset_0_1px_0_rgba(255,255,255,0.3)]
-          dark:shadow-[0_4px_12px_rgba(4,6,10,0.16),_inset_0_1px_0_rgba(255,255,255,0.08)]
-          transition-colors
-        `}
-      >
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
-          {/* Label */}
-          <div className="flex items-center gap-2.5 sm:w-40 shrink-0">
-            <span className="text-sm font-semibold text-foreground tracking-tight">
-              {layer.label}
-            </span>
-          </div>
-
-          {/* Items (pills) */}
-          <div className="flex flex-wrap gap-2 flex-1">
-            {layer.items.map((item) => (
-              <span
-                key={item}
-                className="rounded-full border border-border/60 bg-surface/60 px-3 py-1 text-xs font-mono tracking-wide text-foreground/80"
-              >
-                {item}
-              </span>
-            ))}
-          </div>
-
-          {/* Description */}
-          <p className="text-xs text-foreground/65 sm:w-52 shrink-0 sm:text-right">
-            {layer.description}
-          </p>
-        </div>
-      </div>
-    </Reveal>
-  );
-}
+/* How much each card overlaps the previous one (px) */
+const OVERLAP = 12;
+/* Expanded card extra width */
+const EXPAND_EXTRA = 80;
 
 export default function ArchitectureOverview({
   architecture,
 }: ArchitectureOverviewProps) {
+  const [active, setActive] = useState<number | null>(null);
+  const count = architecture.layers.length;
+
   return (
     <section id="architecture" className="scroll-mt-24 flex flex-col gap-8 sm:scroll-mt-28">
       <Reveal>
@@ -93,15 +53,124 @@ export default function ArchitectureOverview({
         />
       </Reveal>
 
-      {/* Layered architecture diagram */}
-      <div className="flex flex-col">
+      {/* ── Desktop: horizontal overlapping cards ── */}
+      <Reveal delay={0.08}>
+        <div
+          className="hidden md:flex items-stretch justify-center"
+          onMouseLeave={() => setActive(null)}
+        >
+          {architecture.layers.map((layer, index) => {
+            const accent = layerAccents[index % layerAccents.length];
+            const isActive = active === index;
+
+            return (
+              <motion.div
+                key={layer.label}
+                className={`
+                  relative cursor-pointer select-none
+                  rounded-2xl border backdrop-blur
+                  ${accent.border}
+                  ${isActive ? accent.activeBg : accent.bg}
+                  shadow-[0_4px_16px_rgba(4,6,10,0.06),_inset_0_1px_0_rgba(255,255,255,0.25)]
+                  dark:shadow-[0_4px_16px_rgba(4,6,10,0.2),_inset_0_1px_0_rgba(255,255,255,0.08)]
+                `}
+                style={{
+                  zIndex: isActive ? 20 : count - index,
+                  marginLeft: index === 0 ? 0 : -OVERLAP,
+                }}
+                animate={{
+                  width: isActive ? 260 + EXPAND_EXTRA : 160,
+                }}
+                transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                onMouseEnter={() => setActive(index)}
+                onClick={() => setActive(isActive ? null : index)}
+              >
+                <div className="flex h-full flex-col justify-between px-5 py-5">
+                  {/* Label — always visible */}
+                  <p className="text-sm font-semibold text-foreground tracking-tight whitespace-nowrap">
+                    {layer.label}
+                  </p>
+
+                  {/* Expanded content */}
+                  <AnimatePresence>
+                    {isActive && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        className="overflow-hidden"
+                      >
+                        <p className="mt-3 text-xs text-foreground/65 leading-relaxed">
+                          {layer.description}
+                        </p>
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                          {layer.items.map((item) => (
+                            <span
+                              key={item}
+                              className="rounded-full border border-border/50 bg-surface/50 px-2.5 py-0.5 text-[10px] font-mono tracking-wide text-foreground/70"
+                            >
+                              {item}
+                            </span>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </Reveal>
+
+      {/* ── Mobile: vertical stack (simplified) ── */}
+      <div className="flex flex-col gap-3 md:hidden">
         {architecture.layers.map((layer, index) => {
           const accent = layerAccents[index % layerAccents.length];
           return (
-            <div key={layer.label}>
-              <LayerRow layer={layer} accent={accent} index={index} />
-              {index < architecture.layers.length - 1 && <ArrowDown />}
-            </div>
+            <Reveal key={layer.label} delay={0.06 * index}>
+              <button
+                type="button"
+                className={`
+                  w-full text-left rounded-2xl border backdrop-blur px-5 py-4
+                  ${accent.border} ${active === index ? accent.activeBg : accent.bg}
+                  shadow-[0_4px_12px_rgba(4,6,10,0.04),_inset_0_1px_0_rgba(255,255,255,0.3)]
+                  dark:shadow-[0_4px_12px_rgba(4,6,10,0.16),_inset_0_1px_0_rgba(255,255,255,0.08)]
+                  transition-colors
+                `}
+                onClick={() => setActive(active === index ? null : index)}
+              >
+                <p className="text-sm font-semibold text-foreground tracking-tight">
+                  {layer.label}
+                </p>
+                <AnimatePresence>
+                  {active === index && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden"
+                    >
+                      <p className="mt-2 text-xs text-foreground/65">
+                        {layer.description}
+                      </p>
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {layer.items.map((item) => (
+                          <span
+                            key={item}
+                            className="rounded-full border border-border/50 bg-surface/50 px-2.5 py-0.5 text-[10px] font-mono tracking-wide text-foreground/70"
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </button>
+            </Reveal>
           );
         })}
       </div>
