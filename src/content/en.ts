@@ -65,30 +65,31 @@ export const content = {
   },
   skills: {
     title: "Skills system",
-    subtitle: "Composable by design",
+    subtitle: "What can OwliaBot do for you?",
     body:
-      "Skills are JavaScript modules living in your workspace. They define tools, parameters, and security levels without modifying core code.",
+      "OwliaBot extends its capabilities through Skills — modular plugins that cover real crypto scenarios. From portfolio tracking to automated DeFi strategies, each skill is designed for practical, everyday use.",
     cards: [
       {
-        title: "JS module format",
+        title: "Portfolio at a glance",
         body:
-          "Each skill is a directory with a package.json and an index.js implementation.",
-        meta: "Hot reload supported",
+          "Connect multiple wallet addresses and exchange APIs. OwliaBot aggregates your holdings and reports your portfolio status on demand or on a schedule.",
+        meta: "Multi-chain + CEX",
       },
       {
-        title: "Security levels",
+        title: "DeFi risk guardian",
         body:
-          "Every tool declares its security tier: read, write, or sign.",
-        meta: "Explicit permissions",
+          "Monitor your lending positions across Aave, Compound, and more. Get alerts before liquidation and let OwliaBot auto-repay or add collateral to keep you safe.",
+        meta: "Automated protection",
       },
       {
-        title: "Built-in skills",
+        title: "Strategy execution",
         body:
-          "crypto-price (CoinGecko) and crypto-balance (Alchemy).",
-        meta: "ALCHEMY_API_KEY required for balance",
+          "From MACD signals to delta-hedged leverage — define your strategy, backtest it, and let OwliaBot execute trades with built-in risk controls and audit trails.",
+        meta: "Signal → Execution → Report",
       },
     ],
-    footer: "Install more skills or write your own without expanding the core surface.",
+    footer: "Community-built skills keep growing. Install what you need, or build your own.",
+    exploreMore: "Explore all Skills",
   },
   security: {
     eyebrow: "Security Architecture",
@@ -96,7 +97,7 @@ export const content = {
     subtitle: "Your credentials, isolated from the Agent.",
     description:
       "Owlia Vault stores private keys, API keys, and other sensitive credentials in an isolated system process. The Agent never has direct access — all operations go through a controlled local interface.",
-    status: "Implemented. Continuously hardening.",
+    status: "Continuously hardening...",
     tiers: [
       {
         title: "Crypto Wallet",
@@ -109,11 +110,10 @@ export const content = {
         keyword: "Platform Access",
       },
     ],
-    footer:
-      "The Agent can use them, but never see them. Your credentials stay under your control.",
+    footer: "",
     local: {
-      title: "Your Credentials, Your Control",
-      body: "Owlia Vault ensures AI never directly touches your sensitive information.",
+      title: "The Agent can use them, but never see them",
+      body: "Your credentials stay under your control. Owlia Vault ensures AI never directly touches your sensitive information.",
       bullets: [
         "Private keys & API keys encrypted in an isolated process",
         "Agent can only operate through controlled interfaces",

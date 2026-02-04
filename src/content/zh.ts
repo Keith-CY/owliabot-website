@@ -64,27 +64,31 @@ export const content = {
   },
   skills: {
     title: "Skills 系统",
-    subtitle: "组合式扩展",
+    subtitle: "OwliaBot 能为你做什么？",
     body:
-      "Skills 是工作区中的 JavaScript 模块，定义工具、参数与安全等级，无需修改核心代码。",
+      "OwliaBot 通过 Skills 扩展能力 — 模块化插件覆盖真实的加密场景。从资产总览到自动化 DeFi 策略，每个 Skill 都面向实际使用而设计。",
     cards: [
       {
-        title: "JS 模块格式",
-        body: "每个 Skill 是一个目录，包含 package.json 与 index.js。",
-        meta: "支持热重载",
+        title: "资产一目了然",
+        body:
+          "连接多个钱包地址和交易所 API，OwliaBot 自动汇总你的持仓，按需或定时向你汇报资产状况。",
+        meta: "多链 + 交易所",
       },
       {
-        title: "安全等级",
-        body: "每个工具声明 read / write / sign 的安全级别。",
-        meta: "权限显式",
+        title: "DeFi 风险守护",
+        body:
+          "持续监控你在 Aave、Compound 等平台的借贷仓位，清算前及时预警，并可自动补仓或还款，帮你守住仓位。",
+        meta: "自动防护",
       },
       {
-        title: "内置 Skills",
-        body: "crypto-price（CoinGecko）与 crypto-balance（Alchemy）。",
-        meta: "查询余额需 ALCHEMY_API_KEY",
+        title: "策略执行引擎",
+        body:
+          "从 MACD 信号到 Delta 对冲杠杆 — 定义你的策略、回测验证、让 OwliaBot 带着风控和审计记录自动执行交易。",
+        meta: "信号 → 执行 → 报告",
       },
     ],
-    footer: "无需扩大核心体积即可安装或自建 Skills。",
+    footer: "社区 Skills 持续增长中。安装所需的，或构建你自己的。",
+    exploreMore: "探索全部 Skills",
   },
   security: {
     eyebrow: "安全架构",
@@ -92,7 +96,7 @@ export const content = {
     subtitle: "敏感凭证与 Agent 完全隔离。",
     description:
       "Owlia Vault 将私钥、API Key 等敏感信息存储在独立的系统进程中，Agent 无法直接读取。所有操作通过受控的本地接口完成。",
-    status: "已实现，持续加固中。",
+    status: "持续加固中...",
     tiers: [
       {
         title: "Crypto Wallet",
@@ -105,10 +109,10 @@ export const content = {
         keyword: "平台接入",
       },
     ],
-    footer: "Agent 能用，但看不到。你的凭证始终在你掌控之中。",
+    footer: "",
     local: {
-      title: "你的凭证，你的控制",
-      body: "Owlia Vault 确保 AI 永远不会直接接触你的敏感信息。",
+      title: "Agent 能用，但看不到",
+      body: "你的凭证始终在你掌控之中。Owlia Vault 确保 AI 永远不会直接接触你的敏感信息。",
       bullets: [
         "私钥与 API Key 加密存储在隔离进程中",
         "Agent 只能通过受控接口发起操作",

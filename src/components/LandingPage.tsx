@@ -154,7 +154,7 @@ export default function LandingPage({ content }: LandingPageProps) {
           <SecurityModel security={content.security} />
         </div>
 
-        <SkillsSection skills={content.skills} />
+        <SkillsSection skills={content.skills} lang={content.lang} />
         <Building building={content.building} lang={content.lang} />
       </main>
       <Footer note={content.footer.note} signature={content.footer.signature} links={content.links} />

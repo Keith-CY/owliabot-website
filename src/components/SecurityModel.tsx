@@ -40,30 +40,42 @@ export default function SecurityModel({ security }: SecurityModelProps) {
         </div>
       </Reveal>
 
-      {/* Three-tier signing model */}
+      {/* Vault use cases: left stacked cards + right illustration placeholder */}
       <div className="grid items-stretch gap-6 lg:grid-cols-2">
-        {security.tiers.map((tier, index) => (
-          <Reveal key={tier.title} delay={0.06 * index}>
-            <div className="h-full rounded-[28px] border border-border bg-surface/70 px-6 py-7 shadow-[0_6px_16px_rgba(4,6,10,0.04),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur dark:shadow-[0_6px_16px_rgba(4,6,10,0.12),_inset_0_1px_0_rgba(255,255,255,0.14)]">
-              <p className="text-xs font-semibold uppercase text-foreground/60">
-                {tier.keyword}
-              </p>
-              <h3 className="mt-3 text-balance text-lg font-semibold text-foreground">
-                {tier.title}
-              </h3>
-              <p className="mt-3 text-pretty text-sm text-foreground/70">
-                {tier.body}
-              </p>
-            </div>
-          </Reveal>
-        ))}
+        {/* Left: use case cards stacked vertically */}
+        <div className="flex flex-col gap-6">
+          {security.tiers.map((tier, index) => (
+            <Reveal key={tier.title} delay={0.06 * index}>
+              <div className="h-full rounded-[28px] border border-border bg-surface/70 px-6 py-7 shadow-[0_6px_16px_rgba(4,6,10,0.04),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur dark:shadow-[0_6px_16px_rgba(4,6,10,0.12),_inset_0_1px_0_rgba(255,255,255,0.14)]">
+                <p className="text-xs font-semibold uppercase text-foreground/60">
+                  {tier.keyword}
+                </p>
+                <h3 className="mt-3 text-balance text-lg font-semibold text-foreground">
+                  {tier.title}
+                </h3>
+                <p className="mt-3 text-pretty text-sm text-foreground/70">
+                  {tier.body}
+                </p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* Right: illustration placeholder */}
+        <Reveal delay={0.12}>
+          <div className="hidden lg:flex h-full items-center justify-center rounded-[28px] border border-dashed border-border/60 bg-surface/30">
+            <p className="text-sm text-foreground/30">Illustration</p>
+          </div>
+        </Reveal>
       </div>
 
-      <Reveal delay={0.12}>
-        <p className="text-pretty text-sm font-semibold text-foreground">
-          {security.footer}
-        </p>
-      </Reveal>
+      {security.footer ? (
+        <Reveal delay={0.14}>
+          <p className="text-pretty text-sm font-semibold text-foreground">
+            {security.footer}
+          </p>
+        </Reveal>
+      ) : null}
 
       {/* Local-first / Key control card */}
       <Reveal delay={0.16}>
