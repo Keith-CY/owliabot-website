@@ -34,11 +34,10 @@ type Route = {
 };
 
 const routes: Route[] = [
-  { skillIdx: 0, vaultIdxs: [0],    color: "#38bdf8" },
-  { skillIdx: 1, vaultIdxs: [1],    color: "#a78bfa" },
-  { skillIdx: 2, vaultIdxs: [0, 1], color: "#fbbf24" },
-  { skillIdx: 3, vaultIdxs: [0],    color: "#34d399" },
-  { skillIdx: 4, vaultIdxs: [0],    color: "#fb7185" },
+  { skillIdx: 0, vaultIdxs: [1],    color: "#38bdf8" }, // 资产总览 → API Key
+  { skillIdx: 1, vaultIdxs: [0],    color: "#a78bfa" }, // 借币生息 → 加密钱包
+  { skillIdx: 2, vaultIdxs: [0],    color: "#fbbf24" }, // AMM LP 管理 → 加密钱包
+  { skillIdx: 3, vaultIdxs: [0],    color: "#34d399" }, // Token 发射 → 加密钱包
 ];
 
 /* ── Layout (SVG viewBox 1000×400) ── */
@@ -60,9 +59,9 @@ const COL_VAULT_W = 180;
 
 const CENTER_Y = VB_H / 2;
 
-// Skill Y (5 items)
+// Skill Y (4 items)
 const SKILL_GAP = 60;
-const SKILL_Y0 = 64;
+const SKILL_Y0 = 84;
 const skillY = (i: number) => SKILL_Y0 + i * SKILL_GAP;
 const skillCY = (i: number) => skillY(i) + CARD_H / 2;
 
