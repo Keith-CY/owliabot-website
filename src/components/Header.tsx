@@ -19,8 +19,8 @@ export default function Header({ nav, links }: HeaderProps) {
       <div className="relative mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-5 sm:px-8 lg:px-12">
         <div className="flex items-center gap-3">
           <a
-            href="#top"
-            aria-label="Back to top"
+            href="/"
+            aria-label="Back to home"
             className="flex size-11 items-center justify-center rounded-full border border-border bg-surface/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] backdrop-blur transition hover:-translate-y-0.5 hover:shadow-[0_10px_22px_rgba(5,6,12,0.22),_inset_0_1px_0_rgba(255,255,255,0.6)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]"
           >
             <img
@@ -32,7 +32,7 @@ export default function Header({ nav, links }: HeaderProps) {
         </div>
         <div className="hidden items-center gap-5 rounded-full border border-border bg-surface/70 px-5 py-2.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/55 shadow-[0_14px_36px_rgba(5,6,12,0.2),_inset_0_1px_0_rgba(255,255,255,0.5)] backdrop-blur dark:shadow-[0_14px_36px_rgba(5,6,12,0.2),_inset_0_1px_0_rgba(255,255,255,0.14)] sm:absolute sm:left-1/2 sm:flex sm:-translate-x-1/2">
           <nav className="flex flex-nowrap items-center gap-5 text-foreground/55">
-            <a className="whitespace-nowrap leading-none text-foreground/55 transition hover:text-foreground/85 visited:text-foreground/55" href="#top">
+            <a className="whitespace-nowrap leading-none text-foreground/55 transition hover:text-foreground/85 visited:text-foreground/55" href="/">
               {nav.about}
             </a>
             <a className="whitespace-nowrap leading-none text-foreground/55 transition hover:text-foreground/85 visited:text-foreground/55" href="/skills-hub">
