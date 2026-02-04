@@ -5,7 +5,7 @@ export const content = {
     skillsHub: "Skills Hub",
   },
   hero: {
-    title: "🦉 OwliaBot，专为 Crypto 用户设计的 OpenClaw 🦞",
+    title: "🦉 OwliaBot，更轻、更安全的 Crypto 原生 OpenClaw 🦞",
     subtitle:
       "一键部署 Crypto 原生 AI Agent，Skills 自由扩展，资产完全由你掌控。",
     badge: "OwliaBot",
