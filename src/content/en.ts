@@ -24,7 +24,7 @@ export const content = {
       {
         title: "Built-in Crypto Wallet",
         body:
-          "Secure wallet built-in and ready to use. Supports transfers, signing, balance queries, and other on-chain operations. Your private keys always stay under your control.",
+          "Secure crypto wallet built-in and ready to use. Supports transfers, signing, balance queries, and other on-chain operations. Your private keys always stay under your control.",
         mechanism: "Your keys, your control.",
       },
       {

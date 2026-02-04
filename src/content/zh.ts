@@ -24,7 +24,7 @@ export const content = {
       {
         title: "内置加密钱包",
         body:
-          "自带安全钱包，开箱即用。支持转账、签名、余额查询等链上操作，私钥始终由你掌控。",
+          "内置安全的加密钱包，开箱即用。支持转账、签名、余额查询等链上操作，私钥始终由你掌控。",
         mechanism: "你的密钥，你的控制。",
       },
       {
@@ -106,7 +106,7 @@ export const content = {
     status: "",
     tiers: [
       {
-        title: "Crypto Wallet",
+        title: "加密钱包",
         body: "通过 Vault 发起转账、查余额等链上操作，全程不接触原始密钥。",
         keyword: "链上操作",
       },
