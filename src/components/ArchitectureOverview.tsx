@@ -156,20 +156,22 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
 
   const route = routes[routeIdx];
 
-  const advancePhase = useCallback(() => {
-    setPhase((p) => {
-      if (p < TOTAL_PHASES - 1) return p + 1;
-      // Sequential route switching: 0 → 1 → 2 → 3 → 0
-      setRouteIdx((r) => (r + 1) % routes.length);
-      return 0;
-    });
-  }, []);
-
   useEffect(() => {
     if (paused) return;
-    const t = setTimeout(advancePhase, PHASE_DUR[phase]);
-    return () => clearTimeout(t);
-  }, [phase, paused, advancePhase]);
+    
+    const timer = setTimeout(() => {
+      setPhase((p) => {
+        if (p < TOTAL_PHASES - 1) {
+          return p + 1;
+        }
+        // Phase complete, move to next route
+        setRouteIdx((r) => (r + 1) % routes.length);
+        return 0;
+      });
+    }, PHASE_DUR[phase]);
+    
+    return () => clearTimeout(timer);
+  }, [phase, paused]);
 
   const selectRoute = (i: number) => { setRouteIdx(i); setPhase(0); setPaused(false); };
 
