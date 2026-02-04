@@ -90,7 +90,7 @@ export default function SkillsHub({
               className="break-inside-avoid flex flex-col gap-4 rounded-[28px] border border-border bg-surface/70 p-6 shadow-[0_6px_16px_rgba(4,6,10,0.04)] backdrop-blur transition-shadow hover:shadow-md dark:shadow-[0_6px_16px_rgba(4,6,10,0.12)] relative"
             >
               {/* Building badge - top right */}
-              <span className="absolute top-5 right-5 flex items-center gap-1 rounded-md border border-foreground/10 bg-foreground/5 px-2 py-0.5 text-[10px] font-medium text-foreground/50 dark:border-foreground/20 dark:bg-foreground/10">
+              <span className="absolute top-5 right-5 z-10 isolate flex items-center gap-1 rounded-md border border-foreground/10 bg-foreground/5 px-2 py-0.5 text-[10px] font-medium text-foreground/50 dark:border-foreground/20 dark:bg-foreground/10">
                 <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
@@ -98,10 +98,10 @@ export default function SkillsHub({
               </span>
 
               {/* Category badge */}
-              <div className="flex items-center">
+              <div className="flex items-center relative z-10 isolate">
                 <span
                   className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
-                    colors?.card ?? "bg-gray-100 text-gray-600"
+                    colors?.card ?? "bg-gray-200 text-gray-800"
                   }`}
                 >
                   {categories[skill.category] ?? skill.category}
