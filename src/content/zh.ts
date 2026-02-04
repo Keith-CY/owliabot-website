@@ -7,7 +7,7 @@ export const content = {
   hero: {
     title: "🦉 OwliaBot，专为 Crypto 用户设计的 OpenClaw 🦞",
     subtitle:
-      "一键部署加密原生 AI Agent，Skills 自由扩展，资产完全由你掌控。",
+      "一键部署 Crypto 原生 AI Agent，Skills 自由扩展，资产完全由你掌控。",
     badge: "OwliaBot",
     status: "已完成设计与文档，正在实现。",
     emphasis: "安全、隐私、可控，皆为设计的一部分。",
@@ -22,9 +22,9 @@ export const content = {
     subtitle: "简洁清晰的安全边界。", 
     items: [
       {
-        title: "内置加密钱包",
+        title: "内置 Crypto 钱包",
         body:
-          "内置安全的加密钱包，开箱即用。支持转账、签名、余额查询等链上操作，私钥始终由你掌控。",
+          "内置安全的 Crypto 钱包，开箱即用。支持转账、签名、余额查询等链上操作，私钥始终由你掌控。",
         mechanism: "你的密钥，你的控制。",
       },
       {
@@ -65,7 +65,7 @@ export const content = {
         "AMM LP 管理",
         "Token 发射",
       ],
-      vault: ["加密钱包", "API Key"],
+      vault: ["Crypto 钱包", "API Key"],
     },
     footer: "",
   },
@@ -106,7 +106,7 @@ export const content = {
     status: "",
     tiers: [
       {
-        title: "加密钱包",
+        title: "Crypto 钱包",
         body: "通过 Vault 发起转账、查余额等链上操作，全程不接触原始密钥。",
         keyword: "链上操作",
       },
@@ -172,7 +172,7 @@ export const content = {
       {
         title: "Crypto 个人用户",
         icon: "User",
-        body: "管理多链资产、实时监控 DeFi 仓位健康度、自动化执行链上策略。OwliaBot 是你的个人加密助手，帮你把握市场机会、规避风险。",
+        body: "管理多链资产、实时监控 DeFi 仓位健康度、自动化执行链上策略。OwliaBot 是你的个人 Crypto 助手，帮你把握市场机会、规避风险。",
       },
       {
         title: "智能运营",
