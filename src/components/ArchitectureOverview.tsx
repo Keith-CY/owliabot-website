@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import Reveal from "./Reveal";
 import SectionHeader from "./SectionHeader";
@@ -21,121 +21,158 @@ type ArchitectureOverviewProps = {
   };
 };
 
-/* ── Route definitions: each route lights up a path from User → OwliaBot → Skill → Vault target ── */
+/* ── Skills displayed in the diagram ── */
+const skills = [
+  "Health Factor Guardian",
+  "Portfolio Overview",
+  "Execution Engine",
+  "Uniswap V3 LP Manager",
+  "Refinance Router",
+];
+
+/* ── Vault targets ── */
+const vaultItems = ["Crypto Wallet", "API Key"];
+
+/* ── Routes: skill index → vault index(es) ── */
 type Route = {
-  skill: string;
-  skillLabel: string;
-  vault: "wallet" | "apikey" | "both";
-  color: string;       // tailwind color token
-  glowColor: string;   // CSS color for SVG glow
+  skillIdx: number;
+  vaultIdxs: number[]; // 0 = Crypto Wallet, 1 = API Key
+  color: string;       // CSS stroke color
 };
 
 const routes: Route[] = [
-  { skill: "health-guardian", skillLabel: "Health Factor Guardian", vault: "wallet", color: "sky", glowColor: "rgb(56,189,248)" },
-  { skill: "portfolio", skillLabel: "Portfolio Overview", vault: "apikey", color: "violet", glowColor: "rgb(167,139,250)" },
-  { skill: "execution", skillLabel: "Execution Engine", vault: "both", color: "amber", glowColor: "rgb(251,191,36)" },
-  { skill: "lp-manager", skillLabel: "Uniswap V3 LP Manager", vault: "wallet", color: "emerald", glowColor: "rgb(52,211,153)" },
-  { skill: "refinance", skillLabel: "Refinance Router", vault: "wallet", color: "rose", glowColor: "rgb(251,113,133)" },
+  { skillIdx: 0, vaultIdxs: [0],    color: "#38bdf8" },  // sky
+  { skillIdx: 1, vaultIdxs: [1],    color: "#a78bfa" },  // violet
+  { skillIdx: 2, vaultIdxs: [0, 1], color: "#fbbf24" },  // amber
+  { skillIdx: 3, vaultIdxs: [0],    color: "#34d399" },  // emerald
+  { skillIdx: 4, vaultIdxs: [0],    color: "#fb7185" },  // rose
 ];
 
-const CYCLE_MS = 3000;
+/* ── SVG layout constants (viewBox 800×320) ── */
+const VB_W = 800;
+const VB_H = 320;
 
-/* ── Node component ── */
-function Node({
-  label,
-  active,
-  glowColor,
-  sub,
-}: {
-  label: string;
-  active: boolean;
-  glowColor?: string;
-  sub?: string;
-}) {
-  return (
-    <div className="relative flex flex-col items-center gap-1.5">
-      {active && glowColor && (
-        <motion.div
-          className="absolute -inset-2 rounded-2xl opacity-30 blur-xl"
-          style={{ background: glowColor }}
-          layoutId={undefined}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.3 }}
-          transition={{ duration: 0.4 }}
-        />
-      )}
-      <div
-        className={`
-          relative z-10 rounded-xl border px-4 py-2.5 text-sm font-semibold backdrop-blur
-          transition-all duration-500
-          ${active
-            ? "border-foreground/20 bg-background text-foreground shadow-lg"
-            : "border-border/50 bg-surface/50 text-foreground/40"
-          }
-        `}
-      >
-        {label}
-      </div>
-      {sub && (
-        <span className={`text-[10px] font-medium transition-colors duration-500 ${active ? "text-foreground/50" : "text-foreground/20"}`}>
-          {sub}
-        </span>
-      )}
-    </div>
-  );
+// Column X positions (center of each node)
+const X_USER = 50;
+const X_BOT = 190;
+const X_SKILL_LEFT = 370;   // left edge of skill card
+const X_SKILL = 460;        // center of skill labels
+const X_VAULT_LEFT = 610;   // left edge of vault card
+const X_VAULT = 700;        // center of vault labels
+
+// Y positions for skill items (5 items, evenly spaced)
+const SKILL_Y_START = 60;
+const SKILL_Y_GAP = 50;
+const skillY = (i: number) => SKILL_Y_START + i * SKILL_Y_GAP;
+
+// Y positions for vault items (2 items)
+const VAULT_Y_START = 120;
+const VAULT_Y_GAP = 70;
+const vaultY = (i: number) => VAULT_Y_START + i * VAULT_Y_GAP;
+
+// Center Y for User and OwliaBot
+const CENTER_Y = 160;
+
+/* ── Build SVG paths ── */
+function straightPath(x1: number, y1: number, x2: number, y2: number) {
+  return `M${x1},${y1} L${x2},${y2}`;
 }
 
-/* ── Animated connection line (SVG) ── */
-function ConnectionLine({
-  active,
-  glowColor,
-  className,
+function curvePath(x1: number, y1: number, x2: number, y2: number) {
+  const cpx = (x1 + x2) / 2;
+  return `M${x1},${y1} C${cpx},${y1} ${cpx},${y2} ${x2},${y2}`;
+}
+
+/* ── Animation phases ── */
+// Phase 0: idle (nothing lit)
+// Phase 1: User → OwliaBot line draws
+// Phase 2: OwliaBot → Skill curve draws
+// Phase 3: Skill → Vault curve draws
+// Phase 4: hold
+const PHASE_DURATION = [0, 600, 700, 700, 1200]; // ms per phase
+const TOTAL_CYCLE = PHASE_DURATION.reduce((a, b) => a + b, 0);
+
+/* ── Animated SVG path ── */
+function AnimatedPath({
+  d,
+  color,
+  phase,
+  targetPhase,
+  duration,
 }: {
-  active: boolean;
-  glowColor: string;
-  className?: string;
+  d: string;
+  color: string;
+  phase: number;
+  targetPhase: number;
+  duration: number;
 }) {
+  const isActive = phase >= targetPhase;
+  const isAnimating = phase === targetPhase;
+
   return (
-    <div className={`flex items-center ${className ?? ""}`}>
-      <svg width="100%" height="4" className="overflow-visible">
-        {/* Base line */}
-        <line x1="0" y1="2" x2="100%" y2="2" stroke="currentColor" strokeWidth="1" className="text-foreground/10" />
-        {/* Active glow line */}
-        {active && (
-          <motion.line
-            x1="0" y1="2" x2="100%" y2="2"
-            stroke={glowColor}
-            strokeWidth="2"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          />
-        )}
-      </svg>
-    </div>
+    <motion.path
+      d={d}
+      fill="none"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      initial={{ pathLength: 0, opacity: 0 }}
+      animate={{
+        pathLength: isActive ? 1 : 0,
+        opacity: isActive ? 1 : 0,
+      }}
+      transition={{
+        pathLength: { duration: isAnimating ? duration / 1000 : 0, ease: "easeOut" },
+        opacity: { duration: 0.15 },
+      }}
+    />
   );
 }
 
 export default function ArchitectureOverview({
   architecture,
 }: ArchitectureOverviewProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [routeIdx, setRouteIdx] = useState(0);
+  const [phase, setPhase] = useState(0);
   const [paused, setPaused] = useState(false);
 
-  // Auto-cycle
+  const route = routes[routeIdx];
+
+  // Phase state machine
+  const advancePhase = useCallback(() => {
+    setPhase((p) => {
+      if (p < 4) return p + 1;
+      // End of cycle → next route
+      setRouteIdx((r) => (r + 1) % routes.length);
+      return 0;
+    });
+  }, []);
+
   useEffect(() => {
     if (paused) return;
-    const timer = setInterval(() => {
-      setActiveIndex((i) => (i + 1) % routes.length);
-    }, CYCLE_MS);
-    return () => clearInterval(timer);
-  }, [paused]);
+    const timer = setTimeout(advancePhase, PHASE_DURATION[phase]);
+    return () => clearTimeout(timer);
+  }, [phase, paused, advancePhase]);
 
-  const route = routes[activeIndex];
+  // Reset phase when route changes manually
+  const selectRoute = (i: number) => {
+    setRouteIdx(i);
+    setPhase(0);
+    setPaused(false);
+  };
 
-  // Which vault nodes are active
-  const walletActive = route.vault === "wallet" || route.vault === "both";
-  const apikeyActive = route.vault === "apikey" || route.vault === "both";
+  // Build paths for current route
+  const pathUserToBot = straightPath(X_USER + 40, CENTER_Y, X_BOT - 40, CENTER_Y);
+  const pathBotToSkill = curvePath(X_BOT + 50, CENTER_Y, X_SKILL_LEFT, skillY(route.skillIdx));
+  const pathsSkillToVault = route.vaultIdxs.map((vi) =>
+    curvePath(X_SKILL + 80, skillY(route.skillIdx), X_VAULT_LEFT, vaultY(vi))
+  );
+
+  // Which nodes are lit
+  const userLit = phase >= 1;
+  const botLit = phase >= 1;
+  const skillLit = phase >= 2;
+  const vaultLit = phase >= 3;
 
   return (
     <section id="architecture" className="scroll-mt-24 flex flex-col gap-8 sm:scroll-mt-28">
@@ -154,157 +191,176 @@ export default function ArchitectureOverview({
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          <div className="mx-auto max-w-4xl">
-            {/* Main flow row */}
-            <div className="grid grid-cols-[auto_48px_auto_48px_1fr_48px_auto] items-center gap-0">
-              {/* User */}
-              <Node label="User" active glowColor={route.glowColor} />
-
-              {/* Line: User → OwliaBot */}
-              <ConnectionLine active glowColor={route.glowColor} />
-
-              {/* OwliaBot */}
-              <Node label="OwliaBot" active glowColor={route.glowColor} />
-
-              {/* Line: OwliaBot → Skills */}
-              <ConnectionLine active glowColor={route.glowColor} />
-
-              {/* Skills cluster */}
-              <div className="flex flex-col items-center gap-2">
-                <div className="flex flex-wrap justify-center gap-2">
-                  {routes.map((r, i) => (
-                    <button
-                      key={r.skill}
-                      type="button"
-                      className={`
-                        rounded-lg border px-3 py-1.5 text-xs font-semibold
-                        transition-all duration-500 cursor-pointer
-                        ${i === activeIndex
-                          ? "border-foreground/20 bg-background text-foreground shadow-md"
-                          : "border-border/40 bg-surface/40 text-foreground/35 hover:text-foreground/50"
-                        }
-                      `}
-                      onClick={() => { setActiveIndex(i); setPaused(true); }}
-                    >
-                      {r.skillLabel}
-                    </button>
-                  ))}
-                </div>
-                <span className="text-[10px] font-medium text-foreground/30">Skills</span>
-              </div>
-
-              {/* Line: Skills → Vault */}
-              <ConnectionLine active glowColor={route.glowColor} />
-
-              {/* Owlia Vault */}
-              <div className="flex flex-col items-center gap-2">
-                <div
-                  className={`
-                    relative z-10 rounded-xl border px-4 py-2 text-sm font-semibold backdrop-blur
-                    transition-all duration-500
-                    border-foreground/20 bg-background text-foreground shadow-lg
-                  `}
-                >
-                  Owlia Vault
-                </div>
-                <div className="flex gap-3 mt-1">
-                  <div className={`
-                    flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[11px] font-medium
-                    transition-all duration-500
-                    ${walletActive
-                      ? "border-foreground/20 bg-background text-foreground shadow-sm"
-                      : "border-border/40 bg-surface/40 text-foreground/30"
-                    }
-                  `}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                    </svg>
-                    Crypto Wallet
-                  </div>
-                  <div className={`
-                    flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[11px] font-medium
-                    transition-all duration-500
-                    ${apikeyActive
-                      ? "border-foreground/20 bg-background text-foreground shadow-sm"
-                      : "border-border/40 bg-surface/40 text-foreground/30"
-                    }
-                  `}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.78 7.78 5.5 5.5 0 0 1 7.78-7.78zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
-                    </svg>
-                    API Key
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Route indicator */}
-            <div className="mt-6 flex justify-center gap-2">
-              {routes.map((r, i) => (
-                <button
-                  key={r.skill}
-                  type="button"
-                  className={`
-                    h-1.5 rounded-full transition-all duration-300 cursor-pointer
-                    ${i === activeIndex ? "w-6 bg-foreground/30" : "w-1.5 bg-foreground/10 hover:bg-foreground/20"}
-                  `}
-                  onClick={() => { setActiveIndex(i); setPaused(true); }}
-                />
+          <div className="relative mx-auto" style={{ maxWidth: VB_W, aspectRatio: `${VB_W}/${VB_H}` }}>
+            {/* SVG lines layer */}
+            <svg
+              viewBox={`0 0 ${VB_W} ${VB_H}`}
+              className="absolute inset-0 w-full h-full"
+              preserveAspectRatio="xMidYMid meet"
+            >
+              {/* Base lines (dim) */}
+              <path d={pathUserToBot} fill="none" stroke="currentColor" strokeWidth="1" className="text-foreground/8" />
+              <path d={pathBotToSkill} fill="none" stroke="currentColor" strokeWidth="1" className="text-foreground/8" />
+              {pathsSkillToVault.map((d, i) => (
+                <path key={i} d={d} fill="none" stroke="currentColor" strokeWidth="1" className="text-foreground/8" />
               ))}
+
+              {/* Animated lines */}
+              <AnimatedPath d={pathUserToBot} color={route.color} phase={phase} targetPhase={1} duration={PHASE_DURATION[1]} />
+              <AnimatedPath d={pathBotToSkill} color={route.color} phase={phase} targetPhase={2} duration={PHASE_DURATION[2]} />
+              {pathsSkillToVault.map((d, i) => (
+                <AnimatedPath key={i} d={d} color={route.color} phase={phase} targetPhase={3} duration={PHASE_DURATION[3]} />
+              ))}
+            </svg>
+
+            {/* HTML nodes layer */}
+            <div className="absolute inset-0" style={{ fontSize: 0 }}>
+              {/* User node */}
+              <div
+                className="absolute flex items-center justify-center"
+                style={{ left: X_USER - 30, top: CENTER_Y - 18, width: 70, height: 36 }}
+              >
+                <span className={`text-sm font-semibold transition-colors duration-300 ${userLit ? "text-foreground" : "text-foreground/35"}`}>
+                  User
+                </span>
+              </div>
+
+              {/* OwliaBot node */}
+              <div
+                className="absolute flex items-center justify-center"
+                style={{ left: X_BOT - 45, top: CENTER_Y - 18, width: 100, height: 36 }}
+              >
+                <span className={`
+                  rounded-lg border px-3 py-1.5 text-sm font-semibold
+                  transition-all duration-300
+                  ${botLit
+                    ? "border-foreground/20 bg-background text-foreground"
+                    : "border-border/40 bg-surface/40 text-foreground/35"
+                  }
+                `}>
+                  OwliaBot
+                </span>
+              </div>
+
+              {/* Skills card */}
+              <div
+                className="absolute rounded-2xl border border-border/50 bg-surface/30 backdrop-blur"
+                style={{
+                  left: X_SKILL_LEFT - 10,
+                  top: SKILL_Y_START - 35,
+                  width: 200,
+                  height: skills.length * SKILL_Y_GAP + 20,
+                }}
+              >
+                <div className="px-4 pt-2 pb-1">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-foreground/30">Skills</span>
+                </div>
+                {skills.map((s, i) => (
+                  <button
+                    key={s}
+                    type="button"
+                    className={`
+                      w-full text-left px-4 py-1.5 text-xs font-medium
+                      transition-all duration-300 cursor-pointer
+                      ${skillLit && route.skillIdx === i
+                        ? "text-foreground"
+                        : "text-foreground/30 hover:text-foreground/50"
+                      }
+                    `}
+                    onClick={() => selectRoute(routes.findIndex((r) => r.skillIdx === i) ?? 0)}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+
+              {/* Owlia Vault card */}
+              <div
+                className="absolute rounded-2xl border border-border/50 bg-surface/30 backdrop-blur"
+                style={{
+                  left: X_VAULT_LEFT - 10,
+                  top: VAULT_Y_START - 35,
+                  width: 150,
+                  height: vaultItems.length * VAULT_Y_GAP + 30,
+                }}
+              >
+                <div className="px-4 pt-2 pb-1">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-foreground/30">Owlia Vault</span>
+                </div>
+                {vaultItems.map((v, i) => (
+                  <div
+                    key={v}
+                    className={`
+                      px-4 py-2 text-xs font-medium
+                      transition-all duration-300
+                      ${vaultLit && route.vaultIdxs.includes(i)
+                        ? "text-foreground"
+                        : "text-foreground/30"
+                      }
+                    `}
+                  >
+                    {v}
+                  </div>
+                ))}
+              </div>
             </div>
+          </div>
+
+          {/* Route dots */}
+          <div className="mt-4 flex justify-center gap-2">
+            {routes.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                className={`
+                  h-1.5 rounded-full transition-all duration-300 cursor-pointer
+                  ${i === routeIdx ? "w-6 bg-foreground/30" : "w-1.5 bg-foreground/10 hover:bg-foreground/20"}
+                `}
+                onClick={() => selectRoute(i)}
+              />
+            ))}
           </div>
         </div>
       </Reveal>
 
       {/* ── Mobile: simplified vertical flow ── */}
-      <div className="flex flex-col gap-4 md:hidden">
-        <div className="flex flex-col items-center gap-3">
-          <Node label="User" active glowColor={route.glowColor} />
-          <svg width="2" height="20" className="text-foreground/15"><line x1="1" y1="0" x2="1" y2="20" stroke="currentColor" strokeWidth="1.5" /></svg>
-          <Node label="OwliaBot" active glowColor={route.glowColor} />
-          <svg width="2" height="20" className="text-foreground/15"><line x1="1" y1="0" x2="1" y2="20" stroke="currentColor" strokeWidth="1.5" /></svg>
+      <div className="flex flex-col items-center gap-3 md:hidden">
+        <span className={`text-sm font-semibold transition-colors duration-300 ${userLit ? "text-foreground" : "text-foreground/35"}`}>User</span>
+        <div className="w-px h-5 bg-foreground/10" />
+        <span className={`rounded-lg border px-3 py-1.5 text-sm font-semibold transition-all duration-300 ${botLit ? "border-foreground/20 bg-background text-foreground" : "border-border/40 text-foreground/35"}`}>OwliaBot</span>
+        <div className="w-px h-5 bg-foreground/10" />
 
-          {/* Active skill */}
-          <div className="rounded-xl border border-foreground/20 bg-background px-4 py-2.5 text-sm font-semibold text-foreground shadow-md">
-            {route.skillLabel}
-          </div>
-          <span className="text-[10px] text-foreground/30">Skills</span>
+        {/* Active skill */}
+        <div className={`rounded-xl border px-4 py-2 text-sm font-semibold transition-all duration-300 ${skillLit ? "border-foreground/20 bg-background text-foreground" : "border-border/40 text-foreground/35"}`}>
+          {skills[route.skillIdx]}
+        </div>
+        <div className="w-px h-5 bg-foreground/10" />
 
-          <svg width="2" height="20" className="text-foreground/15"><line x1="1" y1="0" x2="1" y2="20" stroke="currentColor" strokeWidth="1.5" /></svg>
-
-          {/* Vault */}
-          <div className="flex flex-col items-center gap-2">
-            <div className="rounded-xl border border-foreground/20 bg-background px-4 py-2.5 text-sm font-semibold text-foreground shadow-md">
-              Owlia Vault
-            </div>
-            <div className="flex gap-2">
-              <span className={`rounded-lg border px-2.5 py-1 text-[10px] font-medium transition-all duration-500 ${walletActive ? "border-foreground/20 bg-background text-foreground" : "border-border/40 text-foreground/30"}`}>
-                Wallet
-              </span>
-              <span className={`rounded-lg border px-2.5 py-1 text-[10px] font-medium transition-all duration-500 ${apikeyActive ? "border-foreground/20 bg-background text-foreground" : "border-border/40 text-foreground/30"}`}>
-                API Key
-              </span>
-            </div>
-          </div>
+        {/* Vault targets */}
+        <div className="flex gap-2">
+          {vaultItems.map((v, i) => (
+            <span
+              key={v}
+              className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-all duration-300 ${vaultLit && route.vaultIdxs.includes(i) ? "border-foreground/20 bg-background text-foreground" : "border-border/40 text-foreground/30"}`}
+            >
+              {v}
+            </span>
+          ))}
         </div>
 
         {/* Skill selector */}
-        <div className="flex flex-wrap justify-center gap-1.5 mt-2">
+        <div className="flex flex-wrap justify-center gap-1.5 mt-4">
           {routes.map((r, i) => (
             <button
-              key={r.skill}
+              key={i}
               type="button"
               className={`
-                rounded-lg border px-2.5 py-1 text-[10px] font-semibold
-                transition-all duration-300
-                ${i === activeIndex
-                  ? "border-foreground/20 bg-background text-foreground"
-                  : "border-border/40 text-foreground/30"
-                }
+                rounded-lg border px-2.5 py-1 text-[10px] font-semibold transition-all duration-300
+                ${i === routeIdx ? "border-foreground/20 bg-background text-foreground" : "border-border/40 text-foreground/30"}
               `}
-              onClick={() => { setActiveIndex(i); setPaused(true); }}
+              onClick={() => selectRoute(i)}
             >
-              {r.skillLabel}
+              {skills[r.skillIdx]}
             </button>
           ))}
         </div>
