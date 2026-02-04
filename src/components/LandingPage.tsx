@@ -172,11 +172,11 @@ export default function LandingPage({ content }: LandingPageProps) {
 
         <ArchitectureOverview architecture={content.architecture} />
 
+        <SecurityModel security={content.security} />
+
         <UserScenarios scenarios={content.userScenarios} />
 
-        <Partners partners={content.partners} />
-
-        <SecurityModel security={content.security} />
+        {/* <Partners partners={content.partners} /> */}
 
       </main>
       <Footer note={content.footer.note} signature={content.footer.signature} links={content.links} />

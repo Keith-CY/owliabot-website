@@ -51,7 +51,7 @@ export const content = {
     title: "架构总览",
     subtitle: "保持极简",
     body:
-      "消息从你出发，经 OwliaBot 路由到 Skills 执行，密钥始终隔离在 Vault 中。",
+      "指令由你发出，经 OwliaBot 到 Skills 执行，密钥始终隔离在 Vault 中。",
     flowLabel: "核心流程",
     flow: ["Channels", "Gateway", "Agent Runtime", "Skills", "Owlia Vault"],
     diagram: {

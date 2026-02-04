@@ -51,7 +51,7 @@ export const content = {
     title: "Architecture overview",
     subtitle: "Built to stay small",
     body:
-      "Messages flow from you, through OwliaBot to Skills. Keys stay isolated in the Vault.",
+      "Commands from you, through OwliaBot to Skills for execution. Keys stay isolated in the Vault.",
     flowLabel: "Core flow",
     flow: ["Channels", "Gateway", "Agent Runtime", "Skills", "Owlia Vault"],
     footer: "",
