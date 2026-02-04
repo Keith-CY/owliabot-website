@@ -1,7 +1,7 @@
 export const content = {
   lang: "zh",
   nav: {
-    about: "About OwliaBot",
+    about: "关于 OwliaBot",
     skillsHub: "Skills Hub",
   },
   hero: {
