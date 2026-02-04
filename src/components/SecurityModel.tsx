@@ -61,10 +61,16 @@ export default function SecurityModel({ security }: SecurityModelProps) {
           ))}
         </div>
 
-        {/* Right: illustration placeholder */}
+        {/* Right: Vault illustration */}
         <Reveal delay={0.12}>
-          <div className="hidden lg:flex h-full items-center justify-center rounded-[28px] border border-dashed border-border/60 bg-surface/30">
-            <p className="text-sm text-foreground/30">Illustration</p>
+          <div className="hidden lg:flex h-full items-center justify-center relative">
+            {/* Glow effect behind image */}
+            <div className="absolute inset-0 rounded-[28px] bg-gradient-to-br from-violet-400/20 via-transparent to-sky-400/20 blur-2xl" />
+            <img
+              src="/owlia-vault.png"
+              alt="Owlia Vault"
+              className="relative z-10 w-full max-w-md rounded-[20px] drop-shadow-[0_8px_32px_rgba(124,58,237,0.15)] dark:drop-shadow-[0_8px_32px_rgba(124,58,237,0.25)]"
+            />
           </div>
         </Reveal>
       </div>
