@@ -292,17 +292,6 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
             </div>
           </div>
 
-          {/* Route dots */}
-          <div className="mt-4 flex justify-center gap-2">
-            {routes.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${i === routeIdx ? "w-6 bg-foreground/30" : "w-1.5 bg-foreground/10 hover:bg-foreground/20"}`}
-                onClick={() => selectRoute(i)}
-              />
-            ))}
-          </div>
         </div>
       </Reveal>
 
