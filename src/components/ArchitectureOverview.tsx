@@ -91,7 +91,7 @@ function curveBetween(x1: number, y1: number, x2: number, y2: number) {
 }
 
 /* ── Animation ── */
-const PHASE_DUR = [0, 600, 600, 800, 2000]; // 5 phases: idle, User→Bot, Bot→Skill, Skill→Vault, hold
+const PHASE_DUR = [0, 600, 600, 800, 1000]; // 5 phases: idle, User→Bot, Bot→Skill, Skill→Vault, hold
 // 0: idle
 // 1: User→Bot line
 // 2: Bot→Skill curve
