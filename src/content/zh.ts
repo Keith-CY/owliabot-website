@@ -29,11 +29,11 @@ export const content = {
       {
         title: "模块化 Skills",
         body:
-          "社区共建插件生态，覆盖加密世界所有链上链下场景。按需安装，即插即用。",
+          "社区共建插件生态，覆盖大部分链上链下场景。按需安装，即插即用。",
         mechanism: "一个 Skill 解决一个场景。",
       },
       {
-        title: "Owlia Vault 隔离存储",
+        title: "Owlia Vault",
         body:
           "私钥与敏感凭证存储在独立隔离进程中，Agent 永远无法直接读取。",
         mechanism: "能用，但看不到。",
@@ -41,8 +41,8 @@ export const content = {
       {
         title: "一键部署",
         body:
-          "一条命令完成安装，支持服务器和本地运行。通过 Telegram、Discord 等随时在手机上使用。",
-        mechanism: "随时随地，开箱即用。",
+          "快速完成安装，支持服务器、本地以及移动端运行。通过 Telegram、Discord 等随时下达指令。",
+        mechanism: "随时随地，触手可及。",
       },
     ],
   },
