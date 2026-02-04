@@ -223,7 +223,7 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
 
       <Reveal delay={0.08}>
         {/* Outer container with horizontal scroll on mobile */}
-        <div className="overflow-x-auto pb-4 -mx-6 px-6 sm:mx-0 sm:px-0">
+        <div className="overflow-x-auto -mx-6 px-6 sm:mx-0 sm:px-0">
           <div
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
