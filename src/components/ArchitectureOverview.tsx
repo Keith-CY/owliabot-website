@@ -94,12 +94,15 @@ function curveBetween(x1: number, y1: number, x2: number, y2: number) {
 function cardWrapTop(x: number, y: number, w: number, h: number, r: number) {
   const cy = y + h / 2;
   const right = x + w;
-  // Left center → top-left corner → top edge → top-right corner → right center
+  const cpOffset = 20; // Control point offset for smoother curves
+  // Left center → curve up → top-left corner arc → top edge → top-right corner arc → curve down → right center
   return (
     `M${x},${cy}` +
-    ` C${x},${y + r} ${x},${y} ${x + r},${y}` +
-    ` L${right - r},${y}` +
-    ` C${right},${y} ${right},${y + r} ${right},${cy}`
+    ` C${x - cpOffset},${cy} ${x - cpOffset},${y + r} ${x},${y + r}` + // Smooth approach to top-left
+    ` C${x},${y} ${x},${y} ${x + r},${y}` + // Top-left corner arc
+    ` L${right - r},${y}` + // Top edge
+    ` C${right},${y} ${right},${y} ${right},${y + r}` + // Top-right corner arc
+    ` C${right + cpOffset},${y + r} ${right + cpOffset},${cy} ${right},${cy}` // Smooth descent to right center
   );
 }
 
@@ -107,12 +110,15 @@ function cardWrapBottom(x: number, y: number, w: number, h: number, r: number) {
   const cy = y + h / 2;
   const bottom = y + h;
   const right = x + w;
-  // Left center → bottom-left corner → bottom edge → bottom-right corner → right center
+  const cpOffset = 20; // Control point offset for smoother curves
+  // Left center → curve down → bottom-left corner arc → bottom edge → bottom-right corner arc → curve up → right center
   return (
     `M${x},${cy}` +
-    ` C${x},${bottom - r} ${x},${bottom} ${x + r},${bottom}` +
-    ` L${right - r},${bottom}` +
-    ` C${right},${bottom} ${right},${bottom - r} ${right},${cy}`
+    ` C${x - cpOffset},${cy} ${x - cpOffset},${bottom - r} ${x},${bottom - r}` + // Smooth approach to bottom-left
+    ` C${x},${bottom} ${x},${bottom} ${x + r},${bottom}` + // Bottom-left corner arc
+    ` L${right - r},${bottom}` + // Bottom edge
+    ` C${right},${bottom} ${right},${bottom} ${right},${bottom - r}` + // Bottom-right corner arc
+    ` C${right + cpOffset},${bottom - r} ${right + cpOffset},${cy} ${right},${cy}` // Smooth ascent to right center
   );
 }
 
@@ -156,7 +162,7 @@ function Card({ label, x, y, w, active, onClick }: {
   return (
     <div
       className={`
-        absolute flex items-center rounded-[14px] border px-4 text-[13px] font-semibold
+        absolute flex items-center justify-center rounded-[14px] border px-4 text-center text-[15px] font-semibold
         transition-all duration-400
         ${active
           ? "border-foreground/25 bg-background text-foreground shadow-sm"
