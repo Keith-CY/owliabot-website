@@ -153,15 +153,8 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
   const [routeIdx, setRouteIdx] = useState(0);
   const [phase, setPhase] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   const route = routes[routeIdx];
-
-  // Mount delay for smooth initial load
-  useEffect(() => {
-    const timer = setTimeout(() => setMounted(true), 300);
-    return () => clearTimeout(timer);
-  }, []);
 
   const advancePhase = useCallback(() => {
     setPhase((p) => {
@@ -173,10 +166,10 @@ export default function ArchitectureOverview({ architecture }: ArchitectureOverv
   }, []);
 
   useEffect(() => {
-    if (!mounted || paused) return;
+    if (paused) return;
     const t = setTimeout(advancePhase, PHASE_DUR[phase]);
     return () => clearTimeout(t);
-  }, [phase, paused, mounted, advancePhase]);
+  }, [phase, paused, advancePhase]);
 
   const selectRoute = (i: number) => { setRouteIdx(i); setPhase(0); setPaused(false); };
 
