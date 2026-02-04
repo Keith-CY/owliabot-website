@@ -22,13 +22,13 @@ export const skillsHub = {
     },
     {
       id: "002",
-      title: "Launch Trends",
+      title: "Token Launch",
       category: "trading",
       tagline: "Catch trends, launch tokens instantly",
       description:
-        "OwliaBot monitors X/Twitter for trending narratives and helps you launch tokens on Solana via trends.fun. From generating metadata to executing the on-chain deployment, all through a conversation.",
+        "OwliaBot monitors X/Twitter for trending narratives and helps you launch tokens on Solana via pumpfun / trends.fun. From generating metadata to executing the on-chain deployment, all through a conversation.",
       scenario:
-        "\"What's trending today?\" → OwliaBot shows filtered hot topics → \"Launch #2 with symbol XYZ, buy 0.5 SOL\" → Token deployed and initial purchase done.",
+        "\"What's trending today?\" → OwliaBot shows filtered tokens → \"Launch #2 with symbol XYZ, buy 0.5 SOL\" → Token deployed and initial purchase done.",
     },
     {
       id: "003",

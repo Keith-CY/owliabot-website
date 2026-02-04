@@ -22,13 +22,13 @@ export const skillsHub = {
     },
     {
       id: "002",
-      title: "趋势发射",
+      title: "代币发射",
       category: "trading",
       tagline: "捕捉热点，一键发币",
       description:
-        "OwliaBot 监控 X/Twitter 的热门叙事，帮你在 Solana 上通过 trends.fun 一键发币。从生成素材到链上部署，全程对话完成。",
+        "OwliaBot 监控 X/Twitter 的热门叙事，帮你在 Solana 上通过 pumpfun / trends.fun 一键发币。从生成素材到链上部署，全程对话完成。",
       scenario:
-        "\"今天有什么热点？\" → OwliaBot 展示过滤后的趋势 → \"发第2个，代号 XYZ，初始买入 0.5 SOL\" → 代币部署 + 初始买入完成。",
+        "\"今天有什么热点？\" → OwliaBot 展示过滤后的代币 → \"发第2个，代号 XYZ，初始买入 0.5 SOL\" → 代币部署 + 初始买入完成。",
     },
     {
       id: "003",
