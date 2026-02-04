@@ -40,12 +40,12 @@ export default function Hero({ hero }: HeroProps) {
               ) : null}
             </Reveal>
             <Reveal delay={0.06}>
-              <h1 className="max-w-[42rem] text-balance text-4xl font-medium leading-[1.1] text-foreground sm:text-5xl lg:text-[4rem]">
+              <h1 className="max-w-[56rem] text-balance text-4xl font-medium leading-[1.1] text-foreground sm:text-5xl lg:text-[4.5rem]">
                 {hero.title}
               </h1>
             </Reveal>
             <Reveal delay={0.1}>
-              <p className="max-w-2xl text-pretty text-base text-foreground/70 sm:text-lg">
+              <p className="max-w-3xl text-pretty text-base text-foreground/70 sm:text-lg lg:text-xl">
                 {subtitleLines.map((line, index) => (
                   <span key={`${line}-${index}`}>
                     {line}
