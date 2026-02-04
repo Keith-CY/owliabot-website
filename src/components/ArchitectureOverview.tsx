@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Reveal from "./Reveal";
 import SectionHeader from "./SectionHeader";
 
@@ -25,17 +25,14 @@ type ArchitectureOverviewProps = {
 
 /* Accent colors per layer */
 const layerAccents = [
-  { border: "border-sky-400/30", bg: "bg-sky-400/8", activeBg: "bg-sky-400/15", text: "text-sky-300" },
-  { border: "border-violet-400/30", bg: "bg-violet-400/8", activeBg: "bg-violet-400/15", text: "text-violet-300" },
-  { border: "border-amber-400/30", bg: "bg-amber-400/8", activeBg: "bg-amber-400/15", text: "text-amber-300" },
-  { border: "border-emerald-400/30", bg: "bg-emerald-400/8", activeBg: "bg-emerald-400/15", text: "text-emerald-300" },
-  { border: "border-rose-400/30", bg: "bg-rose-400/8", activeBg: "bg-rose-400/15", text: "text-rose-300" },
+  { border: "border-sky-400/20", bg: "bg-sky-400/[0.03]" },
+  { border: "border-violet-400/20", bg: "bg-violet-400/[0.03]" },
+  { border: "border-amber-400/20", bg: "bg-amber-400/[0.03]" },
+  { border: "border-emerald-400/20", bg: "bg-emerald-400/[0.03]" },
+  { border: "border-rose-400/20", bg: "bg-rose-400/[0.03]" },
 ];
 
-/* How much each card overlaps the previous one (px) */
 const OVERLAP = 12;
-/* Expanded card extra width */
-const EXPAND_EXTRA = 80;
 
 export default function ArchitectureOverview({
   architecture,
@@ -69,54 +66,40 @@ export default function ArchitectureOverview({
                 className={`
                   relative cursor-pointer select-none
                   rounded-2xl border backdrop-blur
-                  ${accent.border}
-                  ${isActive ? accent.activeBg : accent.bg}
-                  shadow-[0_4px_16px_rgba(4,6,10,0.06),_inset_0_1px_0_rgba(255,255,255,0.25)]
-                  dark:shadow-[0_4px_16px_rgba(4,6,10,0.2),_inset_0_1px_0_rgba(255,255,255,0.08)]
+                  ${accent.border} ${accent.bg}
+                  shadow-[0_4px_16px_rgba(4,6,10,0.04),_inset_0_1px_0_rgba(255,255,255,0.08)]
+                  dark:shadow-[0_4px_16px_rgba(4,6,10,0.16),_inset_0_1px_0_rgba(255,255,255,0.04)]
                 `}
                 style={{
-                  zIndex: isActive ? 20 : count - index,
                   marginLeft: index === 0 ? 0 : -OVERLAP,
                 }}
                 animate={{
-                  width: isActive ? 260 + EXPAND_EXTRA : 160,
+                  zIndex: isActive ? 20 : count - index,
                 }}
-                transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                transition={{ duration: 0 }}
                 onMouseEnter={() => setActive(index)}
                 onClick={() => setActive(isActive ? null : index)}
               >
-                <div className="flex h-full flex-col justify-between px-5 py-5">
-                  {/* Label — always visible */}
+                <div className="flex h-full flex-col justify-between px-5 py-5 min-w-[160px]">
+                  {/* Label */}
                   <p className="text-sm font-semibold text-foreground tracking-tight whitespace-nowrap">
                     {layer.label}
                   </p>
 
-                  {/* Expanded content */}
-                  <AnimatePresence>
-                    {isActive && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.2, ease: "easeOut" }}
-                        className="overflow-hidden"
+                  {/* Description + pills — always rendered */}
+                  <p className="mt-3 text-xs text-foreground/50 leading-relaxed">
+                    {layer.description}
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {layer.items.map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-full border border-border/40 bg-surface/30 px-2.5 py-0.5 text-[10px] font-mono tracking-wide text-foreground/50"
                       >
-                        <p className="mt-3 text-xs text-foreground/65 leading-relaxed">
-                          {layer.description}
-                        </p>
-                        <div className="mt-3 flex flex-wrap gap-1.5">
-                          {layer.items.map((item) => (
-                            <span
-                              key={item}
-                              className="rounded-full border border-border/50 bg-surface/50 px-2.5 py-0.5 text-[10px] font-mono tracking-wide text-foreground/70"
-                            >
-                              {item}
-                            </span>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             );
@@ -124,52 +107,37 @@ export default function ArchitectureOverview({
         </div>
       </Reveal>
 
-      {/* ── Mobile: vertical stack (simplified) ── */}
+      {/* ── Mobile: vertical stack ── */}
       <div className="flex flex-col gap-3 md:hidden">
         {architecture.layers.map((layer, index) => {
           const accent = layerAccents[index % layerAccents.length];
           return (
             <Reveal key={layer.label} delay={0.06 * index}>
-              <button
-                type="button"
+              <div
                 className={`
-                  w-full text-left rounded-2xl border backdrop-blur px-5 py-4
-                  ${accent.border} ${active === index ? accent.activeBg : accent.bg}
-                  shadow-[0_4px_12px_rgba(4,6,10,0.04),_inset_0_1px_0_rgba(255,255,255,0.3)]
-                  dark:shadow-[0_4px_12px_rgba(4,6,10,0.16),_inset_0_1px_0_rgba(255,255,255,0.08)]
-                  transition-colors
+                  w-full rounded-2xl border backdrop-blur px-5 py-4
+                  ${accent.border} ${accent.bg}
+                  shadow-[0_4px_12px_rgba(4,6,10,0.04),_inset_0_1px_0_rgba(255,255,255,0.08)]
+                  dark:shadow-[0_4px_12px_rgba(4,6,10,0.16),_inset_0_1px_0_rgba(255,255,255,0.04)]
                 `}
-                onClick={() => setActive(active === index ? null : index)}
               >
                 <p className="text-sm font-semibold text-foreground tracking-tight">
                   {layer.label}
                 </p>
-                <AnimatePresence>
-                  {active === index && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="overflow-hidden"
+                <p className="mt-2 text-xs text-foreground/50">
+                  {layer.description}
+                </p>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {layer.items.map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-full border border-border/40 bg-surface/30 px-2.5 py-0.5 text-[10px] font-mono tracking-wide text-foreground/50"
                     >
-                      <p className="mt-2 text-xs text-foreground/65">
-                        {layer.description}
-                      </p>
-                      <div className="mt-2 flex flex-wrap gap-1.5">
-                        {layer.items.map((item) => (
-                          <span
-                            key={item}
-                            className="rounded-full border border-border/50 bg-surface/50 px-2.5 py-0.5 text-[10px] font-mono tracking-wide text-foreground/70"
-                          >
-                            {item}
-                          </span>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </button>
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </Reveal>
           );
         })}
