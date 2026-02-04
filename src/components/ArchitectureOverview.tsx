@@ -77,7 +77,7 @@ export default function ArchitectureOverview({
 
       {/* ── Desktop: left nav + right detail card ── */}
       <Reveal delay={0.08}>
-        <div className="hidden md:grid grid-cols-[220px_1fr] gap-4 items-start">
+        <div className="hidden md:grid grid-cols-[200px_1fr] gap-4 items-stretch max-w-2xl mx-auto w-full">
           {/* Left: vertical node list */}
           <div className="flex flex-col gap-1">
             {architecture.layers.map((layer, index) => {
@@ -114,10 +114,6 @@ export default function ArchitectureOverview({
               );
             })}
 
-            {/* Connecting line decoration */}
-            <div className="ml-[29px] -mt-[calc(100%-16px)] mb-0 pointer-events-none absolute">
-              {/* Intentionally empty — clean look without connector line */}
-            </div>
           </div>
 
           {/* Right: detail card */}
@@ -128,8 +124,9 @@ export default function ArchitectureOverview({
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -8 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
+              style={{ height: "100%" }}
               className={`
-                rounded-2xl border bg-background backdrop-blur p-6
+                h-full flex flex-col rounded-2xl border bg-background backdrop-blur p-6
                 ${accentColors[active % accentColors.length].border}
                 shadow-[0_4px_20px_rgba(4,6,10,0.06),_inset_0_1px_0_rgba(255,255,255,0.4)]
                 dark:shadow-[0_4px_20px_rgba(4,6,10,0.25),_inset_0_1px_0_rgba(255,255,255,0.06)]
@@ -151,7 +148,7 @@ export default function ArchitectureOverview({
               </p>
 
               {/* Items as a structured list */}
-              <div className="mt-5 grid grid-cols-3 gap-3">
+              <div className="mt-auto pt-5 grid grid-cols-3 gap-3">
                 {architecture.layers[active].items.map((item) => (
                   <div
                     key={item}
@@ -164,21 +161,6 @@ export default function ArchitectureOverview({
                 ))}
               </div>
 
-              {/* Position indicator */}
-              <div className="mt-5 flex items-center gap-2">
-                {architecture.layers.map((_, i) => (
-                  <div
-                    key={i}
-                    className={`
-                      h-1 rounded-full transition-all duration-300
-                      ${i === active
-                        ? `w-6 ${accentColors[active % accentColors.length].bg}`
-                        : "w-1.5 bg-foreground/10"
-                      }
-                    `}
-                  />
-                ))}
-              </div>
             </motion.div>
           </AnimatePresence>
         </div>
