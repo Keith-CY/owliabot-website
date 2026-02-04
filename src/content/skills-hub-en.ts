@@ -3,7 +3,7 @@ export const skillsHub = {
   title: "Skills Hub",
   subtitle: "Explore what OwliaBot can do",
   description:
-    "Each Skill is a modular capability that OwliaBot can run for you. Browse real-world scenarios — from portfolio tracking to automated DeFi strategies.",
+    "Each Skill is a modular capability that OwliaBot can run for you. Browse real-world scenarios, from portfolio tracking to automated DeFi strategies.",
   categories: {
     monitoring: "Monitoring & Insights",
     defi: "DeFi Strategies",
@@ -16,7 +16,7 @@ export const skillsHub = {
       category: "monitoring",
       tagline: "See all your assets in one place",
       description:
-        "Connect multiple wallet addresses across chains and exchange read-only APIs. OwliaBot aggregates your holdings and gives you a unified portfolio view — on demand or on a schedule.",
+        "Connect multiple wallet addresses across chains and exchange read-only APIs. OwliaBot aggregates your holdings and gives you a unified portfolio view on demand or on a schedule.",
       scenario:
         "\"Show me my portfolio\" → OwliaBot returns a breakdown of all your positions across wallets and exchanges, with total value and allocation percentages.",
     },
@@ -26,7 +26,7 @@ export const skillsHub = {
       category: "trading",
       tagline: "Spot trends, launch tokens in one click",
       description:
-        "OwliaBot monitors X/Twitter for trending narratives and helps you launch tokens on Solana via trends.fun — from generating metadata to executing the on-chain deployment, all through a conversation.",
+        "OwliaBot monitors X/Twitter for trending narratives and helps you launch tokens on Solana via trends.fun. From generating metadata to executing the on-chain deployment, all through a conversation.",
       scenario:
         "\"What's trending today?\" → OwliaBot shows filtered hot topics → \"Launch #2 with symbol XYZ, buy 0.5 SOL\" → Token deployed and initial purchase done.",
     },
@@ -66,7 +66,7 @@ export const skillsHub = {
       category: "defi",
       tagline: "Always get the best lending rate",
       description:
-        "OwliaBot monitors borrow/supply rates across lending platforms. When a better deal appears, it migrates your position automatically — factoring in gas costs, slippage, and incentives.",
+        "OwliaBot monitors borrow/supply rates across lending platforms. When a better deal appears, it migrates your position automatically, factoring in gas costs, slippage, and incentives.",
       scenario:
         "Your USDC borrow rate on Aave rises to 5.2% → Compound offers 3.8% → OwliaBot calculates net savings after gas → Migrates your debt in one tx.",
     },
@@ -76,7 +76,7 @@ export const skillsHub = {
       category: "defi",
       tagline: "Turn idle collateral into yield",
       description:
-        "Use stablecoins as collateral, borrow target assets, and deploy them into yield opportunities across protocols. OwliaBot manages the full loop — and auto-exits when the carry trade no longer makes sense.",
+        "Use stablecoins as collateral, borrow target assets, and deploy them into yield opportunities across protocols. OwliaBot manages the full loop and auto-exits when the carry trade no longer makes sense.",
       scenario:
         "Deposit USDC → Borrow ETH at 2.1% → Stake in Lido at 3.4% → Net carry +1.3% → OwliaBot monitors and unwinds if rate flips negative.",
     },

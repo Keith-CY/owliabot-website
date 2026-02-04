@@ -3,7 +3,7 @@ export const skillsHub = {
   title: "Skills Hub",
   subtitle: "探索 OwliaBot 的全部能力",
   description:
-    "每个 Skill 都是 OwliaBot 可以为你运行的模块化能力。浏览真实场景 — 从资产总览到自动化 DeFi 策略。",
+    "每个 Skill 都是 OwliaBot 可以为你运行的模块化能力。浏览真实场景，从资产总览到自动化 DeFi 策略。",
   categories: {
     monitoring: "监控与洞察",
     defi: "DeFi 策略",
@@ -26,7 +26,7 @@ export const skillsHub = {
       category: "trading",
       tagline: "发现热点，一键发币",
       description:
-        "OwliaBot 监控 X/Twitter 的热门叙事，帮你在 Solana 上通过 trends.fun 一键发币 — 从生成素材到链上部署，全程对话完成。",
+        "OwliaBot 监控 X/Twitter 的热门叙事，帮你在 Solana 上通过 trends.fun 一键发币。从生成素材到链上部署，全程对话完成。",
       scenario:
         "\"今天有什么热点？\" → OwliaBot 展示过滤后的趋势 → \"发第2个，代号 XYZ，初始买入 0.5 SOL\" → 代币部署 + 初始买入完成。",
     },
@@ -66,7 +66,7 @@ export const skillsHub = {
       category: "defi",
       tagline: "永远拿到最优借贷利率",
       description:
-        "OwliaBot 监控多个借贷平台的存借利率。发现更优利率时，自动迁移你的仓位 — 综合考虑 gas 成本、滑点和激励。",
+        "OwliaBot 监控多个借贷平台的存借利率。发现更优利率时，自动迁移你的仓位，综合考虑 gas 成本、滑点和激励。",
       scenario:
         "你在 Aave 的 USDC 借款利率升至 5.2% → Compound 只要 3.8% → OwliaBot 计算扣除 gas 后的净收益 → 一笔交易完成迁移。",
     },
@@ -76,7 +76,7 @@ export const skillsHub = {
       category: "defi",
       tagline: "让闲置抵押品产生收益",
       description:
-        "用稳定币作抵押，借出目标资产投入跨协议收益场景。OwliaBot 管理整个循环 — 当套利空间消失时自动退出。",
+        "用稳定币作抵押，借出目标资产投入跨协议收益场景。OwliaBot 管理整个循环，当套利空间消失时自动退出。",
       scenario:
         "存入 USDC → 以 2.1% 借出 ETH → 质押到 Lido 获 3.4% → 净收益 +1.3% → OwliaBot 监控，利差翻转时自动平仓。",
     },
@@ -96,7 +96,7 @@ export const skillsHub = {
       category: "trading",
       tagline: "从信号到交易，全自动",
       description:
-        "通用的策略执行层。接收信号、校验参数、执行风控、拆单下单、监控成交、完整审计记录 — 适配任意交易策略。",
+        "通用的策略执行层。接收信号、校验参数、执行风控、拆单下单、监控成交、完整审计记录，适配任意交易策略。",
       scenario:
         "策略产出 BUY 信号 → 执行引擎检查风控限制 → 拆为3笔订单 → 监控成交 → 全程记录 → 返回执行摘要。",
     },

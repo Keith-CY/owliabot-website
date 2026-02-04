@@ -70,11 +70,6 @@ export type LandingPageContent = {
     body: string;
     flowLabel: string;
     flow: ReadonlyArray<string>;
-    layers: ReadonlyArray<{
-      label: string;
-      items: ReadonlyArray<string>;
-      description: string;
-    }>;
     footer: string;
     diagram?: {
       user: string;

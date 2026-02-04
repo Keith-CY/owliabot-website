@@ -68,33 +68,6 @@ export const content = {
       ],
       vault: ["加密钱包", "API Key"],
     },
-    layers: [
-      {
-        label: "Channels",
-        items: ["Telegram", "Discord"],
-        description: "消息入口",
-      },
-      {
-        label: "Gateway",
-        items: ["路由", "会话", "策略"],
-        description: "消息路由与会话管理",
-      },
-      {
-        label: "Agent Runtime",
-        items: ["上下文", "LLM", "工具"],
-        description: "决策与工具编排",
-      },
-      {
-        label: "Skills",
-        items: ["DeFi", "资产", "监控"],
-        description: "可扩展能力模块",
-      },
-      {
-        label: "Owlia Vault",
-        items: ["密钥", "凭证", "审计"],
-        description: "隔离的凭证存储",
-      },
-    ],
     footer: "",
   },
   skills: {

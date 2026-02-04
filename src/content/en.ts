@@ -54,33 +54,6 @@ export const content = {
       "Messages flow from you, through OwliaBot to Skills. Keys stay isolated in the Vault.",
     flowLabel: "Core flow",
     flow: ["Channels", "Gateway", "Agent Runtime", "Skills", "Owlia Vault"],
-    layers: [
-      {
-        label: "Channels",
-        items: ["Telegram", "Discord"],
-        description: "Entry points",
-      },
-      {
-        label: "Gateway",
-        items: ["Routing", "Sessions", "Policy"],
-        description: "Message routing & session management",
-      },
-      {
-        label: "Agent Runtime",
-        items: ["Context", "LLM", "Tools"],
-        description: "Decision-making & tool orchestration",
-      },
-      {
-        label: "Skills",
-        items: ["DeFi", "Portfolio", "Monitoring"],
-        description: "Extensible capability modules",
-      },
-      {
-        label: "Owlia Vault",
-        items: ["Keys", "Credentials", "Audit"],
-        description: "Isolated credential storage",
-      },
-    ],
     footer: "",
     diagram: {
       user: "You",
