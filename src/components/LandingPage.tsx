@@ -170,19 +170,13 @@ export default function LandingPage({ content }: LandingPageProps) {
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-32 px-6 pb-24 pt-24 sm:px-8 lg:px-12">
         <Pillars eyebrow={content.why.eyebrow} title={content.why.title} subtitle={content.why.subtitle} pillars={content.why.items} />
 
-        <div className="relative isolate">
-          <div className="absolute -left-1/4 -top-1/4 -z-10 h-[150%] w-[150%] bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.08),transparent_70%)] opacity-0 dark:opacity-100 pointer-events-none mix-blend-screen" />
-          <ArchitectureOverview architecture={content.architecture} />
-        </div>
+        <ArchitectureOverview architecture={content.architecture} />
 
         <UserScenarios scenarios={content.userScenarios} />
 
         <Partners partners={content.partners} />
 
-        <div className="relative isolate">
-          <div className="absolute -right-1/4 -top-1/4 -z-10 h-[150%] w-[150%] bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,0.08),transparent_70%)] opacity-0 dark:opacity-100 pointer-events-none mix-blend-screen" />
-          <SecurityModel security={content.security} />
-        </div>
+        <SecurityModel security={content.security} />
 
       </main>
       <Footer note={content.footer.note} signature={content.footer.signature} links={content.links} />
