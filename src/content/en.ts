@@ -56,7 +56,7 @@ export const content = {
     flow: ["Channels", "Gateway", "Agent Runtime", "Skills", "Owlia Vault"],
     footer: "",
     diagram: {
-      user: "You",
+      user: "User",
       bot: "OwliaBot",
       skillsLabel: "Skills",
       vaultLabel: "Owlia Vault",
