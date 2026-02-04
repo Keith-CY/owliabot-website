@@ -80,14 +80,14 @@ export default function SkillsHub({
         )}
       </header>
 
-      {/* Skills Masonry Grid */}
-      <div className="columns-1 gap-6 sm:columns-2 space-y-6">
+      {/* Skills Grid */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         {skills.map((skill) => {
           const colors = categoryColors[skill.category];
           return (
             <article
               key={skill.id}
-              className="break-inside-avoid flex flex-col gap-4 rounded-[28px] border border-border bg-surface/70 p-6 shadow-[0_6px_16px_rgba(4,6,10,0.04),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur transition-shadow hover:shadow-md dark:shadow-[0_6px_16px_rgba(4,6,10,0.12),_inset_0_1px_0_rgba(255,255,255,0.14)] relative"
+              className="flex flex-col gap-4 rounded-[28px] border border-border bg-surface/70 p-6 shadow-[0_6px_16px_rgba(4,6,10,0.04),_inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur transition-shadow hover:shadow-md dark:shadow-[0_6px_16px_rgba(4,6,10,0.12),_inset_0_1px_0_rgba(255,255,255,0.14)] relative"
             >
               {/* Building badge - top right */}
               <span className="absolute top-5 right-5 flex items-center gap-1 rounded-md border border-foreground/10 bg-foreground/5 px-2 py-0.5 text-[10px] font-medium text-foreground/50 dark:border-foreground/20 dark:bg-foreground/10">
@@ -119,7 +119,7 @@ export default function SkillsHub({
               </div>
 
               {/* Description */}
-              <p className="text-sm leading-relaxed text-foreground/70 [word-break:break-all]">
+              <p className="text-sm leading-relaxed text-foreground/70">
                 {skill.description}
               </p>
 
@@ -128,7 +128,7 @@ export default function SkillsHub({
                 <p className="text-xs font-semibold text-foreground/50 uppercase tracking-wider mb-1.5">
                   {lang === "zh" ? "典型场景" : "Example"}
                 </p>
-                <p className="text-sm italic text-foreground/60 [word-break:break-all]">
+                <p className="text-sm italic text-foreground/60">
                   {skill.scenario}
                 </p>
               </div>
