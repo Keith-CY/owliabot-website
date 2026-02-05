@@ -2,7 +2,8 @@ type FooterProps = {
   note: string;
   signature: string;
   links: {
-    github: string;
+    // github: string;
+    docs: string;
     x: string;
   };
 };
@@ -23,12 +24,12 @@ export default function Footer({ note, signature, links }: FooterProps) {
           </a>
           <span className="text-foreground/20">•</span>
           <a
-            href={links.github}
+            href={links.docs}
             target="_blank"
             rel="noopener noreferrer"
             className="transition hover:text-foreground"
           >
-            GitHub
+            Docs
           </a>
         </div>
         <p className="text-xs text-foreground/50">{signature}</p>

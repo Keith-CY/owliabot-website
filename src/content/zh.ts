@@ -191,8 +191,9 @@ export const content = {
     signature: "OwliaBot made with ❤️ · 2026",
   },
   links: {
-    github: "https://github.com/owliabot/owliabot",
-    x: "https://x.com/OwliaBot",
+    // github: "https://github.com/owliabot/owliabot",
+    docs: "https://docs.owlia.bot/",
+    x: "https://x.com/owliabot",
   },
   hero_illustration: {
     scenarios: [
