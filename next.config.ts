@@ -11,6 +11,16 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: configDir,
   },
+  // /en 重定向到根路径（避免重复页面）
+  async redirects() {
+    return [
+      {
+        source: '/en',
+        destination: '/',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

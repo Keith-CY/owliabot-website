@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import Reveal from "./Reveal";
 import SectionHeader from "./SectionHeader";
 import ConversationArea from './ConversationArea';
@@ -72,6 +72,9 @@ function BuildingInner({ building, lang }: BuildingProps) {
   const prompts = building.prompts;
   const storageKey = 'owliabot:building-cache';
   const removeLabel = lang === 'zh' ? '删除需求' : 'Remove requirement';
+  
+  // 防抖保存 localStorage 的定时器
+  const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     try {
@@ -100,7 +103,7 @@ function BuildingInner({ building, lang }: BuildingProps) {
       if (typeof parsed.isInConversation === 'boolean') {
         setIsInConversation(parsed.isInConversation);
       }
-      if (parsed.stage === 'EXPLORING' || parsed.stage === 'SUMMARY' || parsed.stage === 'EMAIL_INPUT') {
+      if (parsed.stage === 'EXPLORING' || parsed.stage === 'SUMMARY') {
         setStage(parsed.stage as ConversationStage);
       }
     } catch (error) {
@@ -109,27 +112,50 @@ function BuildingInner({ building, lang }: BuildingProps) {
     setIsHydrated(true);
   }, []);
 
+  // 防抖保存到 localStorage（500ms 延迟，减少频繁写入）
   useEffect(() => {
     if (!isHydrated) return;
-    try {
-      if (stage === 'SUCCESS') {
-        localStorage.removeItem(storageKey);
-        return;
-      }
-      const payload = {
-        stage,
-        messages,
-        uiTrees,
-        confirmedRequirements,
-        currentConversation,
-        isInConversation,
-        baseIntent,
-        pendingRequirements,
-      };
-      localStorage.setItem(storageKey, JSON.stringify(payload));
-    } catch (error) {
-      console.warn('Failed to cache building state:', error);
+
+    // 清除之前的定时器
+    if (saveTimerRef.current) {
+      clearTimeout(saveTimerRef.current);
     }
+
+    // SUCCESS 状态立即清除缓存
+    if (stage === 'SUCCESS') {
+      try {
+        localStorage.removeItem(storageKey);
+      } catch (error) {
+        console.warn('Failed to clear building cache:', error);
+      }
+      return;
+    }
+
+    // 防抖保存
+    saveTimerRef.current = setTimeout(() => {
+      try {
+        const payload = {
+          stage,
+          messages,
+          uiTrees,
+          confirmedRequirements,
+          currentConversation,
+          isInConversation,
+          baseIntent,
+          pendingRequirements,
+        };
+        localStorage.setItem(storageKey, JSON.stringify(payload));
+      } catch (error) {
+        console.warn('Failed to cache building state:', error);
+      }
+    }, 500);
+
+    // 清理函数
+    return () => {
+      if (saveTimerRef.current) {
+        clearTimeout(saveTimerRef.current);
+      }
+    };
   }, [
     stage,
     messages,

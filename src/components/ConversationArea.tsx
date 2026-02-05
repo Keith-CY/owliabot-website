@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import type { Message as MessageType, UITreeNode } from '@/types/building';
 import Message from './Message';
 import TypingIndicator from './TypingIndicator';
@@ -37,6 +37,22 @@ export default function ConversationArea({
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // 预计算每条消息对应的 uiTree，避免 O(n²) 复杂度
+  const messageUiTreeMap = useMemo(() => {
+    const map = new Map<number, UITreeNode>();
+    let aiIndex = 0;
+    messages.forEach((message, index) => {
+      if (message.role === 'assistant') {
+        if (uiTrees[aiIndex]) {
+          map.set(index, uiTrees[aiIndex]);
+        }
+        aiIndex++;
+      }
+    });
+    return map;
+  }, [messages, uiTrees]);
+
   // Auto-scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -62,24 +78,13 @@ export default function ConversationArea({
       {/* Messages */}
       {messages.length > 0 && (
         <div className="flex flex-col gap-3 max-h-96 overflow-y-auto px-2">
-          {messages.map((message, index) => {
-            // Calculate AI message index for uiTree lookup
-            const aiMessageIndex = messages
-              .slice(0, index + 1)
-              .filter(m => m.role === 'assistant')
-              .length - 1;
-            const uiTree = message.role === 'assistant' && aiMessageIndex >= 0
-              ? uiTrees[aiMessageIndex]
-              : undefined;
-
-            return (
-              <Message
-                key={`${message.timestamp}-${index}`}
-                message={message}
-                uiTree={uiTree}
-              />
-            );
-          })}
+          {messages.map((message, index) => (
+            <Message
+              key={`${message.timestamp}-${index}`}
+              message={message}
+              uiTree={messageUiTreeMap.get(index)}
+            />
+          ))}
           {isLoading && (
             <div className="flex justify-start">
               <TypingIndicator />

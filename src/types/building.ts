@@ -11,7 +11,7 @@ export type ConfirmedRequirement = {
   timestamp: number;
 };
 
-export type ConversationStage = 'EXPLORING' | 'SUMMARY' | 'EMAIL_INPUT' | 'SUCCESS';
+export type ConversationStage = 'EXPLORING' | 'SUMMARY' | 'SUCCESS';
 
 export type ConversationState = {
   stage: ConversationStage;
