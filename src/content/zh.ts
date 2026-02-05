@@ -10,7 +10,7 @@ export const content = {
       "一键部署 Crypto 原生 AI Agent，Skills 自由扩展，资产完全由你掌控。",
     badge: "OwliaBot",
     status: "已完成设计与文档，正在实现。",
-    emphasis: "安全、隐私、可控，皆为设计的一部分。",
+    emphasis: "",
     ctaPrimary: "共建 OwliaBot",
     ctaPrimaryHref: "/zh/skills-hub",
     ctaSecondary: "阅读架构说明",

@@ -10,7 +10,7 @@ export const content = {
       "Deploy your crypto-native AI Agent with one click. Skills freely extensible. Assets always under your control.",
     badge: "OwliaBot",
     status: "Designed and documented. Implementation in progress.",
-    emphasis: "Secure. Private. Controllable by design.",
+    emphasis: "",
     ctaPrimary: "Co-build OwliaBot",
     ctaPrimaryHref: "/skills-hub",
     ctaSecondary: "Read the Architecture",
